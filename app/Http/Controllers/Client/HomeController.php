@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\LoaiPhong;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('Client.Home.index');
+        $loaiphong = LoaiPhong::all();
+
+        return view('Client.Home.index', compact('loaiphong'));
     }
     public function about()
     {

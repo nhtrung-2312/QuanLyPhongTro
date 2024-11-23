@@ -46,10 +46,10 @@
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Trang chủ</a></li>
-                <li><a href="./rooms.html">Xem phòng</a></li>
-                <li><a href="./about-us.html">Về chúng tôi</a></li>
-                <li><a href="./contact.html">Liên hệ</a></li>
+                <li><a href="{{ route('home.index') }}">Trang chủ</a></li>
+                <li><a href="{{ route('phong.index') }}">Xem phòng</a></li>
+                <li><a href="{{ route('home.about') }}">Về chúng tôi</a></li>
+                <li><a href="{{ route('home.contact') }}">Liên hệ</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -81,13 +81,13 @@
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
-                            <a href="#" class="bk-btn">Đặt phòng ngay</a>
+                            <a href="{{ route('phong.index') }}" class="bk-btn">Đặt phòng ngay</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" style="box-shadow:0px 12px 15px rgba(36, 11, 12, 0.05)">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-2">
@@ -101,15 +101,12 @@
                         <div class="nav-menu">
                             <nav class="mainmenu">
                                 <ul>
-                                    <li class="active"><a href="./index.html">Trang chủ</a></li>
-                                    <li><a href="./rooms.html">Xem phòng</a></li>
-                                    <li><a href="./about-us.html">Về chúng tôi</a></li>
-                                    <li><a href="./contact.html">Liên hệ</a></li>
+                                    <li><a href="{{ route('home.index') }}">Trang chủ</a></li>
+                                    <li><a href="{{ route('phong.index') }}">Xem phòng</a></li>
+                                    <li><a href="{{ route('home.about') }}">Về chúng tôi</a></li>
+                                    <li><a href="{{ route('home.contact') }}">Liên hệ</a></li>
                                 </ul>
                             </nav>
-                            {{-- <div class="nav-right search-switch">
-                                <i class="icon_search"></i>
-                            </div> --}}
                         </div>
                     </div>
                 </div>

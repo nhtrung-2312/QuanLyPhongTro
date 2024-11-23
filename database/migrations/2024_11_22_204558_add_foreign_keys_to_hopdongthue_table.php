@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('hopdongthue', function (Blueprint $table) {
             $table->foreign(['MaPhong'], 'hopdongthue_ibfk_1')->references(['MaPhong'])->on('phongtro')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['MaKhachThue'], 'hopdongthue_ibfk_2')->references(['MaKhachThue'])->on('khachthue')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('hopdongthue', function (Blueprint $table) {
             $table->dropForeign('hopdongthue_ibfk_1');
-            $table->dropForeign('hopdongthue_ibfk_2');
         });
     }
 };

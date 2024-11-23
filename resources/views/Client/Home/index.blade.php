@@ -1,4 +1,5 @@
 @extends('layout.client')
+@section('title', 'Trang chủ')
 @section('content')
 <section class="hero-section">
     <div class="container">

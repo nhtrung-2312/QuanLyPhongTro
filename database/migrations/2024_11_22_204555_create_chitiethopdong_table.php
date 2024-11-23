@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hopdongthue', function (Blueprint $table) {
-            $table->string('MaHopDong', 10)->primary();
-            $table->string('MaPhong', 10)->index('maphong');
+        Schema::create('chitiethopdong', function (Blueprint $table) {
+            $table->string('MaHopDong', 10);
             $table->string('MaKhachThue', 10)->index('makhachthue');
-            $table->date('NgayBatDau');
-            $table->date('NgayKetThuc');
-            $table->string('TrangThai', 20)->default('Đang thuê');
-            $table->decimal('TienCoc', 10);
+
+            $table->primary(['MaHopDong', 'MaKhachThue']);
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hopdongthue');
+        Schema::dropIfExists('chitiethopdong');
     }
 };
