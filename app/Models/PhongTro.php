@@ -25,4 +25,12 @@ class PhongTro extends Model
     {
         return $this->belongsTo(CoSo::class, 'MaCoSo', 'MaCoSo');
     }
+    public function chiTietPhong()
+    {
+        return $this->hasMany(ChiTietPhong::class, 'MaPhong', 'MaPhong');
+    }
+    public function loaiPhong()
+    {
+        return $this->belongsTo(LoaiPhong::class, 'MaLoaiPhong', 'MaLoaiPhong');
+    }
 }

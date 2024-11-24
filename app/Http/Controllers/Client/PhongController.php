@@ -24,7 +24,7 @@ class PhongController extends Controller
     }
     public function details($id)
     {
-        $phong = PhongTro::with('coSo')->find($id);
-        return view('Client.Phong.detail', compact('phong'));
+        $phong = PhongTro::with('coSo', 'chiTietPhong', 'loaiPhong')->find($id);
+        return view('Client.Phong.details', compact('phong'));
     }
 }

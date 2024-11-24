@@ -19,4 +19,8 @@ class LoaiPhong extends Model
         'LoaiPhong',
         'SoNguoi',
     ];
+    public function phongTro()
+    {
+        return $this->hasMany(PhongTro::class, 'MaLoaiPhong', 'MaLoaiPhong');
+    }
 }

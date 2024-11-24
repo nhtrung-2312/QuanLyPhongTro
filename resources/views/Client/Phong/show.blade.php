@@ -45,7 +45,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <a href="{{ route('phong.show', $item->MaLoaiPhong) }}" class="primary-btn">Xem chi tiết</a>
+                        <a href="{{ route('phong.details', $item->MaPhong ) }}" class="primary-btn">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
