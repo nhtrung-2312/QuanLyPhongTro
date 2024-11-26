@@ -4,10 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\FacilityController;
 
-//admin page
-Route::get('/', [HomeController::class, 'index'])->name('admin.home');
-
-//facility
 Route::prefix('facilities')->name('admin.facilities.')->group(function () {
     Route::get('/', [FacilityController::class, 'index'])->name('index');
     Route::get('/create', [FacilityController::class, 'create'])->name('create');
