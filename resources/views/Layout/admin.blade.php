@@ -1,4 +1,4 @@
-
+@include('components.alert')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="/template/admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/template/admin/dist/css/adminlte.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -85,7 +88,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
+          <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -101,9 +104,9 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item menu-open">
+          <li class="nav-item">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon bi bi-house-fill"></i>
               <p>
                 Facility
                 <i class="right fas fa-angle-left"></i>
@@ -116,7 +119,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="/admin/facilities/create" class="nav-link">
                   <p>Add Facility</p>
                 </a>
               </li>
@@ -145,9 +148,28 @@
     </div>
     <!-- /.content-header -->
 
+
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
         @yield('content')
       </div>
     </section>
@@ -164,7 +186,9 @@
 
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<script src="/template/admin/plugins/jquery/jquery.min.js"></script>
+<script src="/template/admin/plugins/jquery/jquery.min.js"></script>  
+<script src="/template/admin/plugins/toastr/toastr.min.js"></script>
+
 <!-- Bootstrap -->
 <script src="/template/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->
@@ -185,6 +209,34 @@
 <script src="/template/admin/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="/template/admin/dist/js/pages/dashboard2.js"></script>
+
+<script>
+    // Tự động ẩn alert sau 3 giây
+    $(document).ready(function() {
+    // Auto hide alerts after 3 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut('slow', function() {
+                $(this).remove();
+            });
+        }, 3000);
+
+        // Vẫn cho phép đóng thủ công
+        $('.alert .close').on('click', function() {
+            $(this).closest('.alert').fadeOut('slow', function() {
+                $(this).remove();
+            });
+        });
+    });
+</script>
+<script>
+  // Setup CSRF token for Ajax requests
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+</script>
+@stack('scripts')
 </body>
 </html>
 

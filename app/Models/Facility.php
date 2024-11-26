@@ -21,4 +21,5 @@ class Facility extends Model
         'DiaChi',
         'SDT'
     ];
+
 }
