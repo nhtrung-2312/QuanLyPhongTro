@@ -1,6 +1,6 @@
 * text=auto eol=lf
 
-public/template/* linguist-vendored
+public/template/** linguist-vendored
 
 *.blade.php diff=html
 *.css diff=css
