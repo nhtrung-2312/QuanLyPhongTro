@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('chisodiennuoc', function (Blueprint $table) {
             $table->string('MaChiSo', 10)->primary();
-            $table->string('MaPhong', 10)->index('fk_chiso_phong');
-            $table->string('Loai', 20);
-            $table->integer('ChiSoCu');
-            $table->integer('ChiSoMoi');
+            $table->string('MaPhong', 10)->index('maphong');
+            $table->integer('DienCu');
+            $table->integer('DienMoi');
+            $table->integer('NuocCu');
+            $table->integer('NuocMoi');
             $table->date('NgayGhi');
         });
     }

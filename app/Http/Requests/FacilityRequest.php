@@ -14,8 +14,7 @@ class FacilityRequest extends FormRequest
     public function rules(){
         $rules = [
             'TenCoSo' => 'required|string|max:100',
-            'DiaChi' => 'required|string|max:200',
-            'SDT' => 'required|regex:/^0[0-9]{9}$/'
+            'DiaChi' => 'required|string|max:200'
         ];
         return $rules;
     }
@@ -24,8 +23,6 @@ class FacilityRequest extends FormRequest
         return [
             'TenCoSo.required' => 'Tên cơ sở không được để trống',
             'DiaChi.required' => 'Địa chỉ không được để trống',
-            'SDT.required' => 'Số điện thoại không được để trống',
-            'SDT.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng'
         ];
     }
 }

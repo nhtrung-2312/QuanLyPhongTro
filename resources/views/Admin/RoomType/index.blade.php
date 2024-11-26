@@ -1,38 +1,39 @@
 @extends('Layout.admin')
-@section('title', 'Danh sách cơ sở')
+@section('title', 'Danh sách loại phòng')
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Danh sách cơ sở</h3>
+        <h3 class="card-title">Danh sách loại phòng</h3>
         <div class="card-tools">
-            <a href="{{ route('admin.facilities.create') }}" class="btn btn-primary">Thêm mới</a>
+            <a href="{{ route('admin.room-types.create') }}" class="btn btn-primary">Thêm mới</a>
         </div>
     </div>
     <div class="card-body">
         <table class="table">
             <thead>
-                <tr>
-                    <th>Mã cơ sở</th>
-                    <th>Tên cơ sở</th>
-                    <th>Địa chỉ</th>
-                    <th>Hành động</th>
+                <tr class="text-center align-middle">
+                    <th>Mã loại phòng</th>
+                    <th>Diện tích</th>
+                    <th>Loại phòng</th>
+                    <th>Số người</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($facilities as $facility)
-                <tr>
-                    <td>{{ $facility->MaCoSo }}</td>
-                    <td>{{ $facility->TenCoSo }}</td>
-                    <td>{{ $facility->DiaChi }}</td>
+                @foreach($roomTypes as $roomType)
+                <tr class="text-center align-middle">
+                    <td>{{ $roomType->MaLoaiPhong }}</td>
+                    <td>{{ $roomType->DienTich }}</td>
+                    <td>{{ $roomType->LoaiPhong }}</td>
+                    <td>{{ $roomType->SoNguoi }}</td>
                     <td>
-                        <a href="{{ route('admin.facilities.edit', $facility->MaCoSo) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
-                        <button onclick="deleteFacility('{{ $facility->MaCoSo }}', '{{$facility->TenCoSo}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
+                        <a href="{{ route('admin.room-types.edit', $roomType->MaLoaiPhong) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
+                        <button onclick="deleteRoomType('{{ $roomType->MaLoaiPhong }}', '{{$roomType->LoaiPhong}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        {{ $facilities->links() }}
+        {{ $roomTypes->links() }}
     </div>
 </div>
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -45,7 +46,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa cơ sở <span id="deleteFacilityName" class="font-weight-bold"></span>?</p>
+                <p>Bạn có chắc chắn muốn xóa loại phòng <span id="deleteRoomTypeName" class="font-weight-bold"></span>?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
@@ -59,10 +60,10 @@
 <script>
 let deleteId = null;
 
-function deleteFacility(id, name) {
+function deleteRoomType(id, name) {
     console.log(id, name);
     deleteId = id;
-    $('#deleteFacilityName').text(name);
+    $('#deleteRoomTypeName').text(name);
     $('#deleteModal').modal('show');
 }
 
@@ -70,7 +71,7 @@ function confirmDelete() {
     if (!deleteId) return;
 
     $.ajax({
-        url: `/admin/facilities/delete/${deleteId}`,
+        url: `/admin/room-types/delete/${deleteId}`,
         type: 'POST',
         data: {
             _token: '{{ csrf_token() }}',

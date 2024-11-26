@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('nhanvien', function (Blueprint $table) {
-            $table->foreign(['MaCoSo'], 'FK_NhanVien_CoSo')->references(['MaCoSo'])->on('coso')->onUpdate('restrict')->onDelete('restrict');
+        Schema::create('chitiethopdong', function (Blueprint $table) {
+            $table->string('MaHopDong', 10);
+            $table->string('MaKhachThue', 10)->index('makhachthue');
+
+            $table->primary(['MaHopDong', 'MaKhachThue']);
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('nhanvien', function (Blueprint $table) {
-            $table->dropForeign('FK_NhanVien_CoSo');
-        });
+        Schema::dropIfExists('chitiethopdong');
     }
 };

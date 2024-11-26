@@ -3,55 +3,53 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\FacilityService;
-use App\Http\Requests\FacilityRequest;
+use App\Services\RoomTypeService;
+use App\Http\Requests\RoomTypeRequest;
 use Illuminate\Support\Facades\Log;
 
-class FacilityController extends Controller
+class RoomTypeController extends Controller
 {
-    protected $facilityService;
+    protected $roomTypeService;
 
-    public function __construct(FacilityService $facilityService)
+    public function __construct(RoomTypeService $roomTypeService)
     {
-        $this->facilityService = $facilityService;
+        $this->roomTypeService = $roomTypeService;
     }
-
     public function index()
     {
-        $facilities = $this->facilityService->getAll();
-        return view('Admin.Facility.index', compact('facilities'));
+        $roomTypes = $this->roomTypeService->getAll();
+        return view('Admin.RoomType.index', compact('roomTypes'));
     }
-
     public function create()
     {
-        return view('Admin.Facility.create');
+        return view('Admin.RoomType.create');
     }
-
-    public function store(FacilityRequest $request){
+    public function store(RoomTypeRequest $request)
+    {
         try{
-            $result = $this->facilityService->create($request);
+            $result = $this->roomTypeService->create($request);
             if($result){
-            return redirect()->route('admin.facilities.index')->with('success', 'Thêm mới thành công!');
+                return redirect()->route('admin.room-types.index')->with('success', 'Thêm mới thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Có lỗi xảy ra!');
+            dd($e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra!' . $e->getMessage());
         }
     }
 
     public function edit($id){
-        $facility = $this->facilityService->getById($id);
-        return view('Admin.Facility.edit', compact('facility'));
+        $roomType = $this->roomTypeService->getById($id);
+        return view('Admin.RoomType.edit', compact('roomType'));
     }
 
-    public function update(FacilityRequest $request, $id){
+    public function update(RoomTypeRequest $request, $id){
         try {
-            $result = $this->facilityService->update($request, $id);
+            $result = $this->roomTypeService->update($request, $id);
             if($result) {
-                return redirect()->route('admin.facilities.index')
+                return redirect()->route('admin.room-types.index')
                     ->with('success', 'Chỉnh sửa thành công!');
-            }
+            }       
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -59,9 +57,10 @@ class FacilityController extends Controller
         }
     }
 
+
     public function delete($id){
         try {
-            $result = $this->facilityService->delete($id);
+            $result = $this->roomTypeService->delete($id);
             if($result) {
                 return response()->json([
                     'success' => true,

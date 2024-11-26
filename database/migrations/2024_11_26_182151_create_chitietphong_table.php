@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('chitietphong', function (Blueprint $table) {
             $table->string('MaPhong', 10);
-            $table->string('MaTienNghi', 10)->index('fk_chitietphong_tiennghi');
+            $table->string('MaTienNghi', 10)->index('matiennghi');
             $table->integer('SoLuong')->default(1);
             $table->string('TinhTrang', 50)->nullable()->default('Tốt');
             $table->string('GhiChu')->nullable();

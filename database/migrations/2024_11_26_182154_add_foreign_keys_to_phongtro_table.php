@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('phongtro', function (Blueprint $table) {
-            $table->foreign(['MaCoSo'], 'FK_PhongTro_CoSo')->references(['MaCoSo'])->on('coso')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['MaCoSo'], 'phongtro_ibfk_1')->references(['MaCoSo'])->on('coso')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['MaLoaiPhong'], 'phongtro_ibfk_2')->references(['MaLoaiPhong'])->on('loaiphong')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('phongtro', function (Blueprint $table) {
-            $table->dropForeign('FK_PhongTro_CoSo');
+            $table->dropForeign('phongtro_ibfk_1');
+            $table->dropForeign('phongtro_ibfk_2');
         });
     }
 };

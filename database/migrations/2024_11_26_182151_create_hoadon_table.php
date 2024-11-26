@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('hoadon', function (Blueprint $table) {
             $table->string('MaHoaDon', 10)->primary();
-            $table->string('MaHopDong', 10)->index('fk_hoadon_hopdongthue');
-            $table->string('MaChiSo', 10)->index('fk_hoadon_chiso');
-            $table->date('NgayLap');
+            $table->string('MaHopDong', 10)->index('mahopdong');
+            $table->string('MaChiSo', 10)->index('machiso');
+            $table->date('NgayLap')->default('CURRENT_DATE');
             $table->decimal('TongTien', 10);
             $table->string('TrangThai', 20)->default('Chưa thanh toán');
         });

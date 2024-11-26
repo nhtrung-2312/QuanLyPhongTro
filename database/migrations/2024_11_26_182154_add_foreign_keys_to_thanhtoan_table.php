@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coso', function (Blueprint $table) {
-            $table->string('MaCoSo', 10)->primary();
-            $table->string('TenCoSo', 100);
-            $table->string('DiaChi', 200);
-            $table->string('SDT', 10);
+        Schema::table('thanhtoan', function (Blueprint $table) {
+            $table->foreign(['MaHoaDon'], 'thanhtoan_ibfk_1')->references(['MaHoaDon'])->on('hoadon')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('coso');
+        Schema::table('thanhtoan', function (Blueprint $table) {
+            $table->dropForeign('thanhtoan_ibfk_1');
+        });
     }
 };

@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('taikhoan', function (Blueprint $table) {
-            $table->string('TenDangNhap', 50)->primary();
+            $table->string('MaTaiKhoan', 10)->primary();
+            $table->string('TenDangNhap', 50)->nullable();
             $table->string('MatKhau', 100);
-            $table->string('MaNhanVien', 10)->index('fk_taikhoan_nhanvien');
-            $table->string('VaiTro', 20)->default('Nhân viên');
-            $table->boolean('TrangThai')->default(false);
+            $table->string('VaiTro', 20)->default('Khách hàng');
+            $table->boolean('TrangThai')->default(true);
         });
     }
 

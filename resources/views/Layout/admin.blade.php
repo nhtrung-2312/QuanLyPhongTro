@@ -92,14 +92,14 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Dashboard
+                Thống kê
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <p>Dashboard</p>
+                  <p>Thống kê</p>
                 </a>
               </li>
             </ul>
@@ -108,23 +108,46 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon bi bi-house-fill"></i>
               <p>
-                Facility
+                Cơ sở
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="/admin/facilities" class="nav-link">
-                  <p>Facility List</p>
+                  <p>Danh sách cơ sở</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/admin/facilities/create" class="nav-link">
-                  <p>Add Facility</p>
+                  <p>Thêm mới cơ sở</p>
                 </a>
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Loại phòng
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/room-types" class="nav-link">
+                  <p>Danh sách loại phòng</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/room-types/create" class="nav-link">
+                  <p>Thêm mới loại phòng</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        
         </ul>
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           

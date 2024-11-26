@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('thanhtoan', function (Blueprint $table) {
-            $table->string('MaThanhToan', 10)->primary();
-            $table->string('MaHoaDon', 10)->index('fk_thanhtoan_hoadon');
-            $table->dateTime('NgayThanhToan')->useCurrent();
-            $table->decimal('SoTien', 10);
-            $table->string('PhuongThucThanhToan', 50);
+        Schema::create('chitiethoadon', function (Blueprint $table) {
+            $table->string('MaHoaDon', 10);
+            $table->string('MaLoaiPhi', 10)->index('maloaiphi');
+            $table->integer('SoLuong')->nullable();
+            $table->decimal('ThanhTien', 10);
             $table->string('GhiChu')->nullable();
+
+            $table->primary(['MaHoaDon', 'MaLoaiPhi']);
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('thanhtoan');
+        Schema::dropIfExists('chitiethoadon');
     }
 };

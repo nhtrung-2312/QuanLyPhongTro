@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hoadon', function (Blueprint $table) {
-            $table->foreign(['MaChiSo'], 'FK_HoaDon_ChiSo')->references(['MaChiSo'])->on('chisodiennuoc')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['MaHopDong'], 'FK_HoaDon_HopDongThue')->references(['MaHopDong'])->on('hopdongthue')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['MaHopDong'], 'hoadon_ibfk_1')->references(['MaHopDong'])->on('hopdongthue')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['MaChiSo'], 'hoadon_ibfk_2')->references(['MaChiSo'])->on('chisodiennuoc')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hoadon', function (Blueprint $table) {
-            $table->dropForeign('FK_HoaDon_ChiSo');
-            $table->dropForeign('FK_HoaDon_HopDongThue');
+            $table->dropForeign('hoadon_ibfk_1');
+            $table->dropForeign('hoadon_ibfk_2');
         });
     }
 };

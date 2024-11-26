@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('hopdongthue', function (Blueprint $table) {
             $table->string('MaHopDong', 10)->primary();
-            $table->string('MaPhong', 10)->index('fk_hopdongthue_phongtro');
-            $table->string('MaKhachThue', 10)->index('fk_hopdongthue_khachthue');
+            $table->string('MaPhong', 10)->index('maphong');
             $table->date('NgayBatDau');
             $table->date('NgayKetThuc');
             $table->string('TrangThai', 20)->default('Đang thuê');

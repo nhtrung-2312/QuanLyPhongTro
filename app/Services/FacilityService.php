@@ -45,8 +45,7 @@ class FacilityService
             $facility = $this->getById($id);
             $data = [
                 'TenCoSo' => $request->TenCoSo,
-                'DiaChi' => $request->DiaChi,
-                'SDT' => $request->SDT
+                'DiaChi' => $request->DiaChi
             ];
             return $facility->update($data);
         }catch(\Exception $e){

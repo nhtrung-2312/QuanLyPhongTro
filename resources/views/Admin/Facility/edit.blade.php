@@ -18,14 +18,15 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>ID</label>
+                        <label>Mã cơ sở</label>
                         <input type="text" class="form-control" value="{{ $facility->MaCoSo }}" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label>Name <span class="text-danger">*</span></label>
+                        <label>Tên cơ sở <span class="text-danger">*</span></label>
                         <input type="text" name="TenCoSo" class="form-control" 
-                            value="{{ old('TenCoSo', $facility->TenCoSo) }}">
+                            value="{{ old('TenCoSo', $facility->TenCoSo) }}" 
+                            placeholder="Nhập tên cơ sở">
                         @error('TenCoSo')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -34,17 +35,9 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Phone Number <span class="text-danger">*</span></label>
-                        <input type="text" name="SDT" class="form-control" 
-                            value="{{ old('SDT', $facility->SDT) }}">
-                        @error('SDT')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label>Address <span class="text-danger">*</span></label>
-                        <textarea name="DiaChi" class="form-control" rows="3">{{ old('DiaChi', $facility->DiaChi) }}</textarea>
+                        <label>Địa chỉ <span class="text-danger">*</span></label>
+                        <textarea name="DiaChi" class="form-control" rows="3" 
+                            placeholder="Nhập địa chỉ">{{ old('DiaChi', $facility->DiaChi) }}</textarea>
                         @error('DiaChi')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -66,17 +59,3 @@
     </div>
 </div>
 @endsection
-
-@push('css')
-<style>
-    .form-group label {
-        font-weight: 600;
-    }
-    .text-danger {
-        font-weight: 400;
-    }
-    textarea {
-        resize: none;
-    }
-</style>
-@endpush
