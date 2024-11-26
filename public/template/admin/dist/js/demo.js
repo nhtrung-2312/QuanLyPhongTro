@@ -622,6 +622,14 @@
     }
   })
 
+  $(document).ready(function() {
+    $('.nav-link').click(function() {
+        if ($(this).next('.nav-treeview').length) {
+            $(this).parent().toggleClass('menu-open');
+        }
+    });
+});
+
   if (active_sidebar_light_color !== null) {
     $sidebar_light_variants.find('option.' + active_sidebar_light_color).prop('selected', true)
     $sidebar_light_variants.removeClass().addClass('custom-select mb-3 text-light border-0 ').addClass(active_sidebar_light_color)
