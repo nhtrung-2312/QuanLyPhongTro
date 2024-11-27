@@ -2,22 +2,22 @@
 
 namespace App\Services;
 
-use App\Models\Facility;
+use App\Models\CoSo;
 use Illuminate\Support\Facades\Log;
 
 class FacilityService
 {
     public function getAll()
     {
-        return Facility::orderBy('MaCoSo', 'ASC')->paginate(10);
+        return CoSo::orderBy('MaCoSo', 'ASC')->paginate(10);
     }
 
     public function getById($id){
-        return Facility::findOrFail($id);
+        return CoSo::findOrFail($id);
     }
 
     public function generateMaCoSo(){
-        $lastFacility = Facility::orderBy('MaCoSo', 'DESC')->first();
+        $lastFacility = CoSo::orderBy('MaCoSo', 'DESC')->first();
         if(!$lastFacility){
             return 'CS001';
         }
@@ -32,7 +32,7 @@ class FacilityService
             $data = $request->validated();
             $data['MaCoSo'] = $this->generateMaCoSo();
 
-            Facility::create($data);
+            CoSo::create($data);
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
