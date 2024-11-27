@@ -146,6 +146,27 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Khách hàng
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.customers.index') }}" class="nav-link">
+                  <p>Danh sách khách hàng</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <p>Thêm mới khách hàng</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
         
         </ul>

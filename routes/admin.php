@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\FacilityController;
 use App\Http\Controllers\Admin\RoomTypeController;
+use App\Http\Controllers\Admin\CustomerController;
 
 Route::prefix('')->name('admin.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,3 +28,8 @@ Route::prefix('room-types')->name('admin.room-types.')->group(function () {
     Route::put('/update/{id}', [RoomTypeController::class, 'update'])->name('update');
     Route::delete('/delete/{id}', [RoomTypeController::class, 'delete'])->name('delete');
 });
+
+Route::prefix('customers')->name('admin.customers.')->group(function () {
+    Route::get('/', [CustomerController::class, 'index'])->name('index');
+});
+
