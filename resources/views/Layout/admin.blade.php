@@ -156,13 +156,56 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('admin.customers.index') }}" class="nav-link">
+                <a href="{{ route('admin.khachhang.index') }}" class="nav-link">
                   <p>Danh sách khách hàng</p>
                 </a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                LoaiPhi
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="" class="nav-link">
-                  <p>Thêm mới khách hàng</p>
+                <a href="{{ route('admin.loaiphi.index') }}" class="nav-link">
+                  <p>Danh sách loại phí</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Hợp đồng thuê
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.hopdongthue.index') }}" class="nav-link">
+                  <p>Danh sách hợp đồng thuê</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Hóa Đơn
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.hoadon.index') }}" class="nav-link">
+                  <p> Danh sách hóa đơn</p>
                 </a>
               </li>
             </ul>

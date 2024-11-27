@@ -22,4 +22,15 @@ class CoSo extends Model
     {
         return $this->hasMany(PhongTro::class, 'MaCoSo', 'MaCoSo');
     }
+    public function hoadon()
+    {
+        return $this->hasManyThrough(
+            HoaDon::class,
+            PhongTro::class,
+            'MaCoSo', // Khóa ngoại trên bảng phongtro
+            'MaPhong', // Khóa ngoại trên bảng hoadon
+            'MaCoSo', // Khóa chính của bảng coso
+            'MaPhong'  // Khóa chính của bảng phongtro
+        );
+    }
 }
