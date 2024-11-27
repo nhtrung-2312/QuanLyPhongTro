@@ -1,22 +1,22 @@
 <?php
 
 namespace App\Services;
-use App\Models\RoomType;
+use App\Models\LoaiPhong;
 use Illuminate\Support\Facades\Log;
 
 class RoomTypeService
 {
     public function getAll()
     {
-        return RoomType::orderBy('MaLoaiPhong', 'ASC')->paginate(10);
+        return LoaiPhong::orderBy('MaLoaiPhong', 'ASC')->paginate(10);
     }
 
     public function getById($id){
-        return RoomType::findOrFail($id);
+        return LoaiPhong::findOrFail($id);
     }
 
     public function generateMaLoaiPhong(){
-        $lastRoomType = RoomType::orderBy('MaLoaiPhong', 'DESC')->first();
+        $lastRoomType = LoaiPhong::orderBy('MaLoaiPhong', 'DESC')->first();
         if(!$lastRoomType){
             return 'LP001';
         }
@@ -33,7 +33,7 @@ class RoomTypeService
 
             Log::info('Data being created:', $data);
 
-            RoomType::create($data);
+            LoaiPhong::create($data);
             return true;
         } catch (\Exception $e) {
             Log::error('Error creating room type: ' . $e->getMessage());

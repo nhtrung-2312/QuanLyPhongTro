@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\RoomTypeController;
 Route::prefix('')->name('admin.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 });
-
 Route::prefix('facilities')->name('admin.facilities.')->group(function () {
     Route::get('/', [FacilityController::class, 'index'])->name('index');
     Route::get('/create', [FacilityController::class, 'create'])->name('create');
