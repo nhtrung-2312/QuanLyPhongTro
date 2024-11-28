@@ -28,8 +28,22 @@ Hệ thống quản lý phòng trọ được xây dựng bằng Laravel Framewo
 ## Hướng dẫn cài đặt
 
 1. Clone repository
+```
+bash
+git clone https://github.com/nhtrung-2312/QuanLyPhongTro.git
+cd QuanLyPhongTro
+```
 2. Cài đặt dependencies
+```
+bash
+composer install
+npm install
+```
 3. Tạo file .env
+```
+bash
+cp .env.example .env
+```
 4. Cấu hình database trong file .env
 ```
 DB_CONNECTION=mysql
@@ -40,9 +54,25 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 5. Tạo key cho ứng dụng
+```
+bash
+php artisan key:generate
+```
 6. Chạy migration và seeder
+```
+bash
+php artisan migrate --seed
+```
 7. Build assets
+```
+bash
+npm run dev
+```
 8. Khởi chạy ứng dụng
+```
+bash
+php artisan serve
+```
 
 Truy cập: http://localhost:8000
 
