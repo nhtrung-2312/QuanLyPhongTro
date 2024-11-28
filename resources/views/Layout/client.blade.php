@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
 
     <!-- Google Font -->
@@ -190,37 +191,7 @@
     </footer>
     <!-- Footer Section End -->
 
-    <!-- Login Modal Begin -->
-    {{-- <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h4 class="modal-title w-100 font-weight-bold" id="loginModal">Xin chào</h4>
-                    <p class="mb-0 mt-2">Vui lòng đăng nhập để tiếp tục</p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body px-4">
-                    <form action="" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="phone">Số điện thoại</label>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Số điện thoại" pattern="[0-9]{10}">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Tiếp tục</button>
-                    </form>
-                    <div class="text-center mb-3">
-                        <span class="text-muted">Hoặc</span>
-                    </div>
-                    <button class="btn btn-light btn-block border">
-                        <img src="https://www.google.com/favicon.ico" width="20" class="mr-2">
-                        Tiếp tục với Google
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+    <!-- Login Modal Start -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content">
@@ -232,27 +203,28 @@
                     </button>
                 </div>
                 <div class="modal-body px-4">
-                    <form action="" method="POST">
+                    <form id="loginForm">
                         @csrf
                         <div class="form-group">
-                            <label for="phone">Số điện thoại</label>
-                            <input type="text" class="form-control" id="phone" name="phone"
+                            <input type="text" class="form-control" name="phone"
                                    placeholder="Số điện thoại" pattern="[0-9]{10}">
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Tiếp tục</button>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password"
+                                   placeholder="Mật khẩu">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập</button>
                     </form>
+
                     <div class="text-center mb-3">
                         <span class="text-muted">Hoặc</span>
                     </div>
-                    <button class="btn btn-light btn-block border">
-                        <img src="https://www.google.com/favicon.ico" width="20" class="mr-2">
-                        Tiếp tục với Google
-                    </button>
+
+                    <button id="regModal" class="btn btn-light btn-block border py-2 mb-3">Đăng ký</button>
                 </div>
             </div>
         </div>
     </div>
-
     <!--- Login Modal End -->
 
     <!-- Js Plugins -->
@@ -265,11 +237,11 @@
     <script src="/template/client/dist/js/owl.carousel.min.js"></script>
     <script src="/template/client/dist/js/main.js"></script>
 
+
     <script>
         function login() {
             $('#loginModal').modal('show');
         }
     </script>
 </body>
-
 </html>

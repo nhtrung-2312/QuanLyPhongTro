@@ -16,8 +16,3 @@ Route::prefix('')->group(function () {
         Route::get('/chi-tiet/{id}', [PhongController::class, 'details'])->name('phong.details');
     });
 });
-
-Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
-// Route::get('auth/google', [AuthenticationController::class, 'redirectToGoogle'])->name('google.login');
-// Route::get('auth/google/callback', [AuthenticationController::class, 'handleGoogleCallback']);
-Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
