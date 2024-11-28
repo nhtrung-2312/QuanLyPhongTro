@@ -1,6 +1,12 @@
 @extends('Layout.client')
 @section('title', 'Chi tiết phòng')
 @section('content')
+@if($phong->TrangThai != 'Phòng trống')
+    <script>
+        window.location.href = '{{ route("phong.show", $phong->MaLoaiPhong) }}';
+    </script>
+@endif
+
 <div class="breadcrumb-section">
     <div class="container">
         <div class="row">
@@ -35,7 +41,11 @@
                         <div class="rd-title">
                             <h3>{{ $phong->TenPhong }}</h3>
                             <div class="rdt-right">
-                                <a href="#">Đặt phòng ngay</a>
+                                @if(session()->has('logged_in'))
+                                    <a href="#" onclick="handleBooking('{{ $phong->MaPhong }}')" class="primary-btn">Đặt phòng ngay</a>
+                                @else
+                                    <a href="#" onclick="showLogin()" class="primary-btn">Đặt phòng ngay</a>
+                                @endif
                             </div>
                         </div>
                         <h2>{{ number_format($phong->GiaThue, 0, ',', '.') }} đ<span>/Tháng</span></h2>
@@ -137,8 +147,31 @@
                 </div>
             </div>
         </div>
-        </div>
     </div>
 </section>
 <!-- Room Details Section End -->
 @endsection
+@push('scripts')
+<script>
+    function handleBooking(maPhong) {
+        $.ajax({
+            url: '{{ route("phong.book") }}',
+            type: 'POST',
+            data: {
+                maPhong: maPhong,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirectUrl;
+                } else {
+                    console.log(response);
+                }
+            },
+            error: function(xhr) {
+                console.log(xhr);
+            }
+        });
+    }
+</script>
+@endpush

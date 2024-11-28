@@ -302,7 +302,7 @@
                         data: $(this).serialize(),
                         success: function(response) {
                             if (response.status) {
-                                window.location.href = response.redirect;
+                                location.reload();
                             }
                         },
                         error: function(xhr) {
@@ -338,5 +338,7 @@
             $('#registerModal').modal('show');
         }
     </script>
+
+    @stack('scripts')
 </body>
 </html>
