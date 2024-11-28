@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LoaiPhong;
 use App\Models\PhongTro;
+use App\Models\LoaiPhi;
 
 class PhongController extends Controller
 {
@@ -25,6 +26,7 @@ class PhongController extends Controller
     public function details($id)
     {
         $phong = PhongTro::with('coSo', 'chiTietPhong', 'loaiPhong')->find($id);
-        return view('Client.Phong.details', compact('phong'));
+        $loaiphi = LoaiPhi::all();
+        return view('Client.Phong.details', compact('phong', 'loaiphi'));
     }
 }

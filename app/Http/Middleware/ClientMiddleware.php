@@ -16,8 +16,8 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('web')->check()) {
-            return redirect()->route('login');
+        if (!session('logged_in')) {
+            return redirect()->route('home.index');
         }
         return $next($request);
     }

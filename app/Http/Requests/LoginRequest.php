@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-            'password' => 'required|min:6'
+            'password' => 'required'
         ];
     }
     public function messages()
@@ -22,9 +22,8 @@ class LoginRequest extends FormRequest
         return [
             'phone.required' => 'Vui lòng nhập số điện thoại',
             'phone.regex' => 'Số điện thoại không hợp lệ',
-            'phone.min' => 'Số điện thoại phải có ít nhất 10 số',
+            'phone.min' => 'Số điện thoại không hợp lệ.',
             'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự'
         ];
     }
 }

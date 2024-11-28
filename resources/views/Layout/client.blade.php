@@ -43,18 +43,15 @@
             <i class="icon_search"></i>
         </div> --}}
         <div class="header-configure-area">
-            @guest
+            @if(session()->has('logged_in'))
                 <div class="language-option">
-                    <img src="img/flag.jpg" alt="">
-                    <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
-                </div>
-            @endguest
-            @auth
-                <div class="language-option">
-                    <img src="img/flag.jpg" alt="">
                     <span onclick="logout()">Đăng xuất</span>
                 </div>
-            @endauth
+            @else
+                <div class="language-option">
+                    <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
+                </div>
+            @endif
         </div>
         <div class="header-configure-area">
             <a href="#" class="bk-btn">Thuê phòng ngay</a>
@@ -97,10 +94,24 @@
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
                             <a href="{{ route('phong.index') }}" class="bk-btn">Đặt phòng ngay</a>
-                            <div class="language-option">
-                                <img src="img/flag.jpg" alt="">
-                                <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
-                            </div>
+                            @if(session()->has('logged_in'))
+                                <div class="language-option">
+                                    <i class="fa fa-user"></i>
+                                    <span>Thông tin <i class="fa fa-angle-down"></i></span>
+                                    <div class="flag-dropdown">
+                                        <ul>
+                                            <li><span>Xin chào, {{ Str::of(session('username'))->explode(' ')->last() }}</span></li>
+                                            <li><hr style="margin: 5px 0"></li>
+                                            <li><a href="{{ route('home.index') }}">Thông tin cá nhân</a></li>
+                                            <li><a href="{{ route('auth.logout') }}">Đăng xuất</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="language-option">
+                                    <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -204,7 +215,7 @@
                     </button>
                 </div>
                 <div class="modal-body px-4">
-                    <form id="showLoginForm" onsubmit="return validateLogin(event)">
+                    <form id="loginForm" method="POST" action="{{ route('auth.login') }}">
                         @csrf
                         <div class="form-group">
                             <label for="phone">Số điện thoại</label>
@@ -217,7 +228,7 @@
                             <small class="text-danger" id="passwordError"></small>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập</button>
-                        <button onclick="loginSMS(event)" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập với SMS</button>
+                        <button class="btn btn-primary btn-block py-2 mb-3">Đăng nhập với SMS</button>
                     </form>
 
                     <div class="text-center mb-3">
@@ -280,6 +291,44 @@
 
 
     <script>
+            $(document).ready(function() {
+                $('#loginForm').on('submit', function(e) {
+                    e.preventDefault();
+                    $('.text-danger').text('');
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response.status) {
+                                window.location.href = response.redirect;
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                console.log(errors);
+                                if (errors.phone) {
+                                    $('#phoneError').text(errors.phone);
+                                }
+                                if (errors.password) {
+                                    $('#passwordError').text(errors.password);
+                                }
+                            } else if (xhr.responseJSON.errors) {
+                                let errors = xhr.responseJSON.errors;
+                                console.log(errors);
+                                if (errors.phone) {
+                                    $('#phoneError').text(errors.phone);
+                                }
+                                if (errors.password) {
+                                    $('#passwordError').text(errors.password);
+                                }
+                            }
+                        }
+                    });
+                });
+            });
         function showLogin() {
             $('#showLoginModal').modal('show');
         }
@@ -287,76 +336,6 @@
         function showRegister() {
             $('#showLoginModal').modal('hide');
             $('#registerModal').modal('show');
-        }
-        function login(e) {
-            e.preventDefault();
-            $('#phoneError').text('');
-            $('#passwordError').text('');
-            $('#loginBtn').prop('disabled', true);
-
-            let phone = $('#phone').val().trim();
-            let password = $('#password').val().trim();
-            let isValid = true;
-
-            if (!phone) {
-                $('#phoneError').text('Vui lòng nhập số điện thoại');
-                isValid = false;
-            } else if (!/^[0-9]{10}$/.test(phone)) {
-                $('#phoneError').text('Số điện thoại không hợp lệ');
-                isValid = false;
-            }
-            if (!password) {
-                $('#passwordError').text('Vui lòng nhập mật khẩu');
-                isValid = false;
-            } else if (password.length < 6) {
-                $('#passwordError').text('Mật khẩu phải có ít nhất 6 ký tự');
-                isValid = false;
-            }
-            if (isValid) {
-                login();
-            } else {
-                $('#loginBtn').prop('disabled', false);
-            }
-
-            return false;
-        }
-        function login() {
-            let phone = $('#phone').val().trim();
-            let password = $('#password').val().trim();
-            $.ajax({
-                url: '/login',
-                type: 'POST',
-                data: {
-                    phone: phone,
-                    password: password,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#showLoginModal').modal('hide');
-                        toastr.success('Đăng nhập thành công!');
-                        window.location.href = '/';
-                    }
-                },
-                error: function(xhr) {
-                    if(xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        if(errors.phone) {
-                            $('#phoneError').text(errors.phone[0]);
-                        }
-                        if(errors.password) {
-                            $('#passwordError').text(errors.password[0]);
-                        }
-                    } else if(xhr.status === 401) {
-                        toastr.error('Số điện thoại hoặc mật khẩu không chính xác');
-                    } else {
-                        toastr.error('Có lỗi xảy ra, vui lòng thử lại sau');
-                    }
-                },
-                complete: function() {
-                    $('#loginBtn').prop('disabled', false);
-                }
-            });
         }
     </script>
 </body>
