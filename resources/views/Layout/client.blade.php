@@ -43,17 +43,18 @@
             <i class="icon_search"></i>
         </div> --}}
         <div class="header-configure-area">
-            <div class="language-option">
-                <img src="img/flag.jpg" alt="">
-                <span>EN <i class="fa fa-angle-down"></i></span>
-                <div class="flag-dropdown">
-                    <ul>
-                        <li><a href="#">Zi</a></li>
-                        <li><a href="#">Fr</a></li>
-                    </ul>
+            @guest
+                <div class="language-option">
+                    <img src="img/flag.jpg" alt="">
+                    <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
                 </div>
-            </div>
-            <a href="#" class="bk-btn">Booking Now</a>
+            @endguest
+            @auth
+                <div class="language-option">
+                    <img src="img/flag.jpg" alt="">
+                    <span onclick="logout()">Đăng xuất</span>
+                </div>
+            @endauth
         </div>
         <div class="header-configure-area">
             <a href="#" class="bk-btn">Thuê phòng ngay</a>
@@ -98,7 +99,7 @@
                             <a href="{{ route('phong.index') }}" class="bk-btn">Đặt phòng ngay</a>
                             <div class="language-option">
                                 <img src="img/flag.jpg" alt="">
-                                <span onclick="login()">Đăng nhập/Đăng ký</span>
+                                <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
                             </div>
                         </div>
                     </div>
@@ -191,41 +192,81 @@
     </footer>
     <!-- Footer Section End -->
 
-    <!-- Login Modal Start -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+    <!-- Show Login Modal Start -->
+    <div class="modal fade" id="showLoginModal" tabindex="-1" aria-labelledby="showLoginModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content">
                 <div class="modal-header border-0 flex-column">
-                    <h3 class="modal-title w-100 font-weight-bold" id="loginModal">Xin chào</h3>
+                    <h3 class="modal-title w-100 font-weight-bold" id="showLoginModal">Xin chào</h3>
                     <p class="mb-0 mt-2">Vui lòng đăng nhập để tiếp tục</p>
                     <button type="button" class="close position-absolute" style="right: 1rem; top: 1rem;" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body px-4">
-                    <form id="loginForm">
+                    <form id="showLoginForm" onsubmit="return validateLogin(event)">
                         @csrf
                         <div class="form-group">
-                            <input type="text" class="form-control" name="phone"
-                                   placeholder="Số điện thoại" pattern="[0-9]{10}">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" name="phone" placeholder="Số điện thoại">
+                            <small class="text-danger" id="phoneError"></small>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" name="password"
-                                   placeholder="Mật khẩu">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                            <small class="text-danger" id="passwordError"></small>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập</button>
+                        <button onclick="loginSMS(event)" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập với SMS</button>
                     </form>
 
                     <div class="text-center mb-3">
                         <span class="text-muted">Hoặc</span>
                     </div>
 
-                    <button id="regModal" class="btn btn-light btn-block border py-2 mb-3">Đăng ký</button>
+                    <button onclick="showRegister()" id="regModal" class="btn btn-light btn-block border py-2 mb-3">Đăng ký</button>
                 </div>
             </div>
         </div>
     </div>
-    <!--- Login Modal End -->
+    <!--- Show Login Modal End -->
+
+    <!-- Register Modal Start -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header border-0 flex-column">
+                    <h3 class="modal-title w-100 font-weight-bold" id="showLoginModal">Xin chào</h3>
+                    <p class="mb-0 mt-2">Vui lòng đăng nhập để tiếp tục</p>
+                    <button type="button" class="close position-absolute" style="right: 1rem; top: 1rem;" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body px-4">
+                    <form id="registerForm">
+                        @csrf
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" name="phone" placeholder="Số điện thoại">
+                            <small class="text-danger" id="phoneError"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                            <small class="text-danger" id="passwordError"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="repassword">Nhập lại mật khẩu</label>
+                            <input type="repassword" class="form-control" name="repassword" placeholder="Nhập lại mật khẩu">
+                            <small class="text-danger" id="repasswordError"></small>
+                        </div>
+                        <button onclick="register()" class="btn btn-primary btn-block py-2 mb-3">Đăng ký</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register Modal End -->
 
     <!-- Js Plugins -->
     <script src="/template/client/dist/js/jquery-3.3.1.min.js"></script>
@@ -239,8 +280,83 @@
 
 
     <script>
+        function showLogin() {
+            $('#showLoginModal').modal('show');
+        }
+
+        function showRegister() {
+            $('#showLoginModal').modal('hide');
+            $('#registerModal').modal('show');
+        }
+        function login(e) {
+            e.preventDefault();
+            $('#phoneError').text('');
+            $('#passwordError').text('');
+            $('#loginBtn').prop('disabled', true);
+
+            let phone = $('#phone').val().trim();
+            let password = $('#password').val().trim();
+            let isValid = true;
+
+            if (!phone) {
+                $('#phoneError').text('Vui lòng nhập số điện thoại');
+                isValid = false;
+            } else if (!/^[0-9]{10}$/.test(phone)) {
+                $('#phoneError').text('Số điện thoại không hợp lệ');
+                isValid = false;
+            }
+            if (!password) {
+                $('#passwordError').text('Vui lòng nhập mật khẩu');
+                isValid = false;
+            } else if (password.length < 6) {
+                $('#passwordError').text('Mật khẩu phải có ít nhất 6 ký tự');
+                isValid = false;
+            }
+            if (isValid) {
+                login();
+            } else {
+                $('#loginBtn').prop('disabled', false);
+            }
+
+            return false;
+        }
         function login() {
-            $('#loginModal').modal('show');
+            let phone = $('#phone').val().trim();
+            let password = $('#password').val().trim();
+            $.ajax({
+                url: '/login',
+                type: 'POST',
+                data: {
+                    phone: phone,
+                    password: password,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#showLoginModal').modal('hide');
+                        toastr.success('Đăng nhập thành công!');
+                        window.location.href = '/';
+                    }
+                },
+                error: function(xhr) {
+                    if(xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        if(errors.phone) {
+                            $('#phoneError').text(errors.phone[0]);
+                        }
+                        if(errors.password) {
+                            $('#passwordError').text(errors.password[0]);
+                        }
+                    } else if(xhr.status === 401) {
+                        toastr.error('Số điện thoại hoặc mật khẩu không chính xác');
+                    } else {
+                        toastr.error('Có lỗi xảy ra, vui lòng thử lại sau');
+                    }
+                },
+                complete: function() {
+                    $('#loginBtn').prop('disabled', false);
+                }
+            });
         }
     </script>
 </body>

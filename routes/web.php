@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\PhongController;
-use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\AuthController;
+
+
 
 Route::prefix('')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');

@@ -12,4 +12,8 @@ class KhachThue extends Model
     public $incrementing = false;
     public $timestamps = false;
     protected $fillable = ['MaKhachThue', 'HoTen', 'CCCD', 'SDT', 'DiaChi', 'NgaySinh', 'GioiTinh', 'MaTaiKhoan'];
+    public function taiKhoan()
+    {
+        return $this->belongsTo(TaiKhoan::class, 'MaTaiKhoan', 'MaTaiKhoan');
+    }
 }
