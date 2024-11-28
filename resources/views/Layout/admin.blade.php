@@ -114,7 +114,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/facilities" class="nav-link">
+                <a href="/admin/coso" class="nav-link">
                   <p>Danh sách cơ sở</p>
                 </a>
               </li>
@@ -211,10 +211,10 @@
             </ul>
           </li>
         </ul>
-        
+
         </ul>
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -273,7 +273,7 @@
 
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<script src="/template/admin/plugins/jquery/jquery.min.js"></script>  
+<script src="/template/admin/plugins/jquery/jquery.min.js"></script>
 <script src="/template/admin/plugins/toastr/toastr.min.js"></script>
 
 <!-- Bootstrap -->

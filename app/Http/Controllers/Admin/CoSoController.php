@@ -4,35 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\FacilityService;
-use App\Http\Requests\FacilityRequest;
+use App\Services\CoSoService;
+use App\Http\Requests\CoSoRequest;
 use Illuminate\Support\Facades\Log;
 
-class FacilityController extends Controller
+class CoSoController extends Controller
 {
-    protected $facilityService;
+    protected $coSoService;
 
-    public function __construct(FacilityService $facilityService)
+    public function __construct(CoSoService $coSoService)
     {
-        $this->facilityService = $facilityService;
+        $this->coSoService = $coSoService;
     }
 
     public function index()
     {
-        $facilities = $this->facilityService->getAll();
-        return view('Admin.Facility.index', compact('facilities'));
+        $coSos = $this->coSoService->getAll();
+        return view('Admin.CoSo.index', compact('coSos'));
     }
 
     public function create()
     {
-        return view('Admin.Facility.create');
+        return view('Admin.CoSo.create');
     }
 
-    public function store(FacilityRequest $request){
+    public function store(CoSoRequest $request){
         try{
-            $result = $this->facilityService->create($request);
+            $result = $this->coSoService->create($request);
             if($result){
-            return redirect()->route('admin.facilities.index')->with('success', 'Thêm mới thành công!');
+            return redirect()->route('admin.coSos.index')->with('success', 'Thêm mới thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
@@ -41,15 +41,15 @@ class FacilityController extends Controller
     }
 
     public function edit($id){
-        $facility = $this->facilityService->getById($id);
-        return view('Admin.Facility.edit', compact('facility'));
+        $coSo = $this->coSoService->getById($id);
+        return view('Admin.CoSo.edit', compact('coSo'));
     }
 
-    public function update(FacilityRequest $request, $id){
+    public function update(CoSoRequest $request, $id){
         try {
-            $result = $this->facilityService->update($request, $id);
+            $result = $this->coSoService->update($request, $id);
             if($result) {
-                return redirect()->route('admin.facilities.index')
+                return redirect()->route('admin.coSos.index')
                     ->with('success', 'Chỉnh sửa thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
@@ -61,7 +61,7 @@ class FacilityController extends Controller
 
     public function delete($id){
         try {
-            $result = $this->facilityService->delete($id);
+            $result = $this->coSoService->delete($id);
             if($result) {
                 return response()->json([
                     'success' => true,

@@ -5,7 +5,7 @@
     <div class="card-header">
         <h3 class="card-title">Danh sách cơ sở</h3>
         <div class="card-tools">
-            <a href="{{ route('admin.facilities.create') }}" class="btn btn-primary">Thêm mới</a>
+            <a href="{{ route('admin.coso.create') }}" class="btn btn-primary">Thêm mới</a>
         </div>
     </div>
     <div class="card-body">
@@ -19,20 +19,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($facilities as $facility)
+                @foreach($coSos as $coSo)
                 <tr>
-                    <td>{{ $facility->MaCoSo }}</td>
-                    <td>{{ $facility->TenCoSo }}</td>
-                    <td>{{ $facility->DiaChi }}</td>
+                    <td>{{ $coSo->MaCoSo }}</td>
+                    <td>{{ $coSo->TenCoSo }}</td>
+                    <td>{{ $coSo->DiaChi }}</td>
                     <td>
-                        <a href="{{ route('admin.facilities.edit', $facility->MaCoSo) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
-                        <button onclick="deleteFacility('{{ $facility->MaCoSo }}', '{{$facility->TenCoSo}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
+                        <a href="{{ route('admin.coso.edit', $coSo->MaCoSo) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
+                        <button onclick="deleteFacility('{{ $coSo->MaCoSo }}', '{{$coSo->TenCoSo}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        {{ $facilities->links() }}
+        {{ $coSos->links() }}
     </div>
 </div>
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

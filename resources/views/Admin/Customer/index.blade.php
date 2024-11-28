@@ -25,7 +25,7 @@
                 @foreach($customers as $customer)
                 <tr class="text-center align-middle">
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $customer->HoTen }}</td> 
+                    <td>{{ $customer->HoTen }}</td>
                     <td>{{ $customer->SDT }}</td>
                     <td>{{ $customer->DiaChi }}</td>
                     <td>{{ $customer->NgaySinh }}</td>

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KhachThue;
 
-class CustomerController extends Controller
+class KhachThueController extends Controller
 {
     public function index()
     {
