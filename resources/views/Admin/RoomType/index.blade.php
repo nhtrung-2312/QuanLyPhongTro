@@ -12,16 +12,16 @@
         <table class="table">
             <thead>
                 <tr class="text-center align-middle">
-                    <th>Mã loại phòng</th>
-                    <th>Diện tích</th>
+                    <th>STT</th>
+                    <th>Diện tích (m²)</th>
                     <th>Loại phòng</th>
                     <th>Số người</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($roomTypes as $roomType)
+                @foreach($roomTypes as $index => $roomType)
                 <tr class="text-center align-middle">
-                    <td>{{ $roomType->MaLoaiPhong }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $roomType->DienTich }}</td>
                     <td>{{ $roomType->LoaiPhong }}</td>
                     <td>{{ $roomType->SoNguoi }}</td>

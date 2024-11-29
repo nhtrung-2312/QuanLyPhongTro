@@ -12,16 +12,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Mã cơ sở</th>
+                    <th>STT</th>
                     <th>Tên cơ sở</th>
                     <th>Địa chỉ</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($facilities as $facility)
+                @foreach($facilities as $index => $facility)
                 <tr>
-                    <td>{{ $facility->MaCoSo }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $facility->TenCoSo }}</td>
                     <td>{{ $facility->DiaChi }}</td>
                     <td>

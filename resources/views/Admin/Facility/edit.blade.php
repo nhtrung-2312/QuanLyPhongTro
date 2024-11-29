@@ -18,11 +18,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Mã cơ sở</label>
-                        <input type="text" class="form-control" value="{{ $facility->MaCoSo }}" readonly>
-                    </div>
-
-                    <div class="form-group">
                         <label>Tên cơ sở <span class="text-danger">*</span></label>
                         <input type="text" name="TenCoSo" class="form-control" 
                             value="{{ old('TenCoSo', $facility->TenCoSo) }}" 

@@ -118,30 +118,25 @@
                   <p>Danh sách cơ sở</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="/admin/facilities/create" class="nav-link">
-                  <p>Thêm mới cơ sở</p>
-                </a>
-              </li>
             </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon bi bi-house-fill"></i>
               <p>
-                Loại phòng
+                Phòng trọ
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="/admin/room-types" class="nav-link">
-                  <p>Danh sách loại phòng</p>
+                  <p>Quản lý loại phòng</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/room-types/create" class="nav-link">
-                  <p>Thêm mới loại phòng</p>
+                <a href="/admin/rooms" class="nav-link">
+                  <p>Quản lý phòng</p>
                 </a>
               </li>
             </ul>
@@ -150,7 +145,6 @@
         
         </ul>
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -181,7 +175,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
+            </div>        
         @endif
 
         @if(session('error'))
