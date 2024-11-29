@@ -114,7 +114,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/facilities" class="nav-link">
+                <a href="/admin/coso" class="nav-link">
                   <p>Danh sách cơ sở</p>
                 </a>
               </li>
@@ -134,6 +134,17 @@
                   <p>Quản lý loại phòng</p>
                 </a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Hóa Đơn
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="/admin/rooms" class="nav-link">
                   <p>Quản lý phòng</p>
@@ -141,10 +152,75 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Khách hàng
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.khachhang.index') }}" class="nav-link">
+                  <p>Danh sách khách hàng</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                LoaiPhi
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.loaiphi.index') }}" class="nav-link">
+                  <p>Danh sách loại phí</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Hợp đồng thuê
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.hopdongthue.index') }}" class="nav-link">
+                  <p>Danh sách hợp đồng thuê</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-house-fill"></i>
+              <p>
+                Hóa Đơn
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.hoadon.index') }}" class="nav-link">
+                  <p> Danh sách hóa đơn</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
-        
+
         </ul>
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -203,7 +279,7 @@
 
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<script src="/template/admin/plugins/jquery/jquery.min.js"></script>  
+<script src="/template/admin/plugins/jquery/jquery.min.js"></script>
 <script src="/template/admin/plugins/toastr/toastr.min.js"></script>
 
 <!-- Bootstrap -->

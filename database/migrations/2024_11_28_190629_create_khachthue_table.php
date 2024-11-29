@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('khachthue', function (Blueprint $table) {
             $table->string('MaKhachThue', 10)->primary();
-            $table->string('HoTen', 100);
-            $table->string('CCCD', 12)->unique('cccd');
+            $table->string('HoTen', 100)->nullable();
+            $table->string('CCCD', 12)->nullable()->unique('cccd');
             $table->string('SDT', 10);
-            $table->string('DiaChi', 200);
-            $table->date('NgaySinh');
-            $table->string('GioiTinh', 10);
+            $table->string('DiaChi', 200)->nullable();
+            $table->date('NgaySinh')->nullable();
+            $table->string('GioiTinh', 10)->nullable();
             $table->string('MaTaiKhoan', 10)->nullable()->index('mataikhoan');
         });
     }

@@ -29,8 +29,6 @@ class UpdatePhongStatus implements ShouldQueue
     public function handle(): void
     {
         $phongTro = PhongTro::find($this->maPhong);
-
-        // Chỉ reset nếu phòng vẫn đang ở trạng thái "Đang xử lý"
         if ($phongTro && $phongTro->TrangThai === 'Đang xử lý') {
             $phongTro->update(['TrangThai' => 'Đang trống']);
         }

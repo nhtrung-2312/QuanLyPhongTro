@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\NhanVien;
 
 class CoSo extends Model
 {
@@ -21,5 +22,20 @@ class CoSo extends Model
     public function phongTro()
     {
         return $this->hasMany(PhongTro::class, 'MaCoSo', 'MaCoSo');
+    }
+    public function hoadon()
+    {
+        return $this->hasManyThrough(
+            HoaDon::class,
+            PhongTro::class,
+            'MaCoSo', // Khóa ngoại trên bảng phongtro
+            'MaPhong', // Khóa ngoại trên bảng hoadon
+            'MaCoSo', // Khóa chính của bảng coso
+            'MaPhong'  // Khóa chính của bảng phongtro
+        );
+    }
+    public function nhanVien()
+    {
+        return $this->hasMany(NhanVien::class, 'MaCoSo', 'MaCoSo');
     }
 }

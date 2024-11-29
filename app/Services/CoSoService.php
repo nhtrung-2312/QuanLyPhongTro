@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\CoSo;
 use Illuminate\Support\Facades\Log;
 
-class FacilityService
+class CoSoService
 {
     public function getAll()
     {
@@ -17,11 +17,11 @@ class FacilityService
     }
 
     public function generateMaCoSo(){
-        $lastFacility = CoSo::orderBy('MaCoSo', 'DESC')->first();
-        if(!$lastFacility){
+        $lastCoSo = CoSo::orderBy('MaCoSo', 'DESC')->first();
+        if(!$lastCoSo){
             return 'CS001';
         }
-        $lastId = (int)substr($lastFacility->MaCoSo, 2);
+        $lastId = (int)substr($lastCoSo->MaCoSo, 2);
         $newId = $lastId + 1;
         return 'CS' . str_pad($newId, 3, '0', STR_PAD_LEFT);
     }
@@ -42,12 +42,12 @@ class FacilityService
 
     public function update($request, $id){
         try{
-            $facility = $this->getById($id);
+            $coSo = $this->getById($id);
             $data = [
                 'TenCoSo' => $request->TenCoSo,
                 'DiaChi' => $request->DiaChi
             ];
-            return $facility->update($data);
+            return $coSo->update($data);
         }catch(\Exception $e){
             Log::error($e->getMessage());
             return false;
@@ -56,8 +56,8 @@ class FacilityService
 
     public function delete($id){
         try{
-            $facility = $this->getById($id);
-            return $facility->delete();
+            $coSo = $this->getById($id);
+            return $coSo->delete();
         }catch(\Exception $e){
             Log::error($e->getMessage());
             return false;

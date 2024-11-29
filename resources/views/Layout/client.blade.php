@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
 
     <!-- Google Font -->
@@ -41,6 +42,17 @@
         {{-- <div class="search-icon  search-switch">
             <i class="icon_search"></i>
         </div> --}}
+        <div class="header-configure-area">
+            @if(session()->has('logged_in'))
+                <div class="language-option">
+                    <span onclick="logout()">Đăng xuất</span>
+                </div>
+            @else
+                <div class="language-option">
+                    <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
+                </div>
+            @endif
+        </div>
         <div class="header-configure-area">
             <a href="#" class="bk-btn">Thuê phòng ngay</a>
         </div>
@@ -82,6 +94,24 @@
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
                             <a href="{{ route('phong.index') }}" class="bk-btn">Đặt phòng ngay</a>
+                            @if(session()->has('logged_in'))
+                                <div class="language-option">
+                                    <i class="fa fa-user"></i>
+                                    <span>Thông tin <i class="fa fa-angle-down"></i></span>
+                                    <div class="flag-dropdown">
+                                        <ul>
+                                            <li><span>Xin chào, {{ Str::of(session('username'))->explode(' ')->last() }}</span></li>
+                                            <li><hr style="margin: 5px 0"></li>
+                                            <li><a href="{{ route('home.index') }}">Thông tin cá nhân</a></li>
+                                            <li><a href="{{ route('auth.logout') }}">Đăng xuất</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="language-option">
+                                    <span onclick="showLogin()">Đăng nhập/Đăng ký</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -173,16 +203,81 @@
     </footer>
     <!-- Footer Section End -->
 
-    <!-- Search model Begin -->
-    {{-- <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
+    <!-- Show Login Modal Start -->
+    <div class="modal fade" id="showLoginModal" tabindex="-1" aria-labelledby="showLoginModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header border-0 flex-column">
+                    <h3 class="modal-title w-100 font-weight-bold" id="showLoginModal">Xin chào</h3>
+                    <p class="mb-0 mt-2">Vui lòng đăng nhập để tiếp tục</p>
+                    <button type="button" class="close position-absolute" style="right: 1rem; top: 1rem;" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body px-4">
+                    <form id="loginForm" method="POST" action="{{ route('auth.login') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" name="phone" placeholder="Số điện thoại">
+                            <small class="text-danger" id="phoneError"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                            <small class="text-danger" id="passwordError"></small>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập</button>
+                        <button class="btn btn-primary btn-block py-2 mb-3">Đăng nhập với SMS</button>
+                    </form>
+
+                    <div class="text-center mb-3">
+                        <span class="text-muted">Hoặc</span>
+                    </div>
+
+                    <button onclick="showRegister()" id="regModal" class="btn btn-light btn-block border py-2 mb-3">Đăng ký</button>
+                </div>
+            </div>
         </div>
-    </div> --}}
-    <!-- Search model end -->
+    </div>
+    <!--- Show Login Modal End -->
+
+    <!-- Register Modal Start -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header border-0 flex-column">
+                    <h3 class="modal-title w-100 font-weight-bold" id="showLoginModal">Xin chào</h3>
+                    <p class="mb-0 mt-2">Vui lòng đăng nhập để tiếp tục</p>
+                    <button type="button" class="close position-absolute" style="right: 1rem; top: 1rem;" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body px-4">
+                    <form id="registerForm">
+                        @csrf
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" name="phone" placeholder="Số điện thoại">
+                            <small class="text-danger" id="phoneError"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                            <small class="text-danger" id="passwordError"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="repassword">Nhập lại mật khẩu</label>
+                            <input type="repassword" class="form-control" name="repassword" placeholder="Nhập lại mật khẩu">
+                            <small class="text-danger" id="repasswordError"></small>
+                        </div>
+                        <button onclick="register()" class="btn btn-primary btn-block py-2 mb-3">Đăng ký</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register Modal End -->
 
     <!-- Js Plugins -->
     <script src="/template/client/dist/js/jquery-3.3.1.min.js"></script>
@@ -193,6 +288,57 @@
     <script src="/template/client/dist/js/jquery.slicknav.js"></script>
     <script src="/template/client/dist/js/owl.carousel.min.js"></script>
     <script src="/template/client/dist/js/main.js"></script>
-</body>
 
+
+    <script>
+            $(document).ready(function() {
+                $('#loginForm').on('submit', function(e) {
+                    e.preventDefault();
+                    $('.text-danger').text('');
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response.status) {
+                                location.reload();
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                console.log(errors);
+                                if (errors.phone) {
+                                    $('#phoneError').text(errors.phone);
+                                }
+                                if (errors.password) {
+                                    $('#passwordError').text(errors.password);
+                                }
+                            } else if (xhr.responseJSON.errors) {
+                                let errors = xhr.responseJSON.errors;
+                                console.log(errors);
+                                if (errors.phone) {
+                                    $('#phoneError').text(errors.phone);
+                                }
+                                if (errors.password) {
+                                    $('#passwordError').text(errors.password);
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+        function showLogin() {
+            $('#showLoginModal').modal('show');
+        }
+
+        function showRegister() {
+            $('#showLoginModal').modal('hide');
+            $('#registerModal').modal('show');
+        }
+    </script>
+
+    @stack('scripts')
+</body>
 </html>

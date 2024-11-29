@@ -3,33 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\RoomTypeService;
-use App\Http\Requests\RoomTypeRequest;
+use App\Services\LoaiPhongService;
+use App\Http\Requests\LoaiPhongRequest;
 use Illuminate\Support\Facades\Log;
 
-class RoomTypeController extends Controller
+class LoaiPhongController extends Controller
 {
-    protected $roomTypeService;
+    protected $loaiPhongService;
 
-    public function __construct(RoomTypeService $roomTypeService)
+    public function __construct(LoaiPhongService $loaiPhongService)
     {
-        $this->roomTypeService = $roomTypeService;
+        $this->loaiPhongService = $loaiPhongService;
     }
     public function index()
     {
-        $roomTypes = $this->roomTypeService->getAll();
-        return view('Admin.RoomType.index', compact('roomTypes'));
+        $loaiPhongs = $this->loaiPhongService->getAll();
+        return view('Admin.LoaiPhong.index', compact('loaiPhongs'));
     }
     public function create()
     {
-        return view('Admin.RoomType.create');
+        return view('Admin.LoaiPhong.create');
     }
-    public function store(RoomTypeRequest $request)
+    public function store(LoaiPhongRequest $request)
     {
         try{
-            $result = $this->roomTypeService->create($request);
+            $result = $this->loaiPhongService->create($request);
             if($result){
-                return redirect()->route('admin.room-types.index')->with('success', 'Thêm mới thành công!');
+                return redirect()->route('admin.loaiphong.index')->with('success', 'Thêm mới thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
@@ -39,17 +39,17 @@ class RoomTypeController extends Controller
     }
 
     public function edit($id){
-        $roomType = $this->roomTypeService->getById($id);
-        return view('Admin.RoomType.edit', compact('roomType'));
+        $loaiPhong = $this->loaiPhongService->getById($id);
+        return view('Admin.LoaiPhong.edit', compact('loaiPhong'));
     }
 
-    public function update(RoomTypeRequest $request, $id){
+    public function update(LoaiPhongRequest $request, $id){
         try {
-            $result = $this->roomTypeService->update($request, $id);
+            $result = $this->loaiPhongService->update($request, $id);
             if($result) {
-                return redirect()->route('admin.room-types.index')
+                return redirect()->route('admin.loaiphong.index')
                     ->with('success', 'Chỉnh sửa thành công!');
-            }       
+            }
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -60,7 +60,7 @@ class RoomTypeController extends Controller
 
     public function delete($id){
         try {
-            $result = $this->roomTypeService->delete($id);
+            $result = $this->loaiPhongService->delete($id);
             if($result) {
                 return response()->json([
                     'success' => true,

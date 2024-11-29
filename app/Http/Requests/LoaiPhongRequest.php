@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoomTypeRequest extends FormRequest
+class LoaiPhongRequest extends FormRequest
 {
     public function authorize(): bool
     {
         return true;
-    }   
+    }
 
     public function rules()
     {

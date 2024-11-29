@@ -4,7 +4,7 @@ namespace App\Services;
 use App\Models\LoaiPhong;
 use Illuminate\Support\Facades\Log;
 
-class RoomTypeService
+class LoaiPhongService
 {
     public function getAll()
     {
@@ -54,7 +54,7 @@ class RoomTypeService
             return $roomType->update($data);
         }catch(\Exception $e){
             Log::error($e->getMessage());
-            return false;   
+            return false;
         }
     }
 

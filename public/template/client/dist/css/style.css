@@ -344,7 +344,7 @@ ul, ol {
 	margin-right: 10px;
 }
 .top-nav .tn-right .language-option span {
-	font-size: 16px;
+	font-size: 13px;
 	color: #19191a;
 	text-transform: uppercase;
 	font-weight: 500;
@@ -353,7 +353,7 @@ ul, ol {
 	position: absolute;
 	left: 0;
 	top: 60px;
-	width: 100px;
+	width: 200px;
 	background: #ffffff;
 	display: block;
 	padding: 10px 15px;
@@ -369,6 +369,7 @@ ul, ol {
 .top-nav .tn-right .language-option .flag-dropdown ul li {
 	list-style: none;
 	text-align: left;
+    padding-bottom: 5px;
 }
 .top-nav .tn-right .language-option .flag-dropdown ul li a {
 	font-size: 14px;
@@ -719,7 +720,7 @@ ul, ol {
 	transition: all 0.3s;
 }
 /*------------------------
-  Home Page Room Section 
+  Home Page Room Section
 -------------------------*/
 
 .hp-room-items {

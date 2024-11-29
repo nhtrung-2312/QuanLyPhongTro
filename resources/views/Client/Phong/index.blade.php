@@ -22,7 +22,7 @@
             @foreach ($loaiphong as $item)
             <div class="col-lg-4 col-md-6">
                 <div class="room-item">
-                    <img src="/template/client/dist/img/phong/{{ $item->MaLoaiPhong }}.png" alt="" width="600" height="500">
+                    <img src="/template/client/dist/img/phong/{{ $item->MaLoaiPhong }}.png" alt="" width="600" height="300">
                     <div class="ri-text">
                         <h4>{{ $item->LoaiPhong }}</h4>
                         <table>
