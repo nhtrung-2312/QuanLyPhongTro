@@ -12,21 +12,21 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Mã cơ sở</th>
+                    <th>STT</th>
                     <th>Tên cơ sở</th>
                     <th>Địa chỉ</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($coSos as $coSo)
+                @foreach($coSos as $index => $coSo)
                 <tr>
-                    <td>{{ $coSo->MaCoSo }}</td>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ $coSo->TenCoSo }}</td>
                     <td>{{ $coSo->DiaChi }}</td>
                     <td>
                         <a href="{{ route('admin.coso.edit', $coSo->MaCoSo) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
-                        <button onclick="deleteFacility('{{ $coSo->MaCoSo }}', '{{$coSo->TenCoSo}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
+                        <button onclick="deleteCoSo('{{ $coSo->MaCoSo }}', '{{$coSo->TenCoSo}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
                     </td>
                 </tr>
                 @endforeach
@@ -45,7 +45,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa cơ sở <span id="deleteFacilityName" class="font-weight-bold"></span>?</p>
+                <p>Bạn có chắc chắn muốn xóa cơ sở <span id="deleteTenCoSo" class="font-weight-bold"></span>?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
@@ -59,10 +59,10 @@
 <script>
 let deleteId = null;
 
-function deleteFacility(id, name) {
+function deleteCoSo(id, name) {
     console.log(id, name);
     deleteId = id;
-    $('#deleteFacilityName').text(name);
+    $('#deleteTenCoSo').text(name);
     $('#deleteModal').modal('show');
 }
 
@@ -70,7 +70,7 @@ function confirmDelete() {
     if (!deleteId) return;
 
     $.ajax({
-        url: `/admin/facilities/delete/${deleteId}`,
+        url: `/admin/coso/delete/${deleteId}`,
         type: 'POST',
         data: {
             _token: '{{ csrf_token() }}',

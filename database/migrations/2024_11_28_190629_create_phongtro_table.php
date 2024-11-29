@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('phongtro', function (Blueprint $table) {
             $table->string('MaPhong', 10)->primary();
             $table->string('MaCoSo', 10)->nullable()->index('macoso');
-            $table->string('MaLoaiPhong', 10)->index('maloaiphong');
+            $table->string('MaLoaiPhong', 10)->index('maloaiphong')->default("");
             $table->string('TenPhong', 50);
             $table->decimal('GiaThue', 10);
             $table->string('TrangThai', 20)->default('Trống');

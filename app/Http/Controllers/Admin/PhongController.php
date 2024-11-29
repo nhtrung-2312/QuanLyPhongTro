@@ -4,35 +4,41 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\CoSoService;
-use App\Http\Requests\CoSoRequest;
+use App\Services\PhongService;
+use App\Http\Requests\PhongRequest;
+use App\Models\CoSo;
+use App\Models\LoaiPhong;
 use Illuminate\Support\Facades\Log;
 
-class CoSoController extends Controller
-{
-    protected $coSoService;
+class PhongController extends Controller{
+    protected $phongService;
 
-    public function __construct(CoSoService $coSoService)
+    public function __construct(PhongService $phongService)
     {
-        $this->coSoService = $coSoService;
+        $this->phongService = $phongService;
     }
 
-    public function index()
-    {
-        $coSos = $this->coSoService->getAll();
-        return view('Admin.CoSo.index', compact('coSos'));
+    public function index(Request $request){
+        $filters = $request->only(['MaCoSo', 'MaLoaiPhong', 'TrangThai']);
+
+        $phongs = $this->phongService->getAll($filters);
+        $cosos = CoSo::all();
+        $loaiphongs = LoaiPhong::all();
+        
+        return view('Admin.Phong.index', compact('phongs', 'cosos', 'loaiphongs'));
     }
 
-    public function create()
-    {
-        return view('Admin.CoSo.create');
+    public function create(){
+        $cosos = CoSo::all();
+        $loaiphongs = LoaiPhong::all();
+        return view('Admin.Phong.create', compact('cosos', 'loaiphongs'));
     }
 
-    public function store(CoSoRequest $request){
+    public function store(PhongRequest $request){
         try{
-            $result = $this->coSoService->create($request);
+            $result = $this->phongService->create($request);
             if($result){
-            return redirect()->route('admin.coso.index')->with('success', 'Thêm mới thành công!');
+            return redirect()->route('admin.rooms.index')->with('success', 'Thêm mới thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
@@ -41,15 +47,15 @@ class CoSoController extends Controller
     }
 
     public function edit($id){
-        $coSo = $this->coSoService->getById($id);
-        return view('Admin.CoSo.edit', compact('coSo'));
+        $phongs = $this->phongService->getById($id);
+        return view('Admin.Phong.edit', compact('phongs'));
     }
 
-    public function update(CoSoRequest $request, $id){
+    public function update(PhongRequest $request, $id){
         try {
-            $result = $this->coSoService->update($request, $id);
+            $result = $this->phongService->update($request, $id);
             if($result) {
-                return redirect()->route('admin.coso.index')
+                return redirect()->route('admin.rooms.index')
                     ->with('success', 'Chỉnh sửa thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
@@ -61,7 +67,7 @@ class CoSoController extends Controller
 
     public function delete($id){
         try {
-            $result = $this->coSoService->delete($id);
+            $result = $this->phongService->delete($id);
             if($result) {
                 return response()->json([
                     'success' => true,
@@ -80,4 +86,5 @@ class CoSoController extends Controller
             ]);
         }
     }
+
 }

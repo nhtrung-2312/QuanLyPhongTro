@@ -5,13 +5,13 @@
     <div class="card-header">
         <h3 class="card-title">Thêm mới cơ sở</h3>
         <div class="card-tools">
-            <a href="{{ route('admin.facilities.index') }}" class="btn btn-default">
+            <a href="{{ route('admin.coso.index') }}" class="btn btn-default">
                 <i class="fas fa-arrow-left"></i> Quay lại
             </a>
         </div>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.facilities.store') }}" method="POST">
+        <form action="{{ route('admin.coso.store') }}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-md-6">
@@ -42,7 +42,7 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Thêm mới
                     </button>
-                    <a href="{{ route('admin.facilities.index') }}" class="btn btn-default">
+                    <a href="{{ route('admin.coso.index') }}" class="btn btn-default">
                         <i class="fas fa-times"></i> Hủy
                     </a>
                 </div>
