@@ -87,38 +87,21 @@ class HoaDonController extends Controller
 
     public function create()
     {
-        try {
-            // Lấy danh sách cơ sở
-            $cosos = DB::table('coso')->get();
-            \Log::info('Danh sách cơ sở:', ['cosos' => $cosos]);
-
-            // Lấy danh sách phòng đang thuê
-            $phongs = DB::table('phongtro as p')
-                ->join('hopdongthue as h', function($join) {
-                    $join->on('p.MaPhong', '=', 'h.MaPhong')
-                         ->where('h.TrangThai', '=', 'Đang thuê');
-                })
-                ->join('khachhang as k', 'h.MaKhachHang', '=', 'k.MaKhachHang')
-                ->select(
-                    'p.MaPhong',
-                    'p.TenPhong',
-                    'p.MaCoSo',
-                    'k.HoTen as TenKhachHang'
-                )
-                ->get();
-            \Log::info('Danh sách phòng:', ['phongs' => $phongs]);
+        // try {
+        //     $cosos = CoSo::all();
+        //     \Log::info('Danh sách cơ sở:', ['cosos' => $cosos]);
             
-            // Lấy danh sách loại phí
-            $loaiphis = DB::table('loaiphi')->get();
-            \Log::info('Danh sách loại phí:', ['loaiphis' => $loaiphis]);
-
-            // Truyền tất cả biến vào view
-            return view('Admin.HoaDon.create', compact('cosos', 'phongs', 'loaiphis'));
+        //     $loaiphis = DB::table('loaiphi')->get();
+        //     \Log::info('Danh sách loại phí:', ['loaiphis' => $loaiphis]);
             
-        } catch (\Exception $e) {
-            \Log::error('Lỗi trong phương thức create: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Có lỗi xảy ra khi tải trang tạo hóa đơn');
-        }
+        //     return view('Admin.HoaDon.create', compact('cosos', 'loaiphis'));
+        // } catch (\Exception $e) {
+        //     \Log::error('Lỗi trong phương thức create: ' . $e->getMessage());
+        //     return redirect()->back()->with('error', 'Có lỗi xảy ra khi tải trang');
+        // }
+        
+        $cosos = CoSo::with('phongTro')->get();
+        return view('Admin.HoaDon.create', compact('cosos'));
     }
 
     public function store(Request $request)

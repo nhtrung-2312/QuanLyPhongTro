@@ -41,6 +41,9 @@ Route::prefix('khachhang')->name('admin.khachhang.')->group(function () {
 
 Route::prefix('loaiphi')->name('admin.loaiphi.')->group(function () {
     Route::get('/', [LoaiPhiController::class, 'index'])->name('index');
+    Route::get('/create', [LoaiPhiController::class, 'create'])->name('create');
+    Route::post('/store', [LoaiPhiController::class, 'store'])->name('store');
+    Route::delete('/delete/{MaLoaiPhi}', [LoaiPhiController::class, 'delete'])->name('delete');
 });
 
 Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
