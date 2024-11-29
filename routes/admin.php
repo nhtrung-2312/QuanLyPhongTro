@@ -48,9 +48,11 @@ Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
 });
 Route::prefix('hoadon')->name('admin.hoadon.')->group(function () {
     Route::get('/', [HoaDonController::class, 'index'])->name('index');
+    Route::get('/create', [HoaDonController::class, 'create'])->name('create');
+    Route::post('/store', [HoaDonController::class, 'store'])->name('store');
     Route::get('/details/{MaHoaDon}', [HoaDonController::class, 'details'])->name('details');
-    Route::get('/admin/hoadon/{maHoaDon}/get-status', [HoaDonController::class, 'getStatus'])->name('admin.hoadon.getStatus');
-    
+    Route::get('/get-status/{maHoaDon}', [HoaDonController::class, 'getStatus'])->name('getStatus');
+    Route::get('/get-phong-by-coso/{maCoSo}', [HoaDonController::class, 'getPhongByCoSo'])->name('getPhongByCoSo');
 });
 
 

@@ -5,7 +5,7 @@
     <div class="card-header">
         <h3 class="card-title">Danh sách hóa đơn</h3>
         <div class="card-tools">
-            <a href="" class="btn btn-primary">Thêm mới</a>
+            <a href="{{ route('admin.hoadon.create') }}" class="btn btn-primary">Thêm mới</a>
         </div>
     </div>
     <div class="card-body">
