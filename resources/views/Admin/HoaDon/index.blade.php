@@ -31,7 +31,7 @@
                     <td>{{ $hoadon->TongTien }}</td>
                     <td>{{ $hoadon->TrangThai }}</td>
                     <td>
-                        <a class="btn btn-sm btn-info" onclick="updateHoaDon({{ json_encode($hoadon) }})">Chỉnh sửa</a>
+                        <a class="btn btn-sm btn-info" onclick='updateHoaDon(@json($hoadon))'>Cập nhật</a>
                         <a class="btn btn-sm btn-success" href="{{ route('admin.hoadon.details', ['MaHoaDon' => $hoadon->MaHoaDon]) }}">Chi tiết hóa đơn</a>
                        
                     </td>
@@ -46,7 +46,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="updateModalLabel">Chỉnh sửa hóa đơn</h5>
+                <h5 class="modal-title" id="updateModalLabel">Cập nhật hóa đơn</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -58,14 +58,14 @@
                     <div class="form-group">
                         <label for="TrangThai">Trạng thái</label>
                         <select class="form-control" id="TrangThai" name="TrangThai">
-                            <option value="Đang xử lý">Đang xử lý</option>
+                            <option value="Chưa thanh toán">Chưa thanh toán</option>
                             <option value="Đã thanh toán">Đã thanh toán</option>
                         </select>
                         <span class="text-danger" id="TrangThaiError"></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-danger">Chỉnh sửa</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
                 </form>
             </div>
@@ -75,22 +75,13 @@
 @endsection
 @push('scripts')
 <script>
-    function updateHoaDon(maHoaDon) {
-        // Set mã hóa đơn vào input hidden
-        $('#MaHoaDon').val(maHoaDon);
+    function updateHoaDon(hoadon) {
+        // Set giá trị cho form
+        $('#MaHoaDon').val(hoadon.MaHoaDon);
+        $('#TrangThai').val(hoadon.TrangThai);
         
-        // Lấy trạng thái hiện tại của hóa đơn này (nếu cần)
-        $.ajax({
-            url: '/admin/hoadon/' + maHoaDon + '/get-status',
-            method: 'GET',
-            success: function(response) {
-                $('#TrangThai').val(response.TrangThai);
-                $('#updateModal').modal('show');
-            },
-            error: function(xhr) {
-                toastr.error('Có lỗi xảy ra!');
-            }
-        });
+        // Hiển thị modal
+        $('#updateModal').modal('show');
     }
 
     $(document).ready(function() {
@@ -105,9 +96,12 @@
                 success: function(response) {
                     if (response.status) {
                         toastr.success(response.message);
+                        $('#updateModal').modal('hide');
                         setTimeout(function() {
                             location.reload();
-                        }, 500);
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
                     }
                 },
                 error: function(xhr) {
@@ -116,6 +110,8 @@
                         if (errors.TrangThai) {
                             $('#TrangThaiError').text(errors.TrangThai);
                         }
+                    } else {
+                        toastr.error('Có lỗi xảy ra khi cập nhật!');
                     }
                 }
             });
