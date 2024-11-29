@@ -28,7 +28,7 @@
                     <td>{{ $hoadon->hopdongthue->phong->coSo->TenCoSo }}</td> 
                     <td>{{ $hoadon->hopdongthue->phong->TenPhong }}</td>
                     <td>{{ $hoadon->NgayLap }}</td>
-                    <td>{{ $hoadon->TongTien }}</td>
+                    <td>{{ number_format($hoadon->TongTien, 0, ',', '.') }} đ</td>
                     <td>{{ $hoadon->TrangThai }}</td>
                     <td>
                         <a class="btn btn-sm btn-info" onclick='updateHoaDon(@json($hoadon))'>Cập nhật</a>

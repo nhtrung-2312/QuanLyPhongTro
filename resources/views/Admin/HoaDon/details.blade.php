@@ -52,6 +52,10 @@
                             $tienPhong = $chitiethoadons[0]->hoadon->hopdongthue->phong->GiaThue;
                             $tongTienDichVu = $chitiethoadons->sum('ThanhTien');
                             $tongCong = $tienPhong + $tongTienDichVu;
+
+                            $hoadon = $chitiethoadons[0]->hoadon;
+                            $hoadon->TongTien = $tongCong;
+                            $hoadon->save();
                         @endphp
                         {{ number_format($tongCong, 0, ',', '.') }} đ
                     </strong></td>
