@@ -130,20 +130,11 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/room-types" class="nav-link">
+                <a href="/admin/loaiphong" class="nav-link">
                   <p>Quản lý loại phòng</p>
                 </a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
-              <p>
-                Hóa Đơn
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="/admin/rooms" class="nav-link">
@@ -151,7 +142,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> 
           <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon bi bi-house-fill"></i>

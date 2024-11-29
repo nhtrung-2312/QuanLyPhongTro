@@ -32,7 +32,7 @@ class CoSoController extends Controller
         try{
             $result = $this->coSoService->create($request);
             if($result){
-            return redirect()->route('admin.coSos.index')->with('success', 'Thêm mới thành công!');
+            return redirect()->route('admin.coso.index')->with('success', 'Thêm mới thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
         } catch (\Exception $e) {
@@ -49,7 +49,7 @@ class CoSoController extends Controller
         try {
             $result = $this->coSoService->update($request, $id);
             if($result) {
-                return redirect()->route('admin.coSos.index')
+                return redirect()->route('admin.coso.index')
                     ->with('success', 'Chỉnh sửa thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');
