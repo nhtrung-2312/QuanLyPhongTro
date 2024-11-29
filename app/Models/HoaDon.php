@@ -27,4 +27,5 @@ class HoaDon extends Model
     {
         return $this->hasMany(ChiTietHoaDon::class, 'MaHoaDon', 'MaHoaDon');
     }
+  
 }
