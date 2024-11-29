@@ -30,7 +30,7 @@ class UpdatePhongStatus implements ShouldQueue
     {
         $phongTro = PhongTro::find($this->maPhong);
         if ($phongTro && $phongTro->TrangThai === 'Đang xử lý') {
-            $phongTro->update(['TrangThai' => 'Đang trống']);
+            $phongTro->update(['TrangThai' => 'Phòng trống']);
         }
     }
 }

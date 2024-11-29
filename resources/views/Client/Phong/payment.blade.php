@@ -24,9 +24,12 @@
                 <div class="payment-info">
                     <h3>Thông tin thanh toán</h3>
                     <div class="payment-details">
+                        <p>Thông tin khách hàng:</p>
+                        <p>Họ tên: {{ session('user_id') }}</p>
+                        <p>Số điện thoại: {{ session('user_id') }}</p>
+                        <p>Thông tin phòng:</p>
                         <p>Phòng: {{ $phong->TenPhong }}</p>
                         <p>Giá thuê: {{ number_format($phong->GiaThue) }} VNĐ/tháng</p>
-                        <!-- Thêm các thông tin thanh toán khác -->
                     </div>
                 </div>
             </div>

@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="/template/client/dist/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/template/client/dist/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/template/client/dist/css/style.css" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -102,7 +103,7 @@
                                         <ul>
                                             <li><span>Xin chào, {{ Str::of(session('username'))->explode(' ')->last() }}</span></li>
                                             <li><hr style="margin: 5px 0"></li>
-                                            <li><a href="{{ route('home.index') }}">Thông tin cá nhân</a></li>
+                                            <li><a href="{{ url('/thong-tin/thong-tin-ca-nhan') }}">Thông tin cá nhân</a></li>
                                             <li><a href="{{ route('auth.logout') }}">Đăng xuất</a></li>
                                         </ul>
                                     </div>
@@ -288,10 +289,47 @@
     <script src="/template/client/dist/js/jquery.slicknav.js"></script>
     <script src="/template/client/dist/js/owl.carousel.min.js"></script>
     <script src="/template/client/dist/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
 
     <script>
             $(document).ready(function() {
+                $('#loginForm').on('submit', function(e) {
+                    e.preventDefault();
+                    $('.text-danger').text('');
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response.status) {
+                                location.reload();
+                            }
+                        },
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                console.log(errors);
+                                if (errors.phone) {
+                                    $('#phoneError').text(errors.phone);
+                                }
+                                if (errors.password) {
+                                    $('#passwordError').text(errors.password);
+                                }
+                            } else if (xhr.responseJSON.errors) {
+                                let errors = xhr.responseJSON.errors;
+                                console.log(errors);
+                                if (errors.phone) {
+                                    $('#phoneError').text(errors.phone);
+                                }
+                                if (errors.password) {
+                                    $('#passwordError').text(errors.password);
+                                }
+                            }
+                        }
+                    });
+                });
                 $('#loginForm').on('submit', function(e) {
                     e.preventDefault();
                     $('.text-danger').text('');

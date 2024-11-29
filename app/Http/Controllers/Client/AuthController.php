@@ -38,7 +38,8 @@ class AuthController extends Controller
         $customer = KhachThue::where('MaTaiKhoan', $user->MaTaiKhoan)->first();
         session([
             'logged_in' => true,
-            'user_id' => $user->MaTaiKhoan,
+            'acc_id' => $user->MaTaiKhoan,
+            'user_id' => $customer->MaKhachThue,
             'username' => $customer->HoTen,
             'role' => $user->VaiTro
         ]);
@@ -47,6 +48,10 @@ class AuthController extends Controller
             'message' => 'Đăng nhập thành công',
             'redirect' => route('home.index')
         ]);
+    }
+    public function register()
+    {
+
     }
     public function logout()
     {

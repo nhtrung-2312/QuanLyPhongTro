@@ -163,6 +163,11 @@
             },
             success: function(response) {
                 if (response.success) {
+                    toastr.options = {
+                        "positionClass": "toast-bottom-right",
+                        "showDuration": "3"
+                    }
+                    toastr.success("Đặt phòng thành công.");
                     window.location.href = response.redirectUrl;
                 } else {
                     console.log(response);

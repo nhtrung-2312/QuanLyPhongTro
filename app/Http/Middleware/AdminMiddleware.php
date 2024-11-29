@@ -15,6 +15,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!session('logged_in') && session('role') != 'admin') {
+            return redirect()->route('admin.login');
+        }
         return $next($request);
     }
 }
