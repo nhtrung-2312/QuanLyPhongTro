@@ -6,7 +6,7 @@
         <h3 class="card-title">Thêm phòng trọ mới</h3>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('admin.rooms.store') }}">
+        <form method="POST" action="{{ route('admin.rooms.store') }}" enctype="multipart/form-data">
             @csrf <!-- CSRF token for security -->
             <div class="row">
                 <div class="col-md-6">
@@ -82,9 +82,52 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="HinhAnh">Hình ảnh</label>
+                        {{-- @if(isset($phong) && file_exists(public_path("template/client/dist/img/phong/{$phong->MaPhong}.*")))
+                            @foreach(glob(public_path("template/client/dist/img/phong/{$phong->MaPhong}.*")) as $filename)
+                                <img src="{{ asset('template/client/dist/img/phong/' . basename($filename)) }}"
+                                     alt="Hình ảnh phòng" 
+                                     id="preview"
+                                     class="img-thumbnail mb-2"
+                                     style="max-height: 200px;">
+                            @endforeach
+                        @endif
+                        
+                        <input type="file" 
+                               name="HinhAnh" 
+                               class="form-control" 
+                               id="HinhAnh" 
+                               accept="image/*"
+                               onchange="previewImage(this);"> --}}
+
+                        
+                        <img id="preview" src="#" alt="Hình ảnh xem trước" class="img-thumbnail mb-2" style="max-height: 200px; display: none;">
+                        <input type="file" name="HinhAnh" class="form-control" id="HinhAnh" accept="image/*" onchange="previewImage(this);">
+                        
+                    </div>
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary">Thêm phòng</button>
             <a href="{{ route('admin.rooms.index') }}" class="btn btn-secondary">Hủy</a>
         </form>
     </div>
 </div>
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            const preview = document.getElementById('preview');
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 @endsection

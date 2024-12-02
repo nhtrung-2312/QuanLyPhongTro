@@ -61,4 +61,10 @@ Route::prefix('rooms')->name('admin.rooms.')->group(function() {
     Route::get('/edit/{id}', [PhongController::class, 'edit'])->name('edit');
     Route::put('/update/{id}', [PhongController::class, 'update'])->name('update');
     Route::delete('/delete/{id}', [PhongController::class, 'delete'])->name('delete');
+    Route::get('/details/{id}', [PhongController::class, 'details'])->name('details');
+    Route::get('/details/create/{id}', [PhongController::class, 'createDetail'])->name('details.create');
+    Route::post('/details/store', [PhongController::class, 'storeDetail'])->name('details.store');
+    Route::get('/details/{id}/edit/{maTienNghi}', [PhongController::class, 'editDetail'])->name('details.edit');
+    Route::put('/details/update/{id}/{maTienNghi}', [PhongController::class, 'updateDetail'])->name('details.update');
+    Route::delete('/details/delete/{id}/{idTienNghi}', [PhongController::class, 'deleteDetail'])->name('details.delete');
 });

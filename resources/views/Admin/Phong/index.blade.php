@@ -44,12 +44,12 @@
                 </div>
             </div>
         </form>
-        <div>
-            <span class="p-5">
-        </div>
+            <div>
+                <span class="p-5">
+            </div>
         <table class="table table-bordered">
             <thead>
-                <tr>
+                <tr class="text-center align-center" style="vertical-align: middle;">
                     <th>STT</th>
                     <th>Tên cơ sở</th>
                     <th>Loại phòng</th>
@@ -62,7 +62,7 @@
             </thead>
             <tbody>
                 @foreach($phongs as $index => $phong)               
-                <tr>
+                <tr class="text-center align-center vertical-middle">
                     <td >{{ $index + 1 }}</td>
                     <td>{{ $phong->coSo->TenCoSo ?? 'Không xác định'}}</td>
                     <td>{{ $phong->loaiPhong->LoaiPhong ?? 'Không xác định'}}</td>
@@ -72,10 +72,11 @@
                     <td>{{ $phong->MoTa }}</td>
                     <td>
                         <div class="d-flex align-items-center">
-                            <a href="{{ route('admin.rooms.edit', $phong->MaPhong) }}" class="btn btn-sm btn-info mr-2">Chỉnh sửa</a>
-                            <button onclick="deleteRoom('{{ $phong->MaPhong }}', '{{$phong->TenPhong}}')" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i>
+                            <a href="{{ route('admin.rooms.edit', $phong->MaPhong) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
+                            <button onclick="deleteRoom('{{ $phong->MaPhong }}', '{{$phong->TenPhong}}')" class="btn btn-sm btn-danger m-2 p-3">
+                                Xóa
                             </button>
+                            <a href="{{ route('admin.rooms.details', $phong->MaPhong) }}" class="btn btn-sm btn-success">Chi tiết</a>
                         </div>
                     </td>
                 </tr>

@@ -9,7 +9,7 @@ class ChiTietPhong extends Model
 {
     use HasFactory;
     protected $table = 'ChiTietPhong';
-    protected $primaryKey = 'MaPhong';
+
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;

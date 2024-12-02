@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Models\PhongTro;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PhongService{
     public function getAll($filters = [])
     {
-        Log::info('Filters: ', $filters);
         $query = PhongTro::with(['coSo', 'loaiPhong'])->orderBy('MaPhong', 'ASC');
         if (!empty($filters['MaCoSo'])) {
             $query->where('MaCoSo', $filters['MaCoSo']);
@@ -25,7 +25,7 @@ class PhongService{
     }
 
     public function getById($id){
-        return PhongTro::findOrFail($id);
+        return PhongTro::with(['coSo', 'loaiPhong'])->findOrFail($id);
     }
 
     public function generateMaPhong(){
@@ -38,6 +38,19 @@ class PhongService{
         return 'P' . str_pad($newId, 3, '0', STR_PAD_LEFT);
     }
 
+    protected function getImagePath($maPhong)
+    {
+        // Check common image extensions
+        $extensions = ['png', 'jpg', 'jpeg', 'gif'];
+        foreach ($extensions as $ext) {
+            $path = "public/template/client/dist/img/phong/{$maPhong}.{$ext}";
+            if (Storage::exists($path)) {
+                return $path;
+            }
+        }
+        return null;
+    }
+
     public function create($request)
     {
         try {
@@ -47,7 +60,14 @@ class PhongService{
             Log::info('Inserting Data: ', $data);
 
 
-            PhongTro::create($data);
+            $phong = PhongTro::create($data);
+            if ($request->hasFile('HinhAnh')) {
+                $image = $request->file('HinhAnh');
+                $extension = $image->getClientOriginalExtension();
+                $imageName = $phong->MaPhong . '.' . $extension;
+                $image->move(public_path('template/client/dist/img/phong'), $imageName);
+            }
+
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -64,7 +84,22 @@ class PhongService{
                 'TrangThai' => $request->TrangThai,
                 'MoTa' => $request->MoTa
             ];
-            return $phong->update($data);
+            if ($request->hasFile('HinhAnh')) {
+                // Remove old image if exists
+                $oldImage = public_path("template/client/dist/img/phong/{$phong->MaPhong}.*");
+                array_map('unlink', glob($oldImage));
+                
+                // Save new image
+                $image = $request->file('HinhAnh');
+                $extension = $image->getClientOriginalExtension();
+                $imageName = $phong->MaPhong . '.' . $extension;
+                $image->move(public_path('template/client/dist/img/phong'), $imageName);
+            }
+
+            $result = $phong->update($data);
+
+
+            return $result;
         }catch(\Exception $e){
             Log::error($e->getMessage());
             return false;
