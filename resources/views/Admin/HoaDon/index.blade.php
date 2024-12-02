@@ -5,7 +5,7 @@
     <div class="card-header">
         <h3 class="card-title">Danh sách hóa đơn</h3>
         <div class="card-tools">
-            <a href="" class="btn btn-primary">Thêm mới</a>
+            <a href="{{ route('admin.hoadon.create') }}" class="btn btn-primary">Thêm mới</a>
         </div>
     </div>
     <div class="card-body">
@@ -28,12 +28,11 @@
                     <td>{{ $hoadon->hopdongthue->phong->coSo->TenCoSo }}</td> 
                     <td>{{ $hoadon->hopdongthue->phong->TenPhong }}</td>
                     <td>{{ $hoadon->NgayLap }}</td>
-                    <td>{{ $hoadon->TongTien }}</td>
+                    <td>{{ number_format($hoadon->TongTien, 0, ',', '.') }} đ</td>
                     <td>{{ $hoadon->TrangThai }}</td>
                     <td>
-                        <a class="btn btn-sm btn-info" onclick="updateHoaDon({{ json_encode($hoadon) }})">Chỉnh sửa</a>
-                        <a class="btn btn-sm btn-danger" onclick="deleteHoaDon({{ $hoadon->MaHoaDon }})">Xóa</a>
-                        <a class="btn btn-sm btn-success" href="{{ route('admin.chitiethoadon.index', ['MaHoaDon' => $hoadon->MaHoaDon]) }}">Chi tiết hóa đơn</a>
+                        <a class="btn btn-sm btn-info" onclick='updateHoaDon(@json($hoadon))'>Cập nhật</a>
+                        <a class="btn btn-sm btn-success" href="{{ route('admin.hoadon.details', ['MaHoaDon' => $hoadon->MaHoaDon]) }}">Chi tiết hóa đơn</a>
                        
                     </td>
                 </tr>
@@ -47,33 +46,28 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="updateModalLabel">Chỉnh sửa hóa đơn</h5>
+                <h5 class="modal-title" id="updateModalLabel">Cập nhật hóa đơn</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST">
+                <form id="updateHoaDonForm" action="{{ route('admin.hoadon.update') }}" method="POST">
                     @csrf
-                    @method('PUT')
-                   
-                    <div class="form-group">
-                        <label for="NgayLap">Ngày lập</label>
-                        <input type="text" class="form-control" id="NgayLap" name="NgayLap" placeholder="Nhập ngày lập">
-                    </div>
-                    <div class="form-group">
-                        <label for="TongTien">Tổng tiền</label>
-                        <input type="text" class="form-control" id="TongTien" name="TongTien" value="" placeholder="Nhập tổng tiền">
-                    </div>
+                    <input type="hidden" name="MaHoaDon" id="MaHoaDon">
                     <div class="form-group">
                         <label for="TrangThai">Trạng thái</label>
-                        <input type="text" class="form-control" id="TrangThai" name="TrangThai" value="" placeholder="Nhập trạng thái">
+                        <select class="form-control" id="TrangThai" name="TrangThai">
+                            <option value="Chưa thanh toán">Chưa thanh toán</option>
+                            <option value="Đã thanh toán">Đã thanh toán</option>
+                        </select>
+                        <span class="text-danger" id="TrangThaiError"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn    btn-danger" onclick="confirmUpdate()">Chỉnh sửa</button>
             </div>
         </div>
     </div>
@@ -82,12 +76,46 @@
 @push('scripts')
 <script>
     function updateHoaDon(hoadon) {
-        console.log('HoaDon data:', hoadon);
-        $('#NgayLap').val(hoadon.NgayLap);
-        $('#TongTien').val(hoadon.TongTien);
+        // Set giá trị cho form
+        $('#MaHoaDon').val(hoadon.MaHoaDon);
         $('#TrangThai').val(hoadon.TrangThai);
-        window.updateId = hoadon.MaHoaDon;
+        
+        // Hiển thị modal
         $('#updateModal').modal('show');
     }
+
+    $(document).ready(function() {
+        $('#updateHoaDonForm').on('submit', function(e) {
+            e.preventDefault();
+            $('.text-danger').text('');
+
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success(response.message);
+                        $('#updateModal').modal('hide');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        if (errors.TrangThai) {
+                            $('#TrangThaiError').text(errors.TrangThai);
+                        }
+                    } else {
+                        toastr.error('Có lỗi xảy ra khi cập nhật!');
+                    }
+                }
+            });
+        });
+    });
 </script>
 @endpush

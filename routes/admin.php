@@ -41,6 +41,9 @@ Route::prefix('khachhang')->name('admin.khachhang.')->group(function () {
 
 Route::prefix('loaiphi')->name('admin.loaiphi.')->group(function () {
     Route::get('/', [LoaiPhiController::class, 'index'])->name('index');
+    Route::get('/create', [LoaiPhiController::class, 'create'])->name('create');
+    Route::post('/store', [LoaiPhiController::class, 'store'])->name('store');
+    Route::delete('/delete/{MaLoaiPhi}', [LoaiPhiController::class, 'delete'])->name('delete');
 });
 
 Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
@@ -48,10 +51,13 @@ Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
 });
 Route::prefix('hoadon')->name('admin.hoadon.')->group(function () {
     Route::get('/', [HoaDonController::class, 'index'])->name('index');
+    Route::get('/create', [HoaDonController::class, 'create'])->name('create');
+    Route::post('/store', [HoaDonController::class, 'store'])->name('store');
+    Route::get('/details/{MaHoaDon}', [HoaDonController::class, 'details'])->name('details');
+    Route::get('/get-status/{maHoaDon}', [HoaDonController::class, 'getStatus'])->name('getStatus');
+    Route::get('/get-phong-by-coso/{maCoSo}', [HoaDonController::class, 'getPhongByCoSo'])->name('getPhongByCoSo');
 });
-Route::prefix('chitiethoadon')->name('admin.chitiethoadon.')->group(function () {
-    Route::get('/{MaHoaDon}', [ChiTietHoaDonController::class, 'index'])->name('index');
-});
+
 
 //room
 Route::prefix('rooms')->name('admin.rooms.')->group(function() {

@@ -205,6 +205,11 @@
                   <p> Danh sách hóa đơn</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.hoadon.create') }}" class="nav-link">
+                  <p> Thêm hóa đơn mới</p>
+                </a>
+              </li>
             </ul>
           </li>
         </ul>
