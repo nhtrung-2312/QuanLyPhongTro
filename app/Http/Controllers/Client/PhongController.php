@@ -34,39 +34,35 @@ class PhongController extends Controller
     public function book(Request $request)
     {
         try {
-            $phong = PhongTro::find($request->maPhong);
+            $maPhong = $request->input('maPhong');
+
+
+            $phong = PhongTro::find($maPhong);
+            if (!$phong) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy thông tin phòng'
+                ]);
+            }
 
             if ($phong->TrangThai != 'Phòng trống') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Phòng đã được đặt.'
+                    'message' => 'Phòng đã được đặt'
                 ]);
             }
-            // $phong->update(['TrangThai' => 'Đang xử lý']);
-
-            // UpdatePhongStatus::dispatch($phong->MaPhong)->delay(now()->addMinutes(10));
-
-            do {
-                $maHopDong = 'HDT' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-            } while (HopDongThue::where('MaHopDong', $maHopDong)->exists());
-
-            $paymentUrl = route('phong.payment', ['id' => $phong->MaPhong, 'maHopDong' => $maHopDong]);
 
             return response()->json([
                 'success' => true,
-                'redirectUrl' => $paymentUrl
+                'message' => 'Đặt phòng thành công',
+                'redirectUrl' => route('thanhToan.datphong', ['id' => $maPhong])
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra, vui lòng thử lại sau'
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
             ]);
         }
-    }
-    public function payment($id)
-    {
-        $phong = PhongTro::find($id);
-        return view('Client.Phong.payment', compact('phong'));
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class RegisterRequest extends FormRequest
 {
@@ -10,10 +12,11 @@ class RegisterRequest extends FormRequest
     {
         return true;
     }
+
     public function rules(): array
     {
         return [
-            'phone' => 'required|string|regex:/^0\d{9}$/|unique:tai_khoan,TenDangNhap',
+            'phone' => 'required|string|regex:/^0\d{9}$/|unique:taikhoan,TenDangNhap',
             'password' => [
                 'required',
                 'string',
@@ -38,5 +41,13 @@ class RegisterRequest extends FormRequest
             'repassword.required' => 'Vui lòng nhập lại mật khẩu',
             'repassword.same' => 'Mật khẩu nhập lại không khớp'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new ValidationException($validator, response()->json([
+            'status' => false,
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

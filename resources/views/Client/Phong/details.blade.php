@@ -153,30 +153,26 @@
 @endsection
 @push('scripts')
 <script>
-    function handleBooking(maPhong) {
-        $.ajax({
-            url: '{{ route("phong.book") }}',
-            type: 'POST',
-            data: {
-                maPhong: maPhong,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                if (response.success) {
-                    toastr.options = {
-                        "positionClass": "toast-bottom-right",
-                        "showDuration": "3"
-                    }
-                    toastr.success("Đặt phòng thành công.");
-                    window.location.href = response.redirectUrl;
-                } else {
-                    console.log(response);
-                }
-            },
-            error: function(xhr) {
-                console.log(xhr);
+function handleBooking(maPhong) {
+    $.ajax({
+        url: '{{ route("phong.book") }}',
+        type: 'POST',
+        data: {
+            maPhong: maPhong,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                toastr.success("Đặt phòng thành công");
+                window.location.href = response.redirectUrl;
+            } else {
+                toastr.error(response.message || "Đang có lỗi vui lòng chờ");
             }
-        });
-    }
+        },
+        error: function(xhr) {
+            toastr.error("Có lỗi xảy ra, vui lòng thử lại");
+        }
+    });
+}
 </script>
 @endpush

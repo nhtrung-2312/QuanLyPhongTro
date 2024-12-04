@@ -40,6 +40,8 @@ class ThongTinController extends Controller
         $khachthue->GioiTinh = $credentials['gioitinh'];
         $khachthue->save();
 
+        session(['username' => $khachthue->HoTen]);
+
         return response()->json([
             'status' => true,
             'message' => 'Cập nhật thông tin thành công.',
@@ -83,11 +85,30 @@ class ThongTinController extends Controller
     }
     public function phong()
     {
-        $phongs = PhongTro::whereHas('hopdongthue', function($query) {
-            $query->whereHas('chitiethopdong', function($q) {
-                $q->where('MaKhachThue', session('user_id'));
-            });
-        })->get();
+        $khachthue = KhachThue::with([
+            'chitiethopdong.hopdongthue' => function($query) {
+                $query->select('hopdongthue.*');
+            },
+            'chitiethopdong.hopdongthue.phong.coso',  // Thêm relationship với cơ sở
+            'chitiethopdong.hopdongthue.phong.loaiphong'  // Thêm relationship với loại phòng
+        ])
+        ->find(session('user_id'));
+
+        $phongs = collect();
+        foreach($khachthue->chitiethopdong as $chitiet) {
+            if ($chitiet->hopdongthue && $chitiet->hopdongthue->phong) {
+                $phongs->push([
+                    'hopdongthue' => $chitiet->hopdongthue,
+                    'phong' => $chitiet->hopdongthue->phong,
+                    'coso' => $chitiet->hopdongthue->phong->coso,
+                    'loaiphong' => $chitiet->hopdongthue->phong->loaiphong,
+                    'NgayBatDau' => $chitiet->hopdongthue->NgayBatDau,
+                    'NgayKetThuc' => $chitiet->hopdongthue->NgayKetThuc,
+                    'TrangThaiHD' => $chitiet->hopdongthue->TrangThai
+                ]);
+            }
+        }
+
         return view('Client.ThongTin.phong', compact('phongs'));
     }
 }

@@ -18,11 +18,4 @@ class TaiKhoan extends Model
     {
         return $this->hasOne(KhachThue::class, 'MaTaiKhoan', 'MaTaiKhoan');
     }
-
-    public function getRole() {
-        if($this->VaiTro == "Khách thuê") {
-            return 'client';
-        }
-        return 'admin';
-    }
 }

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\LoginRequest;
 use App\Models\TaiKhoan;
 use App\Models\KhachThue;
+use App\Http\Requests\RegisterRequest;
+
 class AuthController extends Controller
 {
     public function login(LoginRequest $request)
@@ -49,9 +51,54 @@ class AuthController extends Controller
             'redirect' => route('home.index')
         ]);
     }
-    public function register()
+    public function register(RegisterRequest $request)
     {
+        $credentials = $request->validated();
 
+        if (TaiKhoan::where('TenDangNhap', $credentials['phone'])->exists()) {
+            return response()->json([
+                'status' => false,
+                'errors' => [
+                    'phone' => ['Số điện thoại đã được đăng ký']
+                ]
+            ], 422);
+        }
+
+        do {
+            $maTaiKhoan = 'TK' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+        } while (TaiKhoan::where('MaTaiKhoan', $maTaiKhoan)->exists());
+
+        $taiKhoan = new TaiKhoan();
+        $taiKhoan->MaTaiKhoan = $maTaiKhoan;
+        $taiKhoan->TenDangNhap = $credentials['phone'];
+        $taiKhoan->MatKhau = $credentials['password'];
+        $taiKhoan->VaiTro = 'Khách hàng';
+        $taiKhoan->TrangThai = 1;
+        $taiKhoan->save();
+
+        do {
+            $maKhachThue = 'KT' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+        } while (KhachThue::where('MaKhachThue', $maKhachThue)->exists());
+
+        $khachThue = new KhachThue();
+        $khachThue->MaKhachThue = $maKhachThue;
+        $khachThue->SDT = $credentials['phone'];
+        $khachThue->MaTaiKhoan = $maTaiKhoan;
+        $khachThue->save();
+
+        session([
+            'logged_in' => true,
+            'acc_id' => $taiKhoan->MaTaiKhoan,
+            'user_id' => $khachThue->MaKhachThue,
+            'username' => $khachThue->HoTen,
+            'role' => $taiKhoan->VaiTro
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Đăng ký thành công',
+            'redirect' => route('home.index')
+        ]);
     }
     public function logout()
     {
