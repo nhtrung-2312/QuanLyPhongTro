@@ -5,35 +5,35 @@
     <div class="card-header">
         <h3 class="card-title">Danh sách loại phòng</h3>
         <div class="card-tools">
-            <a href="{{ route('admin.room-types.create') }}" class="btn btn-primary">Thêm mới</a>
+            <a href="{{ route('admin.loaiphong.create') }}" class="btn btn-primary">Thêm mới</a>
         </div>
     </div>
     <div class="card-body">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr class="text-center align-middle">
-                    <th>Mã loại phòng</th>
-                    <th>Diện tích</th>
+                    <th>STT</th>
+                    <th>Diện tích (m²)</th>
                     <th>Loại phòng</th>
                     <th>Số người</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($roomTypes as $roomType)
+                @foreach($loaiPhongs as $index => $loaiPhong)
                 <tr class="text-center align-middle">
-                    <td>{{ $roomType->MaLoaiPhong }}</td>
-                    <td>{{ $roomType->DienTich }}</td>
-                    <td>{{ $roomType->LoaiPhong }}</td>
-                    <td>{{ $roomType->SoNguoi }}</td>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $loaiPhong->DienTich }}</td>
+                    <td>{{ $loaiPhong->LoaiPhong }}</td>
+                    <td>{{ $loaiPhong->SoNguoi }}</td>
                     <td>
-                        <a href="{{ route('admin.room-types.edit', $roomType->MaLoaiPhong) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
-                        <button onclick="deleteRoomType('{{ $roomType->MaLoaiPhong }}', '{{$roomType->LoaiPhong}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
+                        <a href="{{ route('admin.loaiphong.edit', $loaiPhong->MaLoaiPhong) }}" class="btn btn-sm btn-info">Chỉnh sửa</a>
+                        <button onclick="deleteRoomType('{{ $loaiPhong->MaLoaiPhong }}', '{{$loaiPhong->LoaiPhong}}')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>  </button>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        {{ $roomTypes->links() }}
+        {{ $loaiPhongs->links() }}
     </div>
 </div>
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -71,7 +71,7 @@ function confirmDelete() {
     if (!deleteId) return;
 
     $.ajax({
-        url: `/admin/room-types/delete/${deleteId}`,
+        url: `/admin/loaiphong/delete/${deleteId}`,
         type: 'POST',
         data: {
             _token: '{{ csrf_token() }}',

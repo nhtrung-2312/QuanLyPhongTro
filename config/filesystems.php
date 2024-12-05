@@ -72,6 +72,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('template/client/dist/img/phong') => storage_path('app/public/template/client/dist/img/phong')
     ],
 
 ];

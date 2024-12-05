@@ -8,9 +8,14 @@ use App\Models\ChiTietHoaDon;
 use App\Models\HoaDon;
 class ChiTietHoaDonController extends Controller
 {
-    public function index($MaHoaDon)
+    public function index($maHoaDon)
     {
-        $chitiethoadons = ChiTietHoaDon::with(['hoadon.hopdongthue.phong.coSo'])->where('MaHoaDon', $MaHoaDon)->paginate(5);
+        $chitiethoadons = ChiTietHoaDon::with([
+            'hoadon.hopdongthue.phong',
+            'loaiPhi'
+        ])->where('MaHoaDon', $maHoaDon)->get();
+
         return view('Admin.ChiTietHoaDon.index', compact('chitiethoadons'));
     }
+
 }

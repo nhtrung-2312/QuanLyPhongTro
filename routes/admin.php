@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\HopDongThueController;
 use App\Http\Controllers\Admin\HoaDonController;
 use App\Http\Controllers\Admin\ChiTietHoaDonController;
 use App\Http\Controllers\Admin\CoSoController;
+use App\Http\Controllers\Admin\PhongController;
 
 Route::prefix('')->name('admin.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -21,6 +22,8 @@ Route::prefix('coso')->name('admin.coso.')->group(function () {
     Route::put('/update/{id}', [CoSoController::class, 'update'])->name('update');
     Route::delete('/delete/{id}', [CoSoController::class, 'delete'])->name('delete');
 });
+
+
 
 //room type
 Route::prefix('loaiphong')->name('admin.loaiphong.')->group(function () {
@@ -38,6 +41,9 @@ Route::prefix('khachhang')->name('admin.khachhang.')->group(function () {
 
 Route::prefix('loaiphi')->name('admin.loaiphi.')->group(function () {
     Route::get('/', [LoaiPhiController::class, 'index'])->name('index');
+    Route::get('/create', [LoaiPhiController::class, 'create'])->name('create');
+    Route::post('/store', [LoaiPhiController::class, 'store'])->name('store');
+    Route::delete('/delete/{MaLoaiPhi}', [LoaiPhiController::class, 'delete'])->name('delete');
 });
 
 Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
@@ -45,7 +51,26 @@ Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
 });
 Route::prefix('hoadon')->name('admin.hoadon.')->group(function () {
     Route::get('/', [HoaDonController::class, 'index'])->name('index');
+    Route::get('/create', [HoaDonController::class, 'create'])->name('create');
+    Route::post('/store', [HoaDonController::class, 'store'])->name('store');
+    Route::get('/details/{MaHoaDon}', [HoaDonController::class, 'details'])->name('details');
+    Route::get('/get-status/{maHoaDon}', [HoaDonController::class, 'getStatus'])->name('getStatus');
+    Route::get('/get-phong-by-coso/{maCoSo}', [HoaDonController::class, 'getPhongByCoSo'])->name('getPhongByCoSo');
 });
-Route::prefix('chitiethoadon')->name('admin.chitiethoadon.')->group(function () {
-    Route::get('/{MaHoaDon}', [ChiTietHoaDonController::class, 'index'])->name('index');
+
+
+//room
+Route::prefix('rooms')->name('admin.rooms.')->group(function() {
+    Route::get('/', [PhongController::class, 'index'])->name('index');
+    Route::get('/create', [PhongController::class, 'create'])->name('create');
+    Route::post('/store', [PhongController::class, 'store'])->name('store');
+    Route::get('/edit/{id}', [PhongController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [PhongController::class, 'update'])->name('update');
+    Route::delete('/delete/{id}', [PhongController::class, 'delete'])->name('delete');
+    Route::get('/details/{id}', [PhongController::class, 'details'])->name('details');
+    Route::get('/details/create/{id}', [PhongController::class, 'createDetail'])->name('details.create');
+    Route::post('/details/store', [PhongController::class, 'storeDetail'])->name('details.store');
+    Route::get('/details/{id}/edit/{maTienNghi}', [PhongController::class, 'editDetail'])->name('details.edit');
+    Route::put('/details/update/{id}/{maTienNghi}', [PhongController::class, 'updateDetail'])->name('details.update');
+    Route::delete('/details/delete/{id}/{idTienNghi}', [PhongController::class, 'deleteDetail'])->name('details.delete');
 });

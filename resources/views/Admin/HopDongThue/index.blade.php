@@ -34,8 +34,7 @@
                     <td>{{ $hopdongthue->TienCoc }}</td>
                     <td>
                         <a class="btn btn-sm btn-info" onclick="updateHopDongThue({{ json_encode($hopdongthue) }})">Chỉnh sửa</a>
-                        <a class="btn btn-sm btn-danger" onclick="deleteHopDongThue({{ $hopdongthue->MaHopDong }})">Xóa</a>
-                    </td>
+                     </td>
                 </tr>
                 @endforeach
             </tbody>

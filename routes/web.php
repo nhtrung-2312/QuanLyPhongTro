@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\PhongController;
 use App\Http\Controllers\Client\AuthController;
+use App\Http\Controllers\Admin\HoaDonController;
 use App\Http\Controllers\Client\ThongTinController;
 use App\Http\Controllers\Client\ThanhToanController;
 Route::middleware('web')->group(function () {
@@ -41,4 +42,9 @@ Route::middleware('web')->group(function () {
         Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     });
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::post('/hoadon/update', [HoaDonController::class, 'update'])->name('hoadon.update');
+    Route::get('/hoadon/{maHoaDon}/get-status', [HoaDonController::class, 'getStatus'])->name('hoadon.getStatus');
 });

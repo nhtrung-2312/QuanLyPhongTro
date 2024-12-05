@@ -7,12 +7,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class KhachThue extends Model
 {
     use HasFactory;
-    protected $table = 'KhachThue';
+    protected $table = 'khachthue';
     protected $primaryKey = 'MaKhachThue';
     public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
-    protected $fillable = ['MaKhachThue', 'HoTen', 'CCCD', 'SDT', 'DiaChi', 'NgaySinh', 'GioiTinh', 'MaTaiKhoan'];
-    public function taiKhoan()
+    protected $fillable = [
+        'MaKhachThue',
+        'HoTen',
+        'CCCD',
+        'SDT',
+        'DiaChi',
+        'NgaySinh',
+        'GioiTinh',
+        'MaTaiKhoan',
+    ];
+
+    public function taiKhoan()  
     {
         return $this->belongsTo(TaiKhoan::class, 'MaTaiKhoan', 'MaTaiKhoan');
     }
