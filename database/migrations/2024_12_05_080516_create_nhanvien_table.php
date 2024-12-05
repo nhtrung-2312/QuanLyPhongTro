@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('GioiTinh', 10);
             $table->string('ChucVu', 50);
             $table->decimal('Luong', 10);
-            $table->string('MaCoSo', 10)->index('macoso');
             $table->string('MaTaiKhoan', 10)->nullable()->index('mataikhoan');
         });
     }

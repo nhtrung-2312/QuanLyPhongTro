@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loaiphi', function (Blueprint $table) {
-            $table->string('MaLoaiPhi', 10)->primary();
-            $table->string('TenLoaiPhi', 50);
-            $table->decimal('DonGia', 10);
+        Schema::create('quyen', function (Blueprint $table) {
+            $table->string('MaQuyen', 10)->primary();
+            $table->string('TenQuyen', 50);
+            $table->string('MoTa')->nullable();
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('loaiphi');
+        Schema::dropIfExists('quyen');
     }
 };
