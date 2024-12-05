@@ -38,4 +38,13 @@ class CoSo extends Model
     {
         return $this->hasMany(NhanVien::class, 'MaCoSo', 'MaCoSo');
     }
+    public function phanQuyen()
+    {
+        return $this->hasMany(PhanQuyen::class, 'MaCoSo', 'MaCoSo');
+    }
+    public function nhanViens()
+    {
+        return $this->belongsToMany(NhanVien::class, 'phanquyen', 'MaCoSo', 'MaTaiKhoan', 'MaCoSo', 'MaTaiKhoan')
+                    ->where('phanquyen.MaQuyen', 'Q002'); // Q002 là mã quyền Quản lý
+    }
 }

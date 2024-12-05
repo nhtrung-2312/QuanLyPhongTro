@@ -8,7 +8,11 @@ use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
-    public function login() {
+    public function login()
+    {
+        if (session('admin_logged_in')) {
+            return redirect()->route('admin.home');
+        }
         return view('Admin.Auth.login');
     }
     public function store(LoginRequest $request)
@@ -47,8 +51,9 @@ class AuthController extends Controller
             'redirect' => route('admin.dashboard')
         ]);
     }
-    public function logout() {
+    public function logout()
+    {
         session()->flush();
-        return redirect()->route('admin.login');
+        return redirect()->route('admin.auth.login');
     }
 }

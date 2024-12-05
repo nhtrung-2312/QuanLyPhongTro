@@ -104,11 +104,13 @@
                                 <p style="font-size: 18px;color: #333;">
                                     @php
                                         $quanLy = $phong->coSo->nhanVien()
-                                                    ->where('ChucVu', 'Quản lý')
+                                                    ->whereHas('taikhoan', function($query) {
+                                                        $query->where('VaiTro', 'Quản lý');
+                                                    })
                                                     ->first();
                                     @endphp
                                     Liên hệ ngay để được tư vấn chi tiết và xem phòng miễn phí! <br>
-                                    Liên hệ: {{ $quanLy->HoTen }} - {{ $quanLy->SDT }}
+                                    {{-- Liên hệ: {{ $quanLy->HoTen }} - {{ $quanLy->SDT }} --}}
                                 </p>
                             </div>
                         </div>
