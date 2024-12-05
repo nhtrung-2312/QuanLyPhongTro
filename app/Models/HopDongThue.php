@@ -20,4 +20,8 @@ class HopDongThue extends Model
     {
         return $this->belongsTo(PhongTro::class, 'MaPhong', 'MaPhong');
     }
+    public function chitiethopdong()
+    {
+        return $this->hasMany(ChiTietHopDong::class, 'MaHopDong', 'MaHopDong');
+    }
 }

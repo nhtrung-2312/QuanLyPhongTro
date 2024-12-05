@@ -48,4 +48,9 @@ class HoaDon extends Model
         
         return 0;
     }
+
+    public function khachthue()
+    {
+        return $this->belongsTo(KhachThue::class, 'MaKhachThue', 'MaKhachThue');
+    }
 }

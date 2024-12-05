@@ -27,4 +27,8 @@ class KhachThue extends Model
     {
         return $this->belongsTo(TaiKhoan::class, 'MaTaiKhoan', 'MaTaiKhoan');
     }
+    public function chitiethopdong()
+    {
+        return $this->hasMany(ChiTietHopDong::class, 'MaKhachThue', 'MaKhachThue');
+    }
 }

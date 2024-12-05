@@ -132,10 +132,12 @@
                     @foreach($phongKhacList as $phongKhac)
                         <div class="room-item">
                             <a href="{{ route('phong.details', $phongKhac->MaPhong) }}">
-                                <img src="{{ file_exists(public_path('template/client/dist/img/phong/' . $phong->MaPhong . '.png'))
-                                ? '/template/client/dist/img/phong/' . $phong->MaPhong . '.png'
+                                <img src="{{ file_exists(public_path('template/client/dist/img/phong/' . $phongKhac->MaPhong . '.png'))
+                                ? '/template/client/dist/img/phong/' . $phongKhac->MaPhong . '.png'
                                 : '/template/client/dist/img/phong/noimage.png' }}"
-                                alt="Hình ảnh">
+                                alt="Hình ảnh"
+                                width="200"
+                                height="150">
                                 <div class="ri-text">
                                     <h4>{{ $phongKhac->TenPhong }}</h4>
                                     <h3>{{ number_format($phongKhac->GiaThue, 0, ',', '.') }}<span>/Tháng</span></h3>
@@ -153,25 +155,26 @@
 @endsection
 @push('scripts')
 <script>
-    function handleBooking(maPhong) {
-        $.ajax({
-            url: '{{ route("phong.book") }}',
-            type: 'POST',
-            data: {
-                maPhong: maPhong,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                if (response.success) {
-                    window.location.href = response.redirectUrl;
-                } else {
-                    console.log(response);
-                }
-            },
-            error: function(xhr) {
-                console.log(xhr);
+function handleBooking(maPhong) {
+    $.ajax({
+        url: '{{ route("phong.book") }}',
+        type: 'POST',
+        data: {
+            maPhong: maPhong,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                toastr.success("Đặt phòng thành công");
+                window.location.href = response.redirectUrl;
+            } else {
+                toastr.error(response.message || "Đang có lỗi vui lòng chờ");
             }
-        });
-    }
+        },
+        error: function(xhr) {
+            toastr.error("Có lỗi xảy ra, vui lòng thử lại");
+        }
+    });
+}
 </script>
 @endpush

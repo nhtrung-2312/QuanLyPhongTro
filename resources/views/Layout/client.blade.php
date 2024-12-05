@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="/template/client/dist/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/template/client/dist/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/template/client/dist/css/style.css" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -102,7 +103,7 @@
                                         <ul>
                                             <li><span>Xin chào, {{ Str::of(session('username'))->explode(' ')->last() }}</span></li>
                                             <li><hr style="margin: 5px 0"></li>
-                                            <li><a href="{{ route('home.index') }}">Thông tin cá nhân</a></li>
+                                            <li><a href="{{ url('/thong-tin/thong-tin-ca-nhan') }}">Thông tin cá nhân</a></li>
                                             <li><a href="{{ route('auth.logout') }}">Đăng xuất</a></li>
                                         </ul>
                                     </div>
@@ -254,7 +255,7 @@
                     </button>
                 </div>
                 <div class="modal-body px-4">
-                    <form id="registerForm">
+                    <form id="registerForm" method="POST" action="{{ route('auth.register') }}">
                         @csrf
                         <div class="form-group">
                             <label for="phone">Số điện thoại</label>
@@ -268,10 +269,10 @@
                         </div>
                         <div class="form-group">
                             <label for="repassword">Nhập lại mật khẩu</label>
-                            <input type="repassword" class="form-control" name="repassword" placeholder="Nhập lại mật khẩu">
+                            <input type="password" class="form-control" name="repassword" placeholder="Nhập lại mật khẩu">
                             <small class="text-danger" id="repasswordError"></small>
                         </div>
-                        <button onclick="register()" class="btn btn-primary btn-block py-2 mb-3">Đăng ký</button>
+                        <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Đăng ký</button>
                     </form>
                 </div>
             </div>
@@ -288,47 +289,83 @@
     <script src="/template/client/dist/js/jquery.slicknav.js"></script>
     <script src="/template/client/dist/js/owl.carousel.min.js"></script>
     <script src="/template/client/dist/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
 
     <script>
-            $(document).ready(function() {
-                $('#loginForm').on('submit', function(e) {
-                    e.preventDefault();
-                    $('.text-danger').text('');
+        $(document).ready(function() {
+            $('#registerForm').on('submit', function(e) {
+                e.preventDefault();
+                $('.text-danger').text('');
 
-                    $.ajax({
-                        url: $(this).attr('action'),
-                        method: 'POST',
-                        data: $(this).serialize(),
-                        success: function(response) {
-                            if (response.status) {
-                                location.reload();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.status) {
+                            toastr.success(response.message);
+                            setTimeout(function() {
+                                window.location.href = response.redirect;
+                            }, 1000);
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            if (errors.phone) {
+                                $('#registerForm #phoneError').text(errors.phone[0]);
                             }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                console.log(errors);
-                                if (errors.phone) {
-                                    $('#phoneError').text(errors.phone);
-                                }
-                                if (errors.password) {
-                                    $('#passwordError').text(errors.password);
-                                }
-                            } else if (xhr.responseJSON.errors) {
-                                let errors = xhr.responseJSON.errors;
-                                console.log(errors);
-                                if (errors.phone) {
-                                    $('#phoneError').text(errors.phone);
-                                }
-                                if (errors.password) {
-                                    $('#passwordError').text(errors.password);
-                                }
+                            if (errors.password) {
+                                $('#registerForm #passwordError').text(errors.password[0]);
+                            }
+                            if (errors.repassword) {
+                                $('#registerForm #repasswordError').text(errors.repassword[0]);
+                            }
+                            if (errors.system) {
+                                toastr.error(errors.system[0]);
                             }
                         }
-                    });
+                    }
                 });
             });
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+                $('.text-danger').text('');
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.status) {
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            console.log(errors);
+                            if (errors.phone) {
+                                $('#phoneError').text(errors.phone);
+                            }
+                            if (errors.password) {
+                                $('#passwordError').text(errors.password);
+                            }
+                        } else if (xhr.responseJSON.errors) {
+                            let errors = xhr.responseJSON.errors;
+                            console.log(errors);
+                            if (errors.phone) {
+                                $('#phoneError').text(errors.phone);
+                            }
+                            if (errors.password) {
+                                $('#passwordError').text(errors.password);
+                            }
+                        }
+                    }
+                });
+            });
+        });
         function showLogin() {
             $('#showLoginModal').modal('show');
         }
