@@ -46,16 +46,20 @@
                                 <td>{{ number_format($hoadon->TongTien, 0, ',', '.') }}đ</td>
                                 <td>
                                     @if($hoadon->TrangThai == "Đã thanh toán")
-                                        <span class="badge badge-success">Đã thanh toán</span>
+                                        <span style="font-size: 14px; padding: 8px 12px;" class="badge badge-lg badge-success">Đã thanh toán</span>
+                                    @elseif($hoadon->TrangThai == "Chưa thanh toán")
+                                        <span style="font-size: 14px; padding: 8px 12px;" class="badge badge-lg badge-warning">Chưa thanh toán</span>
                                     @elseif($hoadon->TrangThai == "Đang xử lý")
-                                        <span class="badge badge-warning">Chưa thanh toán</span>
-                                    @elseif($hoadon->TrangThai == "Đã hủy")
-                                        <span class="badge badge-danger">Đã hủy</span>
+                                        <span style="font-size: 14px; padding: 8px 12px;" class="badge badge-lg badge-info">Đang xử lý</span>
+                                    @elseif($hoadon->TrangThai == "Đã huỷ")
+                                        <span style="font-size: 14px; padding: 8px 12px;" class="badge badge-lg badge-danger">Đã hủy</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($hoadon->TrangThai == "Đang xử lý")
+                                    @if($hoadon->TrangThai == "Chưa thanh toán")
                                         <a href="" class="btn btn-sm btn-success">Thanh toán</a>
+                                    @elseif($hoadon->TrangThai == "Đang xử lý")
+
                                     @else
                                         <a href="" class="btn btn-sm btn-info">Chi tiết</a>
                                     @endif

@@ -33,7 +33,7 @@
                     @endphp
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h5><a href="{{ url('/phong/details/'.$phong['phong']->MaPhong) }}" style="color: inherit; text-decoration: none;">{{ $phong['phong']->TenPhong }} - {{ $phong['coso']->TenCoSo }}</a></h5>
+                            <h5><a style="color: inherit; text-decoration: none;">{{ $phong['phong']->TenPhong }} - {{ $phong['coso']->TenCoSo }}</a></h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -42,13 +42,14 @@
                                     <p><strong>Loại phòng:</strong> {{ $phong['loaiphong']->LoaiPhong }}</p>
                                     <p><strong>Diện tích:</strong> {{ $phong['phong']->loaiPhong->DienTich }}m²</p>
                                     <p><strong>Giá thuê:</strong> {{ number_format($phong['phong']->GiaThue, 0, ',', '.') }}đ</p>
+                                    <p><strong>Trạng thái:</strong> <span class="badge badge-lg {{ $phong['hopdongthue']->TrangThai == 'Chờ thanh toán cọc' ? 'badge-warning' : ($phong['hopdongthue']->TrangThai == 'Đã thanh toán cọc' ? 'badge-success' : 'badge-secondary') }}" style="font-size: 14px; padding: 8px 12px;">{{ $phong['hopdongthue']->TrangThai }}</span></p>
                                 </div>
                                 <div class="col-md-6">
                                     <h6 class="mb-3">Thời hạn hợp đồng:</h6>
                                     @php
                                         $hopDong = $phong['hopdongthue'];
                                         if($hopDong) {
-                                            $ngayHienTai = now();
+                                            $ngayHienTai = \Carbon\Carbon::parse($hopDong->NgayBatDau);
                                             $ngayKetThuc = \Carbon\Carbon::parse($hopDong->NgayKetThuc);
                                             if($ngayHienTai->lte($ngayKetThuc)) {
                                                 $ngayConLai = $ngayHienTai->diffInDays($ngayKetThuc) . ' ngày';
@@ -61,6 +62,9 @@
                                         <p><strong>Ngày bắt đầu:</strong> {{ date('d/m/Y', strtotime($hopDong->NgayBatDau)) }}</p>
                                         <p><strong>Ngày kết thúc:</strong> {{ date('d/m/Y', strtotime($hopDong->NgayKetThuc)) }}</p>
                                         <p><strong>Thời gian còn lại:</strong> {{ $ngayConLai }} </p>
+                                        @if($phong['hopdongthue']->TrangThai == 'Chờ thanh toán cọc')
+                                            <a href="{{ route('thanhToan.datphong', $phong['phong']->MaPhong) }}" class="btn btn-primary">Thanh toán tiền cọc</a>
+                                        @endif
                                     @endif
                                 </div>
                             </div>

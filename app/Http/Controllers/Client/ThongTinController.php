@@ -80,7 +80,7 @@ class ThongTinController extends Controller
             ->join('chitiethopdong', 'hopdongthue.MaHopDong', '=', 'chitiethopdong.MaHopDong')
             ->where('chitiethopdong.MaKhachThue', session('user_id'))
             ->select('hoadon.*')
-            ->get();
+            ->orderBy('hoadon.NgayLap', 'desc')->get();
         return view('Client.ThongTin.history', compact('hoadons'));
     }
     public function phong()

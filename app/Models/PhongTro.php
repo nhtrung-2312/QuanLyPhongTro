@@ -37,4 +37,8 @@ class PhongTro extends Model
     {
         return $this->hasMany(HopDongThue::class, 'MaPhong', 'MaPhong');
     }
+    public function chisodiennuoc()
+    {
+        return $this->hasMany(ChiSoDienNuoc::class, 'MaPhong', 'MaPhong');
+    }
 }

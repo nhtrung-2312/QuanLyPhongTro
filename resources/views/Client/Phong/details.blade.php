@@ -132,10 +132,12 @@
                     @foreach($phongKhacList as $phongKhac)
                         <div class="room-item">
                             <a href="{{ route('phong.details', $phongKhac->MaPhong) }}">
-                                <img src="{{ file_exists(public_path('template/client/dist/img/phong/' . $phong->MaPhong . '.png'))
-                                ? '/template/client/dist/img/phong/' . $phong->MaPhong . '.png'
+                                <img src="{{ file_exists(public_path('template/client/dist/img/phong/' . $phongKhac->MaPhong . '.png'))
+                                ? '/template/client/dist/img/phong/' . $phongKhac->MaPhong . '.png'
                                 : '/template/client/dist/img/phong/noimage.png' }}"
-                                alt="Hình ảnh">
+                                alt="Hình ảnh"
+                                width="200"
+                                height="150">
                                 <div class="ri-text">
                                     <h4>{{ $phongKhac->TenPhong }}</h4>
                                     <h3>{{ number_format($phongKhac->GiaThue, 0, ',', '.') }}<span>/Tháng</span></h3>

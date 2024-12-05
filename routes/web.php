@@ -31,6 +31,9 @@ Route::middleware('web')->group(function () {
         Route::prefix('thanh-toan')->middleware('auth.client')->group(function () {
             Route::get('/dat-phong/{id}', [ThanhToanController::class, 'datphong'])->name('thanhToan.datphong');
             Route::post('/hoa-don/{id}', [ThanhToanController::class, 'bill'])->name('thanhToan.bill');
+            Route::get('/thanh-toan-tien-mat', [ThanhToanController::class, 'thanhToanCash'])->name('thanhToan.thanhToanCash');
+            Route::get('/thanh-toan-momo', [ThanhToanController::class, 'thanhToanMomo'])->name('thanhToan.thanhToanMomo');
+            Route::get('/thanh-toan-bank', [ThanhToanController::class, 'thanhToanBank'])->name('thanhToan.thanhToanBank');
         });
 
         Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
