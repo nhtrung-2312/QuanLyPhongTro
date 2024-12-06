@@ -18,6 +18,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -185,6 +186,11 @@
                       <p>Danh sách khách hàng</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.khachhang.create') }}" class="nav-link">
+                      <p>Thêm khách hàng mới</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
             @endif
@@ -228,6 +234,11 @@
                   <p>Danh sách hợp đồng thuê</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.hopdongthue.create') }}" class="nav-link">
+                  <p>Thêm hợp đồng thuê mới</p>
+                </a>
+              </li>
             </ul>
           </li>
           @endif
@@ -266,12 +277,12 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.nhanvien.index') }} " class="nav-link">
                   <p> Danh sách nhân viên</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.nhanvien.create') }} " class="nav-link">
                   <p> Thêm nhân viên mới</p>
                 </a>
               </li>
@@ -359,7 +370,10 @@
 <script src="/template/admin/plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
 <script src="/template/admin/plugins/chart.js/Chart.min.js"></script>
+<!-- jQuery UI CSS -->
 
+<!-- jQuery UI JS (sau jQuery core) -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/template/admin/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

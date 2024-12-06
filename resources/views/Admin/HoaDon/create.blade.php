@@ -1,121 +1,131 @@
-@extends('Layout.admin')                    
+@extends('Layout.admin')
 @section('title', 'Thêm hóa đơn')
-
-@push('styles')
-<!-- Thêm các style cụ thể nếu cần -->
-@endpush
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <div class="">
+            <a href="{{ route('admin.hoadon.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay về
+            </a>
+        </div>
+    </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('admin.hoadon.store') }}">
+        <form id="createForm" method="POST">
             @csrf
-            <div class="row">
-                <!-- Thông tin cơ bản -->
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Thông tin hóa đơn</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <!-- Thông tin cơ bản bên trái -->
-                                    <div class="form-group">
-                                        <label for="MaCoSo">Cơ sở</label>
-                                        <select name="MaCoSo" class="form-control" id="MaCoSo" required>
-                                            <option value="" selected hidden>Chọn cơ sở</option>
-                                            @foreach($cosos as $coso)
-                                                <option value="{{ $coso->MaCoSo }}">{{ $coso->TenCoSo }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('MaCoSo')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="MaPhong">Phòng</label>
-                                        <select name="MaPhong" class="form-control" id="MaPhong" required>
-                                            <option value="" selected hidden>Chọn phòng</option>
-                                        </select>
-                                        @error('MaPhong')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="NgayLap">Ngày lập</label>
-                                        <input type="date" name="NgayLap" class="form-control" value="{{ old('NgayLap', date('Y-m-d')) }}" required>
-                                        @error('NgayLap')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="TrangThai">Trạng thái</label>
-                                        <select name="TrangThai" class="form-control" required>
-                                            <option value="Đang xử lý" selected>Đang xử lý</option>
-                                            <option value="Đã thanh toán">Đã thanh toán</option>
-                                            <option value="Hủy">Hủy</option>
-                                        </select>
-                                        @error('TrangThai')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <!-- Thông tin chỉ số bên phải -->
-                                    <div class="form-group">
-                                        <label for="ChiSoDienCu">Chỉ số điện cũ</label>
-                                        <input type="number" name="ChiSoDienCu" class="form-control" required>
-                                        @error('ChiSoDienCu')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="ChiSoDienMoi">Chỉ số điện mới</label>
-                                        <input type="number" name="ChiSoDienMoi" class="form-control" required>
-                                        @error('ChiSoDienMoi')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="ChiSoNuocCu">Chỉ số nước cũ</label>
-                                        <input type="number" name="ChiSoNuocCu" class="form-control" required>
-                                        @error('ChiSoNuocCu')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="ChiSoNuocMoi">Chỉ số nước mới</label>
-                                        <input type="number" name="ChiSoNuocMoi" class="form-control" required>
-                                        @error('ChiSoNuocMoi')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="TongTien">Tổng tiền</label>
-                                        <input type="number" name="TongTien" id="TongTien" class="form-control" readonly>
-                                        @error('TongTien')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
+            <!-- Phần 0: Thông tin cá nhân -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Thông tin khách hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="SoDienThoai">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="SoDienThoai" name="SoDienThoai" required>
+                                <span class="text-danger" id="SoDienThoaiError"></span>
                             </div>
-
-                            <div class="text-center mt-3">
-                                <button type="submit" class="btn btn-primary">Tạo hóa đơn</button>
-                                <a href="{{ route('admin.hoadon.index') }}" class="btn btn-secondary">Hủy</a>
+                            <div class="form-group">
+                                <label for="CCCD">Số CCCD <span class="text-danger">*</span></label>
+                                <input type="text" disabled class="form-control" id="CCCD" name="CCCD" required>
+                                <span class="text-danger" id="CCCDError"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="HoTen">Họ và tên <span class="text-danger">*</span></label>
+                                <input type="text" disabled class="form-control" id="HoTen" name="HoTen" required>
+                                <span class="text-danger" id="HoTenError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="GioiTinh">Giới tính <span class="text-danger">*</span></label>
+                                <select class="form-control" disabled id="GioiTinh" name="GioiTinh" required>
+                                    <option value="" selected disabled>-- Chọn giới tính --</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                </select>
+                                <span class="text-danger" id="GioiTinhError"></span>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- Phần 1: Thông tin khách hàng -->
+
+            <!-- Phần 2: Thông tin phòng -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Thông tin phòng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="MaPhong">Chọn phòng <span class="text-danger">*</span></label>
+                                <select class="form-control" id="MaPhong" name="MaPhong" required>
+                                    <option value="">-- Chọn phòng --</option>
+                                </select>
+                                <span class="text-danger" id="MaPhongError"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="thongTinPhong">
+                                <div class="form-group">
+                                    <label>Ngày thuê</label>
+                                    <input type="text" class="form-control" id="NgayBatDau" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày hết hạn</label>
+                                    <input type="text" class="form-control" id="NgayKetThuc" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Thông tin hoá đơn</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="TienDien">Tiền điện trước</label>
+                                <input type="number" class="form-control" id="TienDien" name="TienDien" required>
+                                <span class="text-danger" id="TienDienError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="TienDien">Tiền điện hiện tại</label>
+                                <input type="number" class="form-control" id="TienDien" name="TienDien" required>
+                                <span class="text-danger" id="TienDienError"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="TienNuoc">Tiền nước trước</label>
+                                <input type="number" class="form-control" id="TienNuoc" name="TienNuoc" required>
+                                <span class="text-danger" id="TienNuocError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="TienNuoc">Tiền nước hiện tại</label>
+                                <input type="number" class="form-control" id="TienNuoc" name="TienNuoc" required>
+                                <span class="text-danger" id="TienNuocError"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Tạo hợp đồng
+                </button>
+                <a href="{{ route('admin.hopdongthue.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Hủy
+                </a>
             </div>
         </form>
     </div>
@@ -125,22 +135,39 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    $('#MaCoSo').change(function() {
-        var maCoSo = $(this).val();
-        if(maCoSo) {
-            // Xóa tất cả option cũ trừ option mặc định
-            $('#MaPhong').find('option').not(':first').remove();
-            
-            // Lọc phòng theo cơ sở được chọn
-            @foreach($cosos as $coso)
-                if('{{ $coso->MaCoSo }}' === maCoSo) {
-                    @foreach($coso->phongTro as $phong)
-                        $('#MaPhong').append(new Option('{{ $phong->TenPhong }}', '{{ $phong->MaPhong }}'));
-                    @endforeach
+    $('#SoDienThoai').change(function() {
+        let sdt = $(this).val();
+        if(sdt) {
+            $.ajax({
+                url: '{{ route('api.khachhang.getKhachHang') }}',
+                type: 'GET',
+                data: {
+                    sdt: sdt
+                },
+                success: function(response) {
+                    if(response.success) {
+                        $('#HoTen').val(response.data.HoTen);
+                        $('#CCCD').val(response.data.CCCD);
+                        $('#GioiTinh').val(response.data.GioiTinh);
+                        $('#SoDienThoaiError').text('');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if(xhr.status == 422) {
+                        $('#HoTen').val('');
+                        $('#CCCD').val('');
+                        $('#GioiTinh').val('');
+                        $('#SoDienThoaiError').text('Không tìm thấy thông tin khách hàng!');
+                    } else {
+                        toastr.error('Có lỗi xảy ra khi lấy thông tin khách hàng!');
+                    }
                 }
-            @endforeach
+            });
         } else {
-            $('#MaPhong').find('option').not(':first').remove();
+            $('#HoTen').val('');
+            $('#CCCD').val('');
+            $('#GioiTinh').val('');
+            $('#MaPhong').html('<option value="" selected disabled>-- Chọn phòng --</option>');
         }
     });
 });

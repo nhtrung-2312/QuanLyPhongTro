@@ -3,12 +3,9 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Danh sách loại phí</h3>
-        <div class="card-tools">
-            <a href="{{ route('admin.loaiphi.create') }}" class="btn btn-success">
-                <i class="fas fa-plus"></i> Thêm mới
-            </a>
-        </div>
+        <a href="{{ route('admin.loaiphi.create') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Thêm mới
+        </a>
     </div>
     <div class="card-body">
         @if(session('success'))
@@ -87,10 +84,12 @@
                     <div class="form-group">
                         <label for="edit_TenLoaiPhi">Tên loại phí</label>
                         <input type="text" class="form-control" id="edit_TenLoaiPhi" required>
+                        <span class="text-danger" id="edit_TenLoaiPhiError"></span>
                     </div>
                     <div class="form-group">
                         <label for="edit_DonGia">Đơn giá</label>
                         <input type="number" class="form-control" id="edit_DonGia" min="0" required>
+                        <span class="text-danger" id="edit_DonGiaError"></span>
                     </div>
                 </form>
             </div>
@@ -105,19 +104,14 @@
 @push('scripts')
 <script>
 let deleteId = null;
-
-// Hàm chuyển đến trang chỉnh sửa
 function editLoaiPhi(maLoaiPhi) {
-    // Gọi API để lấy thông tin loại phí
     $.ajax({
         url: `/admin/loaiphi/edit/${maLoaiPhi}`,
         type: 'GET',
         success: function(response) {
-            // Điền dữ liệu vào form
-            $('#edit_MaLoaiPhi').val(response.MaLoaiPhi);
-            $('#edit_TenLoaiPhi').val(response.TenLoaiPhi);
-            $('#edit_DonGia').val(response.DonGia);
-            // Hiển thị modal
+            $('#edit_MaLoaiPhi').val(response.data.MaLoaiPhi);
+            $('#edit_TenLoaiPhi').val(response.data.TenLoaiPhi);
+            $('#edit_DonGia').val(response.data.DonGia);
             $('#editModal').modal('show');
         },
         error: function(xhr) {
@@ -126,14 +120,12 @@ function editLoaiPhi(maLoaiPhi) {
     });
 }
 
-// Hàm mở modal xác nhận xóa
 function deleteLoaiPhi(maLoaiPhi, tenLoaiPhi) {
     deleteId = maLoaiPhi;
     $('#deleteLoaiPhiName').text(tenLoaiPhi);
     $('#deleteModal').modal('show');
 }
 
-// Hàm xác nhận xóa
 function confirmDelete() {
     if (!deleteId) return;
 
@@ -149,19 +141,19 @@ function confirmDelete() {
                 toastr.success('Xóa thành công!');
                 setTimeout(() => {
                     window.location.reload();
-                }, 1500);
+                }, 500);
             } else {
                 toastr.error(response.message || 'Có lỗi xảy ra!');
             }
         },
         error: function(xhr) {
             $('#deleteModal').modal('hide');
+            console.log(xhr.responseJSON);
             toastr.error('Có lỗi xảy ra khi xóa!');
         }
     });
 }
 
-// Thêm hàm updateLoaiPhi để xử lý cập nhật
 function updateLoaiPhi() {
     const maLoaiPhi = $('#edit_MaLoaiPhi').val();
     const data = {
@@ -181,13 +173,15 @@ function updateLoaiPhi() {
                 toastr.success('Cập nhật thành công!');
                 setTimeout(() => {
                     window.location.reload();
-                }, 1500);
+                }, 500);
             } else {
                 toastr.error(response.message || 'Có lỗi xảy ra!');
             }
         },
         error: function(xhr) {
-            toastr.error('Có lỗi xảy ra khi cập nhật!');
+            const error = xhr.responseJSON;
+            $('#edit_TenLoaiPhiError').text(error.errors.TenLoaiPhi);
+            $('#edit_DonGiaError').text(error.errors.DonGia);
         }
     });
 }

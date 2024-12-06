@@ -11,12 +11,24 @@ use App\Http\Controllers\Admin\ChiTietHoaDonController;
 use App\Http\Controllers\Admin\CoSoController;
 use App\Http\Controllers\Admin\PhongController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\NhanVienController;
+use App\Http\Controllers\Api\HopDongThueApi;
+use App\Http\Controllers\Api\LoaiPhiApi;
+use App\Http\Controllers\Api\PhongTroApi;
+use App\Http\Controllers\Api\KhachHangApi;
+
 
 Route::get('/login', [AuthController::class, 'login'])->name('admin.auth.login');
 Route::post('/store', [AuthController::class, 'store'])->name('admin.auth.store');
 Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 Route::post('/check-permissions', [HomeController::class, 'checkPermissions'])->name('admin.checkPermissions');
 
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('/hopdongthue/get-phong', [HopDongThueApi::class, 'getPhong'])->name('hopdongthue.getPhong');
+    Route::get('/loaiphi/get-loaiphi', [LoaiPhiApi::class, 'getLoaiPhi'])->name('loaiphi.getLoaiPhi');
+    Route::get('/phongtro/get-phong', [PhongTroApi::class, 'getPhong'])->name('phongtro.getPhong');
+    Route::get('/khachhang/get-khachhang', [KhachHangApi::class, 'getKhachHang'])->name('khachhang.getKhachHang');
+});
 
 Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(function () {
     Route::prefix('')->name('admin.')->group(function () {
@@ -52,25 +64,45 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
 
     Route::prefix('khachhang')->name('admin.khachhang.')->group(function () {
         Route::get('/', [KhachThueController::class, 'index'])->name('index');
+        Route::get('/create', [KhachThueController::class, 'create'])->name('create');
+        Route::post('/store', [KhachThueController::class, 'store'])->name('store');
+        Route::get('/edit/{maKhachThue}', [KhachThueController::class, 'edit'])->name('edit');
+        Route::put('/update/{maKhachThue}', [KhachThueController::class, 'update'])->name('update');
     });
 
     Route::prefix('loaiphi')->name('admin.loaiphi.')->group(function () {
         Route::get('/', [LoaiPhiController::class, 'index'])->name('index');
         Route::get('/create', [LoaiPhiController::class, 'create'])->name('create');
         Route::post('/store', [LoaiPhiController::class, 'store'])->name('store');
-        Route::delete('/delete/{MaLoaiPhi}', [LoaiPhiController::class, 'delete'])->name('delete');
+        Route::get('/edit/{id}', [LoaiPhiController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [LoaiPhiController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [LoaiPhiController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('hopdongthue')->name('admin.hopdongthue.')->group(function () {
         Route::get('/', [HopDongThueController::class, 'index'])->name('index');
+        Route::get('/edit/{id}', [HopDongThueController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [HopDongThueController::class, 'update'])->name('update');
+        Route::get('/create', [HopDongThueController::class, 'create'])->name('create');
+        Route::post('/store', [HopDongThueController::class, 'store'])->name('store');
     });
     Route::prefix('hoadon')->name('admin.hoadon.')->group(function () {
         Route::get('/', [HoaDonController::class, 'index'])->name('index');
-        Route::get('/create', [HoaDonController::class, 'create'])->name('create');
+        Route::get('/edit/{MaHoaDon}', [HoaDonController::class, 'edit'])->name('edit');
+        Route::put('/update', [HoaDonController::class, 'update'])->name('update');
         Route::post('/store', [HoaDonController::class, 'store'])->name('store');
+        Route::get('/create', [HoaDonController::class, 'create'])->name('create');
         Route::get('/details/{MaHoaDon}', [HoaDonController::class, 'details'])->name('details');
-        Route::get('/get-status/{maHoaDon}', [HoaDonController::class, 'getStatus'])->name('getStatus');
-        Route::get('/get-phong-by-coso/{maCoSo}', [HoaDonController::class, 'getPhongByCoSo'])->name('getPhongByCoSo');
+        Route::get('/xuat-hoa-don/{MaHoaDon}', [HoaDonController::class, 'printHoaDon'])->name('print');
+    });
+
+    Route::prefix('nhanvien')->name('admin.nhanvien.')->group(function () {
+        Route::get('/', [NhanVienController::class, 'index'])->name('index');
+        Route::get('/create', [NhanVienController::class, 'create'])->name('create');
+        Route::post('/store', [NhanVienController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [NhanVienController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [NhanVienController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [NhanVienController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('rooms')->name('admin.rooms.')->group(function() {

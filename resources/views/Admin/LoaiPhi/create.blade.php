@@ -11,35 +11,25 @@
         </div>
     </div>
     <div class="card-body">
-        @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
-
-        <form method="POST" action="{{ route('admin.loaiphi.store') }}">
+        <form id="createForm" method="POST" action="{{ route('admin.loaiphi.store') }}">
             @csrf
             <div class="form-group">
                 <label for="TenLoaiPhi">Tên loại phí <span class="text-danger">*</span></label>
-                <input type="text" 
-                       name="TenLoaiPhi" 
-                       class="form-control @error('TenLoaiPhi') is-invalid @enderror" 
-                       value="{{ old('TenLoaiPhi') }}"
-                       required>
-                @error('TenLoaiPhi')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+                <input type="text"
+                       id="TenLoaiPhi"
+                       name="TenLoaiPhi"
+                       class="form-control">
+                <span class="text-danger" id="TenLoaiPhiError"></span>
             </div>
 
             <div class="form-group">
                 <label for="DonGia">Đơn giá <span class="text-danger">*</span></label>
-                <input type="number" 
-                       name="DonGia" 
-                       class="form-control @error('DonGia') is-invalid @enderror" 
-                       value="{{ old('DonGia') }}"
-                       min="0"
-                       required>
-                @error('DonGia')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+                <input type="number"
+                       id="DonGia"
+                       name="DonGia"
+                       class="form-control"
+                       min="0">
+                <span class="text-danger" id="DonGiaError"></span>
             </div>
 
             <div class="text-center mt-4">
@@ -53,4 +43,41 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('#createForm').submit(function(e) {
+        e.preventDefault();
+
+        // Reset error messages
+        $('#TenLoaiPhiError').text('');
+        $('#DonGiaError').text('');
+
+        $.ajax({
+            url: $(this).attr('action'),
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if(response.success) {
+                    toastr.success('Thêm loại phí thành công!');
+                    setTimeout(() => {
+                        window.location.href = "{{ route('admin.loaiphi.index') }}";
+                    }, 500);
+                }
+            },
+            error: function(xhr) {
+                const errors = xhr.responseJSON.errors;
+                if(errors.TenLoaiPhi) {
+                    $('#TenLoaiPhiError').text(errors.TenLoaiPhi[0]);
+                }
+                if(errors.DonGia) {
+                    $('#DonGiaError').text(errors.DonGia[0]);
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush
 @endsection
