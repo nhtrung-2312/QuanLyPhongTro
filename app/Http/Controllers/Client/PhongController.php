@@ -28,7 +28,7 @@ class PhongController extends Controller
     public function details($id)
     {
         $phong = PhongTro::with('coSo', 'chiTietPhong', 'loaiPhong')->find($id);
-        $loaiphi = LoaiPhi::all();
+        $loaiphi = LoaiPhi::where('MaCoSo', $phong->MaCoSo)->get();
         return view('Client.Phong.details', compact('phong', 'loaiphi'));
     }
     public function book(Request $request)

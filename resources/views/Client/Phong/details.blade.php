@@ -103,11 +103,11 @@
                                 <h5 style="margin-bottom:5px;font-weight: bold;">Liên hệ</h5>
                                 <p style="font-size: 18px;color: #333;">
                                     @php
-                                        $quanLy = $phong->coSo->nhanVien()
-                                                    ->whereHas('taikhoan', function($query) {
-                                                        $query->where('VaiTro', 'Quản lý');
-                                                    })
-                                                    ->first();
+                                        // $quanLy = $phong->coSo->nhanVien()
+                                        //             ->whereHas('taikhoan', function($query) {
+                                        //                 $query->where('VaiTro', 'Quản lý');
+                                        //             })
+                                        //             ->first();
                                     @endphp
                                     Liên hệ ngay để được tư vấn chi tiết và xem phòng miễn phí! <br>
                                     {{-- Liên hệ: {{ $quanLy->HoTen }} - {{ $quanLy->SDT }} --}}

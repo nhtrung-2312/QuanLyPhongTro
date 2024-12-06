@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('quyen', function (Blueprint $table) {
             $table->string('MaQuyen', 10)->primary();
-            $table->string('TenQuyen', 50);
-            $table->string('MoTa')->nullable();
+            $table->string('TenQuyen', 20);
+            $table->string('MoTa');
         });
     }
 

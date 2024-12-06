@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('phanquyen', function (Blueprint $table) {
-            $table->string('MaTaiKhoan', 10);
-            $table->string('MaQuyen', 10)->index('fk_phanquyen_maquyen');
-            $table->string('MaCoSo', 10)->index('fk_phanquyen_macoso');
+            $table->string('MaQuyen', 10);
+            $table->string('MaTaiKhoan', 10)->index('fk_phanquyen_matk');
+            $table->string('MaCoSo', 10)->index('fk_phanquyen_maso');
 
-            $table->primary(['MaTaiKhoan', 'MaQuyen', 'MaCoSo']);
+            $table->primary(['MaQuyen', 'MaTaiKhoan', 'MaCoSo']);
         });
     }
 

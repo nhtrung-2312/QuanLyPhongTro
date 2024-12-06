@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('phanquyen', function (Blueprint $table) {
-            $table->foreign(['MaCoSo'], 'fk_phanquyen_macoso')->references(['MaCoSo'])->on('coso')->onUpdate('restrict')->onDelete('restrict');
             $table->foreign(['MaQuyen'], 'fk_phanquyen_maquyen')->references(['MaQuyen'])->on('quyen')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['MaTaiKhoan'], 'fk_phanquyen_mataikhoan')->references(['MaTaiKhoan'])->on('taikhoan')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['MaCoSo'], 'fk_phanquyen_maso')->references(['MaCoSo'])->on('coso')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['MaTaiKhoan'], 'fk_phanquyen_matk')->references(['MaTaiKhoan'])->on('taikhoan')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,9 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('phanquyen', function (Blueprint $table) {
-            $table->dropForeign('fk_phanquyen_macoso');
             $table->dropForeign('fk_phanquyen_maquyen');
-            $table->dropForeign('fk_phanquyen_mataikhoan');
+            $table->dropForeign('fk_phanquyen_maso');
+            $table->dropForeign('fk_phanquyen_matk');
         });
     }
 };

@@ -118,12 +118,12 @@ class ThanhToanController extends Controller
                 $chiTietHD->MaHoaDon = $mahd;
                 $chiTietHD->MaLoaiPhi = $lp->MaLoaiPhi;
                 $chiTietHD->GhiChu = null;
-                switch($lp->MaLoaiPhi) {
-                    case 'PHI001':
+                switch($lp->TenLoaiPhi) {
+                    case 'Tiền điện':
                         $chiTietHD->SoLuong = $chisodn->DienMoi - $chisodn->DienCu;
                         $chiTietHD->ThanhTien = $lp->DonGia * $chiTietHD->SoLuong;
                         break;
-                    case 'PHI002':
+                    case 'Tiền nước':
                         $chiTietHD->SoLuong = $chisodn->NuocMoi - $chisodn->NuocCu;
                         $chiTietHD->ThanhTien = $lp->DonGia * $chiTietHD->SoLuong;
                         break;

@@ -79,6 +79,7 @@
                         @php
                             $dichVu = DB::table('loaiphi')
                                 ->whereNotIn('TenLoaiPhi', ['Tiền điện', 'Tiền nước', 'Phí khác'])
+                                ->where('MaCoSo', $phong->MaCoSo)
                                 ->get();
                         @endphp
                         @foreach ($dichVu as $dv)
