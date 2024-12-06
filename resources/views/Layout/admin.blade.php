@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title')</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -27,52 +28,72 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-dark">
+<nav class="main-header navbar navbar-expand navbar-dark">
+<!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            @php
+                $permissions = \App\Models\PhanQuyen::where('MaTaiKhoan', session('admin_id'))->pluck('MaCoSo')->toArray();
+                $coSo = \App\Models\CoSo::whereIn('MaCoSo', $permissions)->get();
+                $selectedCoSo = session('selected_facility', $coSo->first()->MaCoSo ?? null);
+            @endphp
+
+            <select class="form-control bg-light border-0 text-white" style="margin-top: 3px" id="coSoSelect">
+            @foreach($coSo as $item)
+                <option value="{{ $item->MaCoSo }}" {{ $selectedCoSo == $item->MaCoSo ? 'selected' : '' }}>
+                    Cơ sở {{ $loop->index + 1 }}
+                </option>
+            @endforeach
+            </select>
+        </li>
+    </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
-      </li>
-    </ul>
-  </nav>
-  <!-- /.navbar -->
+        <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                <i class="fas fa-expand-arrows-alt"></i>
+            </a>
+        </li>
 
+        <li class="nav-item">
+            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                <i class="fas fa-th-large"></i>
+            </a>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user"></i> {{ session('admin_name') }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-user-circle mr-2"></i>Thông tin tài khoản
+                </a>
+
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-cog mr-2"></i>Cài đặt
+                </a>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href="{{ route('auth.logout') }}">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
+                </a>
+            </div>
+        </li>
+    </ul>
+</nav>
+  <!-- /.navbar -->
   <!-- Main Sidebar Container -->
+  @php
+    $permissions = \App\Models\PhanQuyen::where('MaTaiKhoan', session('admin_id'))
+        ->where('MaCoSo', $selectedCoSo)
+        ->pluck('MaQuyen')
+        ->toArray();
+
+    print_r($selectedCoSo);
+  @endphp
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/admin" class="brand-link">
@@ -88,82 +109,92 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Thống kê
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Thống kê</p>
+            @if(in_array('Q009', $permissions))
+            <li class="nav-item" data-permission="Q009">
+                <a href="#" class="nav-link active">
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    Thống kê
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <p>Thống kê</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
-              <p>
-                Cơ sở
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/admin/coso" class="nav-link">
-                  <p>Danh sách cơ sở</p>
+            @endif
+              @if(in_array('Q001', $permissions))
+              <li class="nav-item" data-permission="Q001">
+                <a href="#" class="nav-link active">
+                  <i class="nav-icon fas fa-building"></i>
+                  <p>
+                    Cơ sở
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/admin/coso" class="nav-link">
+                      <p>Danh sách cơ sở</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
-              <p>
-                Phòng trọ
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/admin/loaiphong" class="nav-link">
-                  <p>Quản lý loại phòng</p>
+            @endif
+            @if(in_array('Q004', $permissions))
+            <li class="nav-item" data-permission="Q004">
+                <a href="#" class="nav-link active">
+                  <i class="nav-icon fas fa-door-open"></i>
+                  <p>
+                    Phòng trọ
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/admin/loaiphong" class="nav-link">
+                      <p>Quản lý loại phòng</p>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/admin/rooms" class="nav-link">
+                      <p>Quản lý phòng</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/admin/rooms" class="nav-link">
-                  <p>Quản lý phòng</p>
+            @endif
+            @if(in_array('Q002', $permissions))
+            <li class="nav-item" data-permission="Q002">
+                <a href="#" class="nav-link active">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>
+                    Khách hàng
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('admin.khachhang.index') }}" class="nav-link">
+                      <p>Danh sách khách hàng</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </li> 
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
+            @endif
+
+            @if(in_array('Q005', $permissions))
+            <li class="nav-item" data-permission="Q005">
+                <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-money-bill"></i>
               <p>
-                Khách hàng
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('admin.khachhang.index') }}" class="nav-link">
-                  <p>Danh sách khách hàng</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
-              <p>
-                LoaiPhi
+                Loại phí
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -173,11 +204,19 @@
                   <p>Danh sách loại phí</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.loaiphi.create') }}" class="nav-link">
+                  <p>Thêm loại phí mới</p>
+                </a>
+              </li>
             </ul>
           </li>
-          <li class="nav-item">
+          @endif
+
+          @if(in_array('Q008', $permissions))
+          <li class="nav-item" data-permission="Q008">
             <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
+              <i class="nav-icon fas fa-file-contract"></i>
               <p>
                 Hợp đồng thuê
                 <i class="right fas fa-angle-left"></i>
@@ -191,9 +230,12 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
+          @endif
+
+          @if(in_array('Q007', $permissions))
+          <li class="nav-item" data-permission="Q007">
             <a href="#" class="nav-link active">
-              <i class="nav-icon bi bi-house-fill"></i>
+              <i class="nav-icon fas fa-file-invoice"></i>
               <p>
                 Hóa Đơn
                 <i class="right fas fa-angle-left"></i>
@@ -212,6 +254,30 @@
               </li>
             </ul>
           </li>
+          @endif
+          @if(in_array('Q003', $permissions))
+          <li class="nav-item" data-permission="Q003">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-user-tie"></i>
+              <p>
+                Nhân viên
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p> Danh sách nhân viên</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p> Thêm nhân viên mới</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
         </ul>
 
         </ul>
@@ -247,7 +313,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>        
+            </div>
         @endif
 
         @if(session('error'))
@@ -298,11 +364,10 @@
 <script src="/template/admin/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="/template/admin/dist/js/pages/dashboard2.js"></script>
-
 <script>
     // Tự động ẩn alert sau 3 giây
     $(document).ready(function() {
-    // Auto hide alerts after 3 seconds
+        // Auto hide alerts after 3 seconds
         setTimeout(function() {
             $('.alert').fadeOut('slow', function() {
                 $(this).remove();
@@ -313,6 +378,24 @@
         $('.alert .close').on('click', function() {
             $(this).closest('.alert').fadeOut('slow', function() {
                 $(this).remove();
+            });
+        });
+
+        $('#coSoSelect').change(function() {
+            var maCoSo = $(this).val();
+            $.ajax({
+                url: '/admin/check-permissions',
+                method: 'POST',
+                data: {
+                    maCoSo: maCoSo,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    console.log('Lỗi khi kiểm tra quyền');
+                }
             });
         });
     });
@@ -328,5 +411,3 @@
 @stack('scripts')
 </body>
 </html>
-
-

@@ -11,15 +11,16 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!session('logged_in')) {
-            return redirect()->route('auth.login');
+        if (!session('admin_logged_in')) {
+            return redirect()->route('admin.auth.login');
         }
 
-        $hasAdminAccess = PhanQuyen::where('MaTaiKhoan', session('acc_id'))
-            ->exists();
+        $selectedCoSo = session('selected_facility');
+
+        $hasAdminAccess = PhanQuyen::where('MaTaiKhoan', session('admin_id'))->exists();
 
         if (!$hasAdminAccess) {
-            return redirect()->route('home.index')->with('error', 'Bạn không có quyền truy cập trang quản trị');
+            return redirect()->route('admin.auth.login');
         }
 
         return $next($request);

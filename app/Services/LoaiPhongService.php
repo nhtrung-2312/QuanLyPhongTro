@@ -14,6 +14,9 @@ class LoaiPhongService
     public function getById($id){
         return LoaiPhong::findOrFail($id);
     }
+    public function getLPWithCoSo($maCoSo){
+        return LoaiPhong::where('MaCoSo', $maCoSo)->orderBy('MaLoaiPhong', 'ASC')->paginate(10);
+    }
 
     public function generateMaLoaiPhong(){
         $lastRoomType = LoaiPhong::orderBy('MaLoaiPhong', 'DESC')->first();

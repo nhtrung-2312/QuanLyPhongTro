@@ -23,16 +23,16 @@ class PhongController extends Controller{
     {
         $this->phongService = $phongService;
         $this->chitietService = $chiTietService;
-        
-    }
 
+    }
     public function index(Request $request){
         $filters = $request->only(['MaCoSo', 'MaLoaiPhong', 'TrangThai']);
 
-        $phongs = $this->phongService->getAll($filters);
+        $coso = session('selected_facility');
+        $phongs = $this->phongService->getAllWithCoSo($coso, $filters);
         $cosos = CoSo::all();
         $loaiphongs = LoaiPhong::all();
-        
+
         return view('Admin.Phong.index', compact('phongs', 'cosos', 'loaiphongs'));
     }
 
@@ -63,7 +63,7 @@ class PhongController extends Controller{
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'Có lỗi xảy ra!');
-        }  
+        }
     }
 
     public function update(PhongRequest $request, $id){
@@ -103,7 +103,7 @@ class PhongController extends Controller{
     }
 
     public function details($id){
-        try{    
+        try{
             $phong = $this->phongService->getById($id);
             $chiTietPhongs = ChiTietPhong::with('tienNghi')
                         ->where('MaPhong', $id)
@@ -125,7 +125,7 @@ class PhongController extends Controller{
         catch(\Exception $e){
             Log::error($e->getMessage());
             return back()->with('error', 'Có lỗi xảy ra!');
-        }    
+        }
     }
     public function storeDetail(ChiTietPhongRequest $request)
     {
@@ -133,7 +133,7 @@ class PhongController extends Controller{
             $exists = ChiTietPhong::where('MaPhong', $request->MaPhong)
                 ->where('MaTienNghi', $request->MaTienNghi)
                 ->exists();
-                
+
             if ($exists) {
                 return redirect()->back()
                     ->withInput()
@@ -170,7 +170,7 @@ class PhongController extends Controller{
         try {
             $result = $this->chitietService->update($request, $id, $maTienNghi);
             if($result) {
-                return redirect()->route('admin.rooms.details', ['id' => $id, 'maTienNghi' => $maTienNghi]) 
+                return redirect()->route('admin.rooms.details', ['id' => $id, 'maTienNghi' => $maTienNghi])
                     ->with('success', 'Chỉnh sửa thành công!');
             }
             return back()->with('error', 'Có lỗi xảy ra!');

@@ -7,6 +7,18 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PhongService{
+    public function getAllWithCoSo($maCoSo, $filters = []) {
+        $query = PhongTro::with(['coSo', 'loaiPhong'])
+                ->where('MaCoSo', $maCoSo)
+                ->orderBy('MaPhong', 'ASC');
+        if (!empty($filters['MaLoaiPhong'])) {
+            $query->where('MaLoaiPhong', $filters['MaLoaiPhong']);
+        }
+        if (!empty($filters['TrangThai'])) {
+            $query->where('TrangThai', $filters['TrangThai']);
+        }
+        return $query->paginate(10);
+    }
     public function getAll($filters = [])
     {
         $query = PhongTro::with(['coSo', 'loaiPhong'])->orderBy('MaPhong', 'ASC');
@@ -88,7 +100,7 @@ class PhongService{
                 // Remove old image if exists
                 $oldImage = public_path("template/client/dist/img/phong/{$phong->MaPhong}.*");
                 array_map('unlink', glob($oldImage));
-                
+
                 // Save new image
                 $image = $request->file('HinhAnh');
                 $extension = $image->getClientOriginalExtension();

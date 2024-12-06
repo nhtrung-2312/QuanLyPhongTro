@@ -12,15 +12,25 @@ use App\Http\Controllers\Admin\CoSoController;
 use App\Http\Controllers\Admin\PhongController;
 use App\Http\Controllers\Admin\AuthController;
 
-Route::get('/login', [AuthController::class, 'login'])->name('admin.login');
-Route::post('/login', [AuthController::class, 'store'])->name('admin.auth.login');
+Route::get('/login', [AuthController::class, 'login'])->name('admin.auth.login');
+Route::post('/store', [AuthController::class, 'store'])->name('admin.auth.store');
 Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+Route::post('/check-permissions', [HomeController::class, 'checkPermissions'])->name('admin.checkPermissions');
 
 
-Route::middleware('auth.admin')->prefix('')->group(function () {
+Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(function () {
     Route::prefix('')->name('admin.')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
     });
+
+    Route::resource('coso', CoSoController::class);
+    Route::resource('loaiphong', LoaiPhongController::class);
+    Route::resource('rooms', PhongController::class);
+    Route::resource('khachhang', KhachThueController::class);
+    Route::resource('loaiphi', LoaiPhiController::class);
+    Route::resource('hopdongthue', HopDongThueController::class);
+    Route::resource('hoadon', HoaDonController::class);
+    // Route::resource('nhanvien', NhanVienController::class);
 
     Route::prefix('coso')->name('admin.coso.')->group(function () {
         Route::get('/', [CoSoController::class, 'index'])->name('index');

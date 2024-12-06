@@ -84,11 +84,14 @@
                         @endphp
                         @foreach ($dichVu as $dv)
                             <div class="col-md-6">
-                                <div class="form-check mb-3">
+                                <div class="form-check mb-3 d-flex align-items-center">
                                     <input class="form-check-input service-checkbox" type="checkbox" id="{{ $dv->MaLoaiPhi }}" data-price="{{ $dv->DonGia }}">
-                                    <label class="form-check-label" for="{{ $dv->MaLoaiPhi }}">
+                                    <label class="form-check-label mx-2" for="{{ $dv->MaLoaiPhi }}">
                                         {{ $dv->TenLoaiPhi }} - {{ number_format($dv->DonGia, 0, ',', '.') }}đ/tháng
                                     </label>
+                                    @if(str_contains(strtolower($dv->TenLoaiPhi), 'xe'))
+                                        <input type="number" class="form-control quantity-input" style="width: 70px" min="1" max="5" value="1" disabled oninput="if(this.value > 5) this.value = 5;">
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
@@ -192,6 +195,14 @@
     const basePrice = {{ $phong->GiaThue + ($phong->GiaThue/2) }};
 
     $('.service-checkbox').change(function() {
+        const quantityInput = $(this).closest('.form-check').find('.quantity-input');
+        if (quantityInput.length) {
+            quantityInput.prop('disabled', !this.checked);
+        }
+        calculateTotal();
+    });
+
+    $('.quantity-input').change(function() {
         calculateTotal();
     });
 
@@ -203,13 +214,15 @@
             const id = $(this).attr('id');
             const price = parseInt($(this).data('price'));
             const serviceName = $(this).next('label').text().split('-')[0].trim();
+            const quantityInput = $(this).closest('.form-check').find('.quantity-input');
+            const quantity = quantityInput.length ? parseInt(quantityInput.val()) : 1;
 
-            total += price;
+            total += price * quantity;
             selectedServices.push({
                 id: id,
                 name: serviceName,
                 price: price,
-                quantity: 1
+                quantity: quantity
             });
         });
 
@@ -217,8 +230,8 @@
         selectedServices.forEach(service => {
             serviceHTML += `
                 <div class="d-flex justify-content-between mb-2">
-                    <span>${service.name}:</span>
-                    <span>${number_format(service.price)} VNĐ</span>
+                    <span>${service.name}${service.quantity > 1 ? ' x' + service.quantity : ''}:</span>
+                    <span>${number_format(service.price * service.quantity)} VNĐ</span>
                 </div>
             `;
         });

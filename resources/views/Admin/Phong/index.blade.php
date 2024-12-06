@@ -1,4 +1,4 @@
-@extends('Layout.admin')                    
+@extends('Layout.admin')
 @section('title', 'Danh sách phòng trọ')
 @section('content')
 <div class="card">
@@ -11,16 +11,6 @@
     <div class="card-body">
         <form method="GET" action="{{ route('admin.rooms.index') }}">
             <div class="row">
-                <div class="col-md-3">
-                    <select name="MaCoSo" class="form-control">
-                        <option value="">Chọn cơ sở</option>
-                        @foreach($cosos as $coso)
-                            <option value="{{ $coso->MaCoSo }}" {{ request('MaCoSo') == $coso->MaCoSo ? 'selected' : '' }}>
-                                {{ $coso->MaCoSo }}
-                            </option>
-                        @endforeach
-                    </select>                
-                </div>
                 <div class="col-md-3">
                     <select name="MaLoaiPhong" class="form-control">
                         <option value="">Chọn loại phòng</option>
@@ -39,7 +29,7 @@
                         <option value="Phòng trống" {{ request('TrangThai') == 'Phòng trống' ? 'selected' : '' }}>Phòng trống</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 ml-auto">
                     <button type="submit" class="btn btn-primary btn-block">Lọc</button>
                 </div>
             </div>
@@ -61,7 +51,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($phongs as $index => $phong)               
+                @foreach($phongs as $index => $phong)
                 <tr class="text-center align-center vertical-middle">
                     <td >{{ $index + 1 }}</td>
                     <td>{{ $phong->coSo->TenCoSo ?? 'Không xác định'}}</td>

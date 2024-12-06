@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LoaiPhi;
-
 use App\Http\Requests\LoaiPhiRequest;
 
 class LoaiPhiController extends Controller
@@ -51,7 +50,7 @@ class LoaiPhiController extends Controller
         $loaiPhi->delete();
         return redirect()->route('admin.loaiphi.index')->with('success', 'Loại phí đã được xóa thành công');
     }
-    public function store(LoaiPhiRequest $request)
+    public function store(Request $request)
     {
         LoaiPhi::create($request->all());
         return redirect()->route('admin.loaiphi.index')->with('success', 'Loại phí đã được tạo thành công');
