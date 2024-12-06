@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TaiKhoan;
 use Illuminate\Http\Request;
+use App\Models\PhanQuyen;
 
 class AuthController extends Controller
 {
@@ -42,6 +43,12 @@ class AuthController extends Controller
             'admin_id' => $user->MaTaiKhoan,
             'admin_name' => $user->TenDangNhap
         ]);
+
+        $firstFacility = PhanQuyen::where('MaTaiKhoan', $user->MaTaiKhoan)->orderBy('MaCoSo', 'ASC')->first();
+
+        if ($firstFacility) {
+            session(['selected_facility' => $firstFacility->MaCoSo]);
+        }
 
         return response()->json([
             'status' => true,
