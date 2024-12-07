@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('nhanvien', function (Blueprint $table) {
             $table->foreign(['MaTaiKhoan'], 'nhanvien_ibfk_1')->references(['MaTaiKhoan'])->on('taikhoan')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreign(['MaCoSo'], 'nhanvien_ibfk_2')->references(['MaCoSo'])->on('coso')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('nhanvien', function (Blueprint $table) {
             $table->dropForeign('nhanvien_ibfk_1');
-            $table->dropForeign('nhanvien_ibfk_2');
         });
     }
 };

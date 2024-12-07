@@ -25,8 +25,6 @@
         <form action="{{ route('admin.rooms.details.update', ['id' => $chiTietPhong->MaPhong, 'maTienNghi' => $chiTietPhong->MaTienNghi]) }}" method="POST">
             @csrf
             @method('PUT')
-
-            <p>{{$chiTietPhong->MaTienNghi}}</p>
             <input type="hidden" name="MaPhong" value="{{ $chiTietPhong->MaPhong }}">
             <input type="hidden" name="MaTienNghi" value="{{ $chiTietPhong->MaTienNghi }}">
 

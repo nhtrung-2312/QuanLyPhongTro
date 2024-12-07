@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loaiphi', function (Blueprint $table) {
-            $table->string('MaLoaiPhi', 10)->primary();
-            $table->string('TenLoaiPhi', 50);
-            $table->decimal('DonGia', 10);
+        Schema::create('phanquyen', function (Blueprint $table) {
+            $table->string('MaQuyen', 10);
+            $table->string('MaTaiKhoan', 10)->index('fk_phanquyen_matk');
+            $table->string('MaCoSo', 10)->index('fk_phanquyen_maso');
+
+            $table->primary(['MaQuyen', 'MaTaiKhoan', 'MaCoSo']);
         });
     }
 
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('loaiphi');
+        Schema::dropIfExists('phanquyen');
     }
 };
