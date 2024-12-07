@@ -103,6 +103,7 @@
                                 <h5 style="margin-bottom:5px;font-weight: bold;">Liên hệ</h5>
                                 <p style="font-size: 18px;color: #333;">
                                     @php
+                                        //
                                         // $quanLy = $phong->coSo->nhanVien()
                                         //             ->whereHas('taikhoan', function($query) {
                                         //                 $query->where('VaiTro', 'Quản lý');
