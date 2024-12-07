@@ -24,7 +24,7 @@
         </div>
         <div class="card-body">
             <p class="login-box-msg">Đăng nhập để bắt đầu phiên làm việc</p>
-            <form id="loginForm">
+            <form id="loginForm" action="{{ route('admin.auth.store') }}" method="POST">
                 @csrf
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" name="username" placeholder="Tên đăng nhập">
@@ -66,20 +66,22 @@ $(document).ready(function() {
     $('#loginForm').on('submit', function(e) {
         e.preventDefault();
         $.ajax({
-            url: '{{ route("admin.auth.login") }}',
+            url: '{{ route("admin.auth.store") }}',
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {
                 if (response.status) {
                     toastr.success(response.message);
-                    window.location.href = response.redirect;
+                    setTimeout(function() {
+                        window.location.href = "{{ route('admin.home') }}";
+                    }, 1000);
                 }
             },
             error: function(xhr) {
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
                     Object.keys(errors).forEach(function(key) {
-                        toastr.error(errors[key][0]);
+                        toastr.error(errors[key]);
                     });
                 }
             }

@@ -4,30 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TaiKhoan;
-use App\Http\Requests\LoginRequest;
+use Illuminate\Http\Request;
+use App\Models\PhanQuyen;
 
 class AuthController extends Controller
 {
-    public function login() {
+    public function login()
+    {
+        if (session('admin_logged_in')) {
+            return redirect()->route('admin.home');
+        }
         return view('Admin.Auth.login');
     }
-    public function store(LoginRequest $request)
+    public function store(Request $request)
     {
-        $credentials = $request->validated();
-
-        $user = TaiKhoan::where('TenDangNhap', $credentials['username'])
-                        ->where('VaiTro', 'Admin')
+        $user = TaiKhoan::where('TenDangNhap', $request->username)
+                        ->where('TrangThai', 1)
+                        ->where('VaiTro', '!=', 'Khách hàng')
                         ->first();
 
         if (!$user) {
             return response()->json([
                 'status' => false,
-                'message' => 'Tài khoản không tồn tại',
                 'errors' => ['username' => 'Tài khoản không tồn tại']
             ], 422);
         }
 
-        if ($user->MatKhau != $credentials['password']) {
+        if ($user->MatKhau != $request->password) {
             return response()->json([
                 'status' => false,
                 'message' => 'Mật khẩu không chính xác',
@@ -41,14 +44,21 @@ class AuthController extends Controller
             'admin_name' => $user->TenDangNhap
         ]);
 
+        $firstFacility = PhanQuyen::where('MaTaiKhoan', $user->MaTaiKhoan)->orderBy('MaCoSo', 'ASC')->first();
+
+        if ($firstFacility) {
+            session(['selected_facility' => $firstFacility->MaCoSo]);
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Đăng nhập thành công',
-            'redirect' => route('admin.dashboard')
+            'redirect' => route('admin.home')
         ]);
     }
-    public function logout() {
+    public function logout()
+    {
         session()->flush();
-        return redirect()->route('admin.login');
+        return redirect()->route('admin.auth.login');
     }
 }

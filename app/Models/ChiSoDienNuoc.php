@@ -18,4 +18,9 @@ class ChiSoDienNuoc extends Model
     {
         return $this->belongsTo(PhongTro::class, 'MaPhong', 'MaPhong');
     }
+
+    public function hoadon()
+    {
+        return $this->hasOne(HoaDon::class, 'MaChiSo', 'MaChiSo');
+    }
 }

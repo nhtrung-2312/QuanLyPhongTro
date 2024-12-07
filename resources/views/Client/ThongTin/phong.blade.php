@@ -32,8 +32,11 @@
                         echo "<script>console.log(" . json_encode($phong) . ");</script>";
                     @endphp
                     <div class="card mb-4">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h5><a style="color: inherit; text-decoration: none;">{{ $phong['phong']->TenPhong }} - {{ $phong['coso']->TenCoSo }}</a></h5>
+                            @if($phong['hopdongthue']->TrangThai == 'Chờ thanh toán cọc')
+                                <button class="btn btn-danger" onclick="huyDatPhong('{{ $phong['hopdongthue']->MaHopDong }}')">Huỷ đặt phòng</button>
+                            @endif
                         </div>
                         <div class="card-body">
                             <div class="row">

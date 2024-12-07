@@ -28,4 +28,8 @@ class NhanVien extends Model
     {
         return $this->belongsTo(CoSo::class, 'MaCoSo', 'MaCoSo');
     }
+    public function taikhoan()
+    {
+        return $this->belongsTo(TaiKhoan::class, 'MaTaiKhoan', 'MaTaiKhoan');
+    }
 }

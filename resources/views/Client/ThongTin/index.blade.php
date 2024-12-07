@@ -54,7 +54,8 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Ngày sinh</label>
-                                    <input type="date" class="form-control" name="ngaysinh" value="{{ $khachthue->NgaySinh }}">
+                                    <input type="date" class="form-control" name="ngaysinh"
+                                    value="{{ $khachthue->NgaySinh }}">
                                     <small class="text-danger" id="ngaysinhError"></small>
                                 </div>
                             </div>

@@ -11,7 +11,7 @@ class HoaDon extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
-    
+
     protected $fillable = [
         'MaHoaDon',
         'MaHopDong',
@@ -30,6 +30,11 @@ class HoaDon extends Model
         return $this->hasMany(ChiTietHoaDon::class, 'MaHoaDon', 'MaHoaDon');
     }
 
+    public function chisodiennuoc()
+    {
+        return $this->belongsTo(ChiSoDienNuoc::class, 'MaChiSo', 'MaChiSo');
+    }
+
     public static function capNhatTongTien($maHoaDon)
     {
         $hoadon = self::with(['hopdongthue.phong', 'chiTietHoaDon'])
@@ -39,13 +44,13 @@ class HoaDon extends Model
             $tienPhong = $hoadon->hopdongthue->phong->GiaThue;
             $tongTienDichVu = $hoadon->chiTietHoaDon->sum('ThanhTien');
             $tongCong = $tienPhong + $tongTienDichVu;
-            
+
             $hoadon->TongTien = $tongCong;
             $hoadon->save();
-            
+
             return $tongCong;
         }
-        
+
         return 0;
     }
 
