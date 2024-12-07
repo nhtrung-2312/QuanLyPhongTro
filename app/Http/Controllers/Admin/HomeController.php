@@ -17,4 +17,8 @@ class HomeController extends Controller
         session(['selected_facility' => $maCoSo]);
         return response()->json(['success' => true]);
     }
+    public function thongtin()
+    {
+        return view('Admin.Home.thongtin');
+    }
 }

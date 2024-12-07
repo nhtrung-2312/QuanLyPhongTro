@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChiSoDienNuoc;
 use Illuminate\Http\Request;
 use App\Models\HoaDon;
 use App\Models\PhongTro;
@@ -14,6 +15,7 @@ use App\Models\ChiTietHopDong;
 use App\Models\HopDongThue;
 use App\Models\KhachThue;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 class HoaDonController extends Controller
 {
     public function index()
@@ -62,5 +64,74 @@ class HoaDonController extends Controller
             $query->where('MaCoSo', session('selected_facility'));
         })->get();
         return view('Admin.HoaDon.create', compact('hopdongs'));
+    }
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+        do {
+            $machiso = 'CS' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        } while (ChiSoDienNuoc::where('MaChiSo', $machiso)->exists());
+
+        $cthd = new ChiSoDienNuoc();
+        $cthd->MaChiSo = $machiso;
+        $cthd->MaPhong = $request->phongDaThue;
+        $cthd->NgayGhi = now();
+        $cthd->DienCu = $request->DienCu;
+        $cthd->DienMoi = $request->DienMoi;
+        $cthd->NuocCu = $request->NuocCu;
+        $cthd->NuocMoi = $request->NuocMoi;
+        $cthd->save();
+
+
+        $hoadon = new HoaDon();
+        do {
+            $mahoadon = 'HD' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        } while (HoaDon::where('MaHoaDon', $mahoadon)->exists());
+
+        $hoaDonTruoc = HoaDon::whereHas('hopdongthue', function($query) use ($request) {
+            $query->where('MaPhong', $request->phongDaThue);
+        })
+        ->orderBy('NgayLap', 'desc')
+        ->first();
+
+        $hoadon->MaHoaDon = $mahoadon;
+        $hoadon->MaHopDong = HopDongThue::where('MaPhong', $request->phongDaThue)->first()->MaHopDong;
+        $hoadon->MaChiSo = $machiso;
+        $hoadon->TrangThai = 'Chưa thanh toán';
+        $hoadon->TongTien = 0;
+        $hoadon->NgayLap = now();
+        $hoadon->save();
+
+        if ($hoaDonTruoc) {
+            $chiTietHoaDonTruoc = ChiTietHoaDon::where('MaHoaDon', $hoaDonTruoc->MaHoaDon)->get();
+            foreach ($chiTietHoaDonTruoc as $cthd) {
+                $chitiet = new ChiTietHoaDon();
+                $chitiet->MaHoaDon = $hoadon->MaHoaDon;
+                $loaiphi = LoaiPhi::find($cthd->MaLoaiPhi);
+
+                switch($loaiphi->TenLoaiPhi) {
+                    case 'Tiền điện':
+                        $chitiet->MaLoaiPhi = $cthd->MaLoaiPhi;
+                        $chitiet->SoLuong = $request->DienMoi - $request->DienCu;
+                        $chitiet->ThanhTien = $loaiphi->DonGia * $chitiet->SoLuong;
+                        break;
+                    case 'Tiền nước':
+                        $chitiet->MaLoaiPhi = $cthd->MaLoaiPhi;
+                        $chitiet->SoLuong = $request->NuocMoi - $request->NuocCu;
+                        $chitiet->ThanhTien = $loaiphi->DonGia * $chitiet->SoLuong;
+                        break;
+                    default:
+                        $chitiet->MaLoaiPhi = $cthd->MaLoaiPhi;
+                        $chitiet->SoLuong = $cthd->SoLuong;
+                        $chitiet->ThanhTien = $cthd->ThanhTien;
+                        break;
+                }
+                $chitiet->save();
+            }
+        }
+        $hoadon->TongTien = ChiTietHoaDon::where('MaHoaDon', $mahoadon)->sum('ThanhTien') + PhongTro::find($request->phongDaThue)->GiaThue;
+        $hoadon->save();
+        DB::commit();
+        return response()->json(['success' => true]);
     }
 }

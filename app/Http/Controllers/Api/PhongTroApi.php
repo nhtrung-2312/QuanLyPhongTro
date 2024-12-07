@@ -12,16 +12,12 @@ class PhongTroApi extends Controller
         $phong = PhongTro::with('loaiphong')->where('MaPhong', $request->id)->first();
         return response(['success' => 'true', 'data' => $phong]);
     }
-    public function getPhongByKhach(Request $request)
-    {
-        $phong = PhongTro::whereHas('hopdongthue.khachthue', function($query) use ($request) {
-            $query->where('MaKhachThue', $request->id);
-        })->with('loaiphong')->first();
-
-        if ($phong) {
-            return response()->json(['success' => true, 'data' => $phong], 200);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Không tìm thấy phòng'], 404);
-        }
+    public function getPhongDaThue(Request $request) {
+        $phong = PhongTro::with('hopdongthue.chitiethopdong.khachthue')->whereHas('hopdongthue.chitiethopdong', function($query) use ($request) {
+            $query->whereHas('khachthue', function($subQuery) use ($request) {
+                $subQuery->where('MaKhachThue', $request->maKhachThue);
+            });
+        })->get();
+        return response(['success' => 'true', 'data' => $phong]);
     }
 }

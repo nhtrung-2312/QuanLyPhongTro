@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\HopDongThueApi;
 use App\Http\Controllers\Api\LoaiPhiApi;
 use App\Http\Controllers\Api\PhongTroApi;
 use App\Http\Controllers\Api\KhachHangApi;
-
+use App\Http\Controllers\Api\HoaDonApi;
 
 Route::get('/login', [AuthController::class, 'login'])->name('admin.auth.login');
 Route::post('/store', [AuthController::class, 'store'])->name('admin.auth.store');
@@ -28,6 +28,8 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/loaiphi/get-loaiphi', [LoaiPhiApi::class, 'getLoaiPhi'])->name('loaiphi.getLoaiPhi');
     Route::get('/phongtro/get-phong', [PhongTroApi::class, 'getPhong'])->name('phongtro.getPhong');
     Route::get('/khachhang/get-khachhang', [KhachHangApi::class, 'getKhachHang'])->name('khachhang.getKhachHang');
+    Route::get('/phong/get-phong-da-thue', [PhongTroApi::class, 'getPhongDaThue'])->name('phong.getPhongDaThue');
+    Route::get('/hoadon/get-hoadon-by-phong', [HoaDonApi::class, 'getHoaDonByPhong'])->name('hoadon.getHoaDonByPhong');
 });
 
 Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(function () {
@@ -101,8 +103,9 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::get('/create', [NhanVienController::class, 'create'])->name('create');
         Route::post('/store', [NhanVienController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [NhanVienController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [NhanVienController::class, 'update'])->name('update');
+        Route::put('/update', [NhanVienController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [NhanVienController::class, 'delete'])->name('delete');
+        Route::get('/phanquyen', [NhanVienController::class, 'phanQuyen'])->name('phanquyen');
     });
 
     Route::prefix('rooms')->name('admin.rooms.')->group(function() {
