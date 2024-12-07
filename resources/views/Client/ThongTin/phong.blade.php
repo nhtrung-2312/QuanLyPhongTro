@@ -66,7 +66,54 @@
                                         <p><strong>Ngày kết thúc:</strong> {{ date('d/m/Y', strtotime($hopDong->NgayKetThuc)) }}</p>
                                         <p><strong>Thời gian còn lại:</strong> {{ $ngayConLai }} </p>
                                         @if($phong['hopdongthue']->TrangThai == 'Chờ thanh toán cọc')
-                                            <a href="{{ route('thanhToan.datphong', $phong['phong']->MaPhong) }}" class="btn btn-primary">Thanh toán tiền cọc</a>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal{{ $phong['phong']->MaPhong }}">
+                                                Thanh toán tiền cọc
+                                            </button>
+
+                                            <div class="modal fade" id="paymentModal{{ $phong['phong']->MaPhong }}" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="paymentModalLabel">Chọn phương thức thanh toán</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="paymentForm{{ $phong['phong']->MaPhong }}" action="{{ route('thanhToan.thanhToanMomo') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="ma_phong" value="{{ $phong['phong']->MaPhong }}">
+                                                                <input type="hidden" name="tien_coc" value="{{ $phong['hopdongthue']->TienCoc }}">
+                                                                <input type="hidden" name="ngay_bat_dau" value="{{ $phong['hopdongthue']->NgayBatDau }}">
+                                                                <input type="hidden" name="ngay_ket_thuc" value="{{ $phong['hopdongthue']->NgayKetThuc }}">
+                                                                <input type="hidden" name="tong_tien" value="{{ $phong['hopdongthue']->TongTien }}">
+                                        
+                                                                <div class="payment-methods">
+                                                                    <div class="form-check mb-3">
+                                                                        <input class="form-check-input" type="radio" name="payment_method" id="momoPayment{{ $phong['phong']->MaPhong }}" value="momo" checked>
+                                                                        <label class="form-check-label" for="momoPayment{{ $phong['phong']->MaPhong }}">
+                                                                            Thanh toán qua Momo
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="payment-info mb-3">
+                                                                    <p><strong>Số tiền cọc:</strong> {{ number_format($phong['hopdongthue']->TienCoc, 0, ',', '.') }} VNĐ</p>
+                                                                </div>
+                                        
+                                                                <button type="submit" class="btn btn-primary btn-block">Tiếp tục thanh toán</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                document.getElementById('paymentForm{{ $phong["phong"]->MaPhong }}').addEventListener('submit', function(e) {
+                                                    e.preventDefault();
+                                                    if (confirm('Bạn có chắc chắn muốn thanh toán không?')) {
+                                                        this.submit();
+                                                    }
+                                                });
+                                            </script>
                                         @endif
                                     @endif
                                 </div>

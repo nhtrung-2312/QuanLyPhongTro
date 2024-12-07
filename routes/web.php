@@ -34,9 +34,11 @@ Route::middleware('web')->group(function () {
             Route::post('/hoa-don/{id}', [ThanhToanController::class, 'bill'])->name('thanhToan.bill');
             Route::get('/thanh-toan-tien-mat', [ThanhToanController::class, 'thanhToanCash'])->name('thanhToan.thanhToanCash');
             Route::get('/thanh-toan-momo', [ThanhToanController::class, 'thanhToanMomo'])->name('thanhToan.thanhToanMomo');
+            Route::post('/thanh-toan-momo', [ThanhToanController::class, 'thanhToanMomo'])->name('thanhToan.thanhToanMomo');
+            // Route::get('/hoa-don/{id}', [ThanhToanController::class, 'thanhToanHoaDon'])->name('thanhToan.hoaDon');
+            Route::get('/momo-callback', [ThanhToanController::class, 'momoCallback'])->name('thanhToan.momoCallback');
             Route::get('/thanh-toan-bank', [ThanhToanController::class, 'thanhToanBank'])->name('thanhToan.thanhToanBank');
         });
-
         Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
         Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
         Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
