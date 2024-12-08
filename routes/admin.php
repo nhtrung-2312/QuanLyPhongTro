@@ -17,7 +17,8 @@ use App\Http\Controllers\Api\LoaiPhiApi;
 use App\Http\Controllers\Api\PhongTroApi;
 use App\Http\Controllers\Api\KhachHangApi;
 use App\Http\Controllers\Api\HoaDonApi;
-
+use App\Http\Controllers\Admin\PhanQuyenController;
+use App\Http\Controllers\Admin\ThongTinController;
 Route::get('/login', [AuthController::class, 'login'])->name('admin.auth.login');
 Route::post('/store', [AuthController::class, 'store'])->name('admin.auth.store');
 Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
@@ -30,12 +31,11 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/khachhang/get-khachhang', [KhachHangApi::class, 'getKhachHang'])->name('khachhang.getKhachHang');
     Route::get('/phong/get-phong-da-thue', [PhongTroApi::class, 'getPhongDaThue'])->name('phong.getPhongDaThue');
     Route::get('/hoadon/get-hoadon-by-phong', [HoaDonApi::class, 'getHoaDonByPhong'])->name('hoadon.getHoaDonByPhong');
+    Route::get('/hoadon/get-hoadon-by-year', [HoaDonApi::class, 'getHoaDonByYear'])->name('hoadon.getHoaDonByYear');
 });
 
 Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(function () {
-    Route::prefix('')->name('admin.')->group(function () {
-        Route::get('/', [HomeController::class, 'index'])->name('home');
-    });
+    Route::get('/', [HomeController::class, 'index'])->name('admin.home.index');
 
     Route::resource('coso', CoSoController::class);
     Route::resource('loaiphong', LoaiPhongController::class);
@@ -44,7 +44,7 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
     Route::resource('loaiphi', LoaiPhiController::class);
     Route::resource('hopdongthue', HopDongThueController::class);
     Route::resource('hoadon', HoaDonController::class);
-    // Route::resource('nhanvien', NhanVienController::class);
+    Route::resource('nhanvien', NhanVienController::class);
 
     Route::prefix('coso')->name('admin.coso.')->group(function () {
         Route::get('/', [CoSoController::class, 'index'])->name('index');
@@ -105,7 +105,6 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::get('/edit/{id}', [NhanVienController::class, 'edit'])->name('edit');
         Route::put('/update', [NhanVienController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [NhanVienController::class, 'delete'])->name('delete');
-        Route::get('/phanquyen', [NhanVienController::class, 'phanQuyen'])->name('phanquyen');
     });
 
     Route::prefix('rooms')->name('admin.rooms.')->group(function() {
@@ -123,4 +122,22 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::delete('/details/delete/{id}/{idTienNghi}', [PhongController::class, 'deleteDetail'])->name('details.delete');
     });
 
+    Route::prefix('phanquyen')->name('admin.phanquyen.')->group(function () {
+        Route::get('/', [PhanQuyenController::class, 'index'])->name('index');
+        Route::get('/create', [PhanQuyenController::class, 'create'])->name('create');
+        Route::post('/store', [PhanQuyenController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PhanQuyenController::class, 'edit'])->name('edit');
+        Route::put('/update', [PhanQuyenController::class, 'update'])->name('update');
+        Route::delete('/delete', [PhanQuyenController::class, 'delete'])->name('delete');
+        Route::get('/capquyen', [PhanQuyenController::class, 'capquyen'])->name('capquyen');
+        Route::get('/chitietquyen/{maTaiKhoan}', [PhanQuyenController::class, 'chitietquyen'])->name('chitietquyen');
+        Route::put('/updateQuyen', [PhanQuyenController::class, 'updateQuyen'])->name('updateQuyen');
+    });
+
+    Route::prefix('thongtin')->name('admin.thongtin.')->group(function () {
+        Route::get('/', [ThongTinController::class, 'index'])->name('index');
+        Route::put('/update', [ThongTinController::class, 'update'])->name('update');
+        Route::get('/account', [ThongTinController::class, 'account'])->name('account');
+        Route::get('/backup', [ThongTinController::class, 'backup'])->name('backup');
+    });
 });

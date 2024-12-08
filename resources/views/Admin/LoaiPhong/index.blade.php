@@ -85,12 +85,12 @@ function confirmDelete() {
                     window.location.reload();
                 }, 1500);
             } else {
-                toastr.error('Delete Error!');
+                toastr.error('Kiểm tra các phòng trước khi xoá!');
             }
         },
         error: function(xhr) {
             $('#deleteModal').modal('hide');
-            toastr.error('Delete Error!');
+            toastr.error('Có lỗi xảy ra!');
         }
     });
 }

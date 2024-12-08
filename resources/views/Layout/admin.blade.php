@@ -68,7 +68,7 @@
                 <i class="fas fa-user"></i> {{ session('admin_name') }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ route('admin.thongtin.index') }}">
                     <i class="fas fa-user-circle mr-2"></i>Thông tin tài khoản
                 </a>
 
@@ -92,8 +92,6 @@
         ->where('MaCoSo', $selectedCoSo)
         ->pluck('MaQuyen')
         ->toArray();
-
-    print_r($selectedCoSo);
   @endphp
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -112,20 +110,12 @@
                with font-awesome or any other icon font library -->
             @if(in_array('Q009', $permissions))
             <li class="nav-item" data-permission="Q009">
-                <a href="#" class="nav-link active">
+                <a href="{{ route('admin.home.index') }}" class="nav-link active">
                   <i class="nav-icon fas fa-chart-line"></i>
                   <p>
                     Thống kê
-                    <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <p>Thống kê</p>
-                    </a>
-                  </li>
-                </ul>
               </li>
             @endif
               @if(in_array('Q001', $permissions))
@@ -284,6 +274,30 @@
               <li class="nav-item">
                 <a href="{{ route('admin.nhanvien.create') }} " class="nav-link">
                   <p> Thêm nhân viên mới</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
+
+          @if(in_array('Q001', $permissions))
+          <li class="nav-item" data-permission="Q010">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-user-shield"></i>
+              <p>
+                Phân quyền
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.phanquyen.index') }}" class="nav-link">
+                  <p>Danh sách quyền</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.phanquyen.capquyen') }}" class="nav-link">
+                  <p>Phân quyền tài khoản</p>
                 </a>
               </li>
             </ul>

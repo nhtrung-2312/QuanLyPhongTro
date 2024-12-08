@@ -73,17 +73,12 @@ $(document).ready(function() {
                 if (response.status) {
                     toastr.success(response.message);
                     setTimeout(function() {
-                        window.location.href = "{{ route('admin.home') }}";
+                        window.location.href = "/admin";
                     }, 1000);
                 }
             },
             error: function(xhr) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    Object.keys(errors).forEach(function(key) {
-                        toastr.error(errors[key]);
-                    });
-                }
+                toastr.error("Đăng nhập không thành công!");
             }
         });
     });

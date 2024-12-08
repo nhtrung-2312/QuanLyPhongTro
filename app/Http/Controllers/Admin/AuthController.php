@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function login()
     {
         if (session('admin_logged_in')) {
-            return redirect()->route('admin.home');
+            return redirect()->route('admin.home.index');
         }
         return view('Admin.Auth.login');
     }
@@ -53,7 +53,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Đăng nhập thành công',
-            'redirect' => route('admin.home')
+            'redirect' => route('admin.home.index')
         ]);
     }
     public function logout()

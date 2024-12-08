@@ -37,5 +37,14 @@ class HoaDonApi extends Controller
 
         return response(['success' => 'true', 'data' => $chisodiennuoc]);
     }
+    public function getHoaDonByYear(Request $request) {
+        $hoaDons = HoaDon::whereYear('NgayLap', $request->year)
+                            ->where('TrangThai', 'Đã thanh toán')
+                            ->whereHas('hopdongthue.phong', function($query) {
+                                $query->where('MaCoSo', session('selected_facility'));
+                            })
+                            ->get();
+        return response(['success' => 'true', 'data' => $hoaDons]);
+    }
 }
 
