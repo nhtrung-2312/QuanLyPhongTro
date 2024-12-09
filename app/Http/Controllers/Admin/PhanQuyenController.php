@@ -111,6 +111,16 @@ class PhanQuyenController extends Controller
                 'data' => $e->getMessage()
             ]);
         }
-
+    }
+    public function createaccount()
+    {
+        return view('Admin.PhanQuyen.createaccount');
+    }
+    public function storeaccount(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $request->all()
+        ]);
     }
 }

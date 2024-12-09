@@ -66,7 +66,8 @@ class PhongController extends Controller{
         }
     }
 
-    public function update(PhongRequest $request, $id){
+    public function update(PhongRequest $request, $id)
+    {
         try {
             $result = $this->phongService->update($request, $id);
             if($result) {

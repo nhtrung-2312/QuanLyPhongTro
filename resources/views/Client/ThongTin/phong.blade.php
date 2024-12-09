@@ -87,7 +87,7 @@
                                                                 <input type="hidden" name="ngay_bat_dau" value="{{ $phong['hopdongthue']->NgayBatDau }}">
                                                                 <input type="hidden" name="ngay_ket_thuc" value="{{ $phong['hopdongthue']->NgayKetThuc }}">
                                                                 <input type="hidden" name="tong_tien" value="{{ $phong['hopdongthue']->TongTien }}">
-                                        
+
                                                                 <div class="payment-methods">
                                                                     <div class="form-check mb-3">
                                                                         <input class="form-check-input" type="radio" name="payment_method" id="momoPayment{{ $phong['phong']->MaPhong }}" value="momo" checked>
@@ -99,21 +99,13 @@
                                                                 <div class="payment-info mb-3">
                                                                     <p><strong>Số tiền cọc:</strong> {{ number_format($phong['hopdongthue']->TienCoc, 0, ',', '.') }} VNĐ</p>
                                                                 </div>
-                                        
+
                                                                 <button type="submit" class="btn btn-primary btn-block">Tiếp tục thanh toán</button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <script>
-                                                document.getElementById('paymentForm{{ $phong["phong"]->MaPhong }}').addEventListener('submit', function(e) {
-                                                    e.preventDefault();
-                                                    if (confirm('Bạn có chắc chắn muốn thanh toán không?')) {
-                                                        this.submit();
-                                                    }
-                                                });
-                                            </script>
                                         @endif
                                     @endif
                                 </div>

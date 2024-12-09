@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\KhachHangApi;
 use App\Http\Controllers\Api\HoaDonApi;
 use App\Http\Controllers\Admin\PhanQuyenController;
 use App\Http\Controllers\Admin\ThongTinController;
+use App\Http\Controllers\Admin\TienNghiController;
+
 Route::get('/login', [AuthController::class, 'login'])->name('admin.auth.login');
 Route::post('/store', [AuthController::class, 'store'])->name('admin.auth.store');
 Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
@@ -132,6 +134,8 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::get('/capquyen', [PhanQuyenController::class, 'capquyen'])->name('capquyen');
         Route::get('/chitietquyen/{maTaiKhoan}', [PhanQuyenController::class, 'chitietquyen'])->name('chitietquyen');
         Route::put('/updateQuyen', [PhanQuyenController::class, 'updateQuyen'])->name('updateQuyen');
+        Route::get('/createaccount', [PhanQuyenController::class, 'createaccount'])->name('createaccount');
+        Route::post('/storeaccount', [PhanQuyenController::class, 'storeaccount'])->name('storeaccount');
     });
 
     Route::prefix('thongtin')->name('admin.thongtin.')->group(function () {
@@ -143,5 +147,15 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::post('/createBackup', [ThongTinController::class, 'createBackup'])->name('createBackup');
         Route::get('/download/{filename}', [ThongTinController::class, 'download'])->name('download');
         Route::put('/updateaccount', [ThongTinController::class, 'updateaccount'])->name('updateaccount');
+
+    });
+
+    Route::prefix('tiennghi')->name('admin.tiennghi.')->group(function () {
+        Route::get('/', [TienNghiController::class, 'index'])->name('index');
+        Route::get('/create', [TienNghiController::class, 'create'])->name('create');
+        Route::put('/update', [TienNghiController::class, 'update'])->name('update');
+        Route::delete('/delete', [TienNghiController::class, 'delete'])->name('delete');
+        Route::get('/edit/{id}', [TienNghiController::class, 'edit'])->name('edit');
+        Route::post('/store', [TienNghiController::class, 'store'])->name('store');
     });
 });

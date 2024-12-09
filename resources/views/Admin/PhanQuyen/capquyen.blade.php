@@ -6,6 +6,9 @@
         <a href="{{ route('admin.phanquyen.index') }}" class="btn btn-secondary card-title">
             <i class="fas fa-arrow-left"></i> Quay về
         </a>
+        <a href="{{ route('admin.phanquyen.createaccount') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Tạo tài khoản mới
+        </a>
         <div class="card-tools">
             <div class="d-flex">
                 <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm...">

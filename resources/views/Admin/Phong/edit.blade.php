@@ -29,8 +29,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="TenPhong">Tên Phòng <span class="text-danger">*</span></label>
-                        <input type="text" name="TenPhong" class="form-control" 
-                            value="{{ old('TenPhong', $phong->TenPhong) }}" 
+                        <input type="text" name="TenPhong" class="form-control"
+                            value="{{ old('TenPhong', $phong->TenPhong) }}"
                             placeholder="Nhập tên phòng" required>
                         @error('TenPhong')
                             <span class="text-danger">{{ $message }}</span>
@@ -40,8 +40,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="GiaThue">Giá Thuê <span class="text-danger">*</span></label>
-                        <input type="number" name="GiaThue" class="form-control" 
-                            value="{{ old('GiaThue', $phong->GiaThue) }}" 
+                        <input type="number" name="GiaThue" class="form-control"
+                            value="{{ old('GiaThue', $phong->GiaThue) }}"
                             placeholder="Nhập giá thuê" required>
                         @error('GiaThue')
                             <span class="text-danger">{{ $message }}</span>
@@ -91,14 +91,14 @@
                         <div class="mb-3">
                             @if($imagePath)
                                 <img src="{{ $imagePath }}"
-                                    alt="Hình ảnh phòng hiện tại" 
+                                    alt="Hình ảnh phòng hiện tại"
                                     id="current-preview"
                                     class="img-thumbnail"
                                     style="max-height: 200px; display: block;">
                             @else
-                                <img id="current-preview" 
-                                    src="#" 
-                                    alt="Hình ảnh phòng hiện tại" 
+                                <img id="current-preview"
+                                    src="#"
+                                    alt="Hình ảnh phòng hiện tại"
                                     class="img-thumbnail"
                                     style="max-height: 200px; display: none;">
                             @endif
@@ -127,12 +127,12 @@
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             const preview = document.getElementById('new-preview');
-            
+
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
             }
-            
+
             reader.readAsDataURL(input.files[0]);
         }
     }

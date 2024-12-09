@@ -185,6 +185,30 @@
               </li>
             @endif
 
+            @if(in_array('Q004', $permissions))
+            <li class="nav-item" data-permission="Q002">
+                <a href="#" class="nav-link active">
+                  <i class="nav-icon fas fa-bed"></i>
+                  <p>
+                    Tiện nghi
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('admin.tiennghi.index') }}" class="nav-link">
+                      <p>Danh sách tiện nghi</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.tiennghi.create') }}" class="nav-link">
+                      <p>Thêm tiện nghi mới</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            @endif
+
             @if(in_array('Q005', $permissions))
             <li class="nav-item" data-permission="Q005">
                 <a href="#" class="nav-link active">

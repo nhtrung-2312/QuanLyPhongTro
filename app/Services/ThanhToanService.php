@@ -16,7 +16,7 @@ class ThanhToanService
     {
         $this->momoPaymentService = $momoPaymentService;
     }
- 
+
     public function processCheckout($data)
     {
         try {
@@ -63,7 +63,7 @@ class ThanhToanService
                 $hopdongthue->TrangThai = 'Chờ thanh toán cọc';
             }
             $hopdongthue->save();
-            
+
 
             DB::commit();
             return [
