@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\HoaDonApi;
 use App\Http\Controllers\Admin\PhanQuyenController;
 use App\Http\Controllers\Admin\ThongTinController;
 use App\Http\Controllers\Admin\TienNghiController;
+use App\Http\Controllers\Admin\ThanhToanController;
 
 Route::get('/login', [AuthController::class, 'login'])->name('admin.auth.login');
 Route::post('/store', [AuthController::class, 'store'])->name('admin.auth.store');
@@ -158,5 +159,9 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::delete('/delete', [TienNghiController::class, 'delete'])->name('delete');
         Route::get('/edit/{id}', [TienNghiController::class, 'edit'])->name('edit');
         Route::post('/store', [TienNghiController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('thanhtoan')->name('admin.thanhtoan.')->group(function () {
+        Route::get('/', [ThanhToanController::class, 'index'])->name('index');
     });
 });

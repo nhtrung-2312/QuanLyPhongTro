@@ -121,25 +121,35 @@ class ThongTinController extends Controller
             $process = new Process(['php', $artisanPath, 'backup:run', '--only-db', '--disable-notifications']);
             $process->run();
 
-            $backupPath = storage_path('app/private/Laravel');
+            $backupPath = storage_path('app\private\Laravel');
+            Log::info('Backup path: ' . $backupPath);
             if (!file_exists($backupPath)) {
                 throw new \Exception('Thư mục backup không tồn tại.');
             }
 
             $latestBackup = collect(File::files($backupPath))
-            ->sortByDesc(function ($file) {
-                return $file->getCTime();
-            })
-            ->first();
+                ->filter(function ($file) {
+                    return pathinfo($file->getFilename(), PATHINFO_EXTENSION) === 'zip';
+                })
+                ->sortByDesc(function ($file) {
+                    return $file->getCTime();
+                })
+                ->first();
+
+            Log::info('Latest backup: ' . $latestBackup);
+
+            if (!$latestBackup) {
+                throw new \Exception('Không tìm thấy file backup.');
+            }
 
             Log::info('Latest backup: ' . $latestBackup->getRealPath());
 
             return response()->download(
                 $latestBackup->getRealPath(),
-                $latestBackup->getFilename(),
+                'backup-' . date('Y-m-d-H-i-s') . '.zip',
                 [
-                    'Content-Type' => 'application/octet-stream',
-                    'Content-Disposition' => 'attachment; filename="' . $latestBackup->getFilename() . '"',
+                    'Content-Type' => 'application/zip',
+                    'Content-Disposition' => 'attachment'
                 ]
             );
         } catch (\Exception $e) {
@@ -160,30 +170,39 @@ class ThongTinController extends Controller
                 ]);
             }
 
-            // Lấy file tải lên
             $backupFile = $request->file('backup_file');
+
+            if ($backupFile->getClientOriginalExtension() !== 'sql') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'File phải có định dạng .sql',
+                ]);
+            }
+
             $backupFilePath = $backupFile->getRealPath();
 
-            Log::info('Starting database restore from file: ' . $backupFilePath);
+            $username = config('database.connections.mysql.username');
+            $password = config('database.connections.mysql.password');
+            $host = config('database.connections.mysql.host');
+            $database = config('database.connections.mysql.database');
 
-            $process = new Process([
-                'mysql',
-                '--user=' . env('DB_USERNAME'),
-                '--password=' . env('DB_PASSWORD'),
-                '--host=' . env('DB_HOST'),
-                '--database=' . env('DB_DATABASE'),
-                '--binary-mode=1',
-                '--batch',
-                '--execute=source ' . $backupFilePath
-            ]);
+            $command = "mysql";
+            $command .= " -h " . escapeshellarg($host);
+            $command .= " -u " . escapeshellarg($username);
 
+            if (!empty($password)) {
+                $command .= " -p" . escapeshellarg($password);
+            }
+
+            $command .= " " . escapeshellarg($database);
+            $command .= " < " . escapeshellarg($backupFilePath);
+
+            Log::info('Starting database restore with command: ' . preg_replace('/(-p)([^ ]+)/', '$1****', $command));
+
+            $process = Process::fromShellCommandline($command);
+            $process->setTimeout(null); // Không giới hạn thời gian chạy
             $process->run();
 
-            // Ghi lại output và lỗi chi tiết nếu có
-            Log::info('Process output: ' . $process->getOutput());
-            Log::error('Process error: ' . $process->getErrorOutput());
-
-            // Kiểm tra nếu quá trình không thành công
             if (!$process->isSuccessful()) {
                 Log::error('Restore database failed: ' . $process->getErrorOutput());
                 return response()->json([
@@ -198,6 +217,7 @@ class ThongTinController extends Controller
                 'success' => true,
                 'message' => 'Dữ liệu đã được phục hồi thành công.',
             ]);
+
         } catch (\Exception $e) {
             Log::error('Database restore failed: ' . $e->getMessage());
             return response()->json([

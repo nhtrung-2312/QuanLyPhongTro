@@ -16,6 +16,7 @@ use App\Models\HopDongThue;
 use App\Models\KhachThue;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
+use App\Models\ThanhToan;
 class HoaDonController extends Controller
 {
     public function index()

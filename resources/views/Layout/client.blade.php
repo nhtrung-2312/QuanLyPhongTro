@@ -229,7 +229,6 @@
                             <small class="text-danger" id="passwordError"></small>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block py-2 mb-3">Đăng nhập</button>
-                        <button class="btn btn-primary btn-block py-2 mb-3">Đăng nhập với SMS</button>
                     </form>
 
                     <div class="text-center mb-3">

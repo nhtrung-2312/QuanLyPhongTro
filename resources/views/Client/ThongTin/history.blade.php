@@ -57,15 +57,19 @@
                                 </td>
                                 <td>
                                     @if($hoadon->TrangThai == "Chưa thanh toán")
-                                    <button type="button" 
-                                            class="btn btn-sm btn-success" 
-                                            onclick="window.location.href='{{ route('thanhToan.hoaDon', ['id' => $hoadon->MaHoaDon]) }}'"> 
+                                    <button type="button"
+                                            class="btn btn-sm btn-success"
+                                            onclick="window.location.href='{{ route('thanhToan.hoaDon', ['id' => $hoadon->MaHoaDon]) }}'">
                                         Thanh toán
                                     </button>
                                     @elseif($hoadon->TrangThai == "Đang xử lý")
 
                                     @else
-                                        <a href="" class="btn btn-sm btn-info">Chi tiết</a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-secondary"
+                                            disabled>
+                                        Thanh toán
+                                    </button>
                                     @endif
                                 </td>
                             </tr>
@@ -83,5 +87,3 @@
     </div>
 </section>
 @endsection
-
-{{-- //{{ route('thanhToan.hoaDon', ['id' => $hoadon->MaHoaDon, 'type' => 'invoice']) }} --}}

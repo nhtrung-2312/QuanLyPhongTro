@@ -89,15 +89,15 @@ class ThongTinController extends Controller
             'chitiethopdong.hopdongthue' => function($query) {
                 $query->select('hopdongthue.*');
             },
-            'chitiethopdong.hopdongthue.phong.coso',  // Thêm relationship với cơ sở
-            'chitiethopdong.hopdongthue.phong.loaiphong'  // Thêm relationship với loại phòng
+            'chitiethopdong.hopdongthue.phong.coso',
+            'chitiethopdong.hopdongthue.phong.loaiphong'
         ])
         ->find(session('user_id'));
 
-        $phongs = collect();
+        $phongCollection = collect();
         foreach($khachthue->chitiethopdong as $chitiet) {
             if ($chitiet->hopdongthue && $chitiet->hopdongthue->phong) {
-                $phongs->push([
+                $phongCollection->push([
                     'hopdongthue' => $chitiet->hopdongthue,
                     'phong' => $chitiet->hopdongthue->phong,
                     'coso' => $chitiet->hopdongthue->phong->coso,
@@ -108,6 +108,17 @@ class ThongTinController extends Controller
                 ]);
             }
         }
+
+        // Tạo phân trang thủ công từ collection
+        $page = request()->get('page', 1);
+        $perPage = 3;
+        $phongs = new \Illuminate\Pagination\LengthAwarePaginator(
+            $phongCollection->forPage($page, $perPage),
+            $phongCollection->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('Client.ThongTin.phong', compact('phongs'));
     }

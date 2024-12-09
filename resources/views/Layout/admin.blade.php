@@ -71,11 +71,6 @@
                 <a class="dropdown-item" href="{{ route('admin.thongtin.index') }}">
                     <i class="fas fa-user-circle mr-2"></i>Thông tin tài khoản
                 </a>
-
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-cog mr-2"></i>Cài đặt
-                </a>
-
                 <div class="dropdown-divider"></div>
 
                 <a class="dropdown-item" href="{{ route('auth.logout') }}">
@@ -275,6 +270,11 @@
               <li class="nav-item">
                 <a href="{{ route('admin.hoadon.create') }}" class="nav-link">
                   <p> Thêm hóa đơn mới</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.thanhtoan.index') }}" class="nav-link">
+                  <p>Lịch sử hóa đơn</p>
                 </a>
               </li>
             </ul>

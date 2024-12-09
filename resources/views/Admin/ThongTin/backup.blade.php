@@ -77,7 +77,8 @@ function createBackup() {
         }
     })
     .then(response => {
-        if (response.headers.get('content-type') === 'application/json') {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
             return response.json().then(data => {
                 throw new Error(data.message);
             });
@@ -88,10 +89,11 @@ function createBackup() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'backup.sql';
+        a.download = 'backup-' + new Date().toISOString().slice(0,19).replace(/[:]/g, '-') + '.zip';
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
+        toastr.success('Tạo bản sao lưu thành công');
     })
     .catch(error => {
         console.error('Error:', error);
