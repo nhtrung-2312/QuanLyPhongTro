@@ -49,10 +49,7 @@ class ThanhToanController extends Controller
         }
     }
 
-    public function bill(Request $request, $id)
-    {
-        dd($request->all());
-    }
+
     public function thanhToanMomo(Request $request)
     {
         try{
@@ -72,10 +69,14 @@ class ThanhToanController extends Controller
 
             if ($existingContract) {
                 if ($existingContract->TrangThai === 'Chờ thanh toán cọc') {
+                    $selectedServices = json_decode($request->input('selected_services'), true);
+                    $selectedServices = $selectedServices ?? [];
                     $paymentData = [
                         'orderId' => $existingContract->MaHopDong,
                         'roomId' => $request->ma_phong,
-                        'amount' => $request->tien_coc
+                        'amount' => $request->tien_coc,
+                        'type' => 'deposit',
+                        'fees' => $selectedServices
                     ];
     
                     $momoPayment = $this->thanhToanService->processCheckout($paymentData);
@@ -174,9 +175,11 @@ class ThanhToanController extends Controller
                 $chiTietHD->save();
             }   
             $paymentData = [
-                'orderId' => $mahd,
+                'orderId' => $mahdt,
                 'roomId' => $request->ma_phong,
-                'amount' => $request->tien_coc
+                'amount' => $request->tien_coc,
+                'type' => 'deposit',
+                'fees' => $selectedServices
             ];
 
             $momoPayment = $this->thanhToanService->processCheckout($paymentData);
@@ -209,6 +212,42 @@ class ThanhToanController extends Controller
             Log::error('Momo callback error in controller: ' . $e->getMessage());
             return redirect()->route('phong.index')
                 ->with('error', 'Có lỗi xảy ra trong quá trình thanh toán');
+        }
+    }
+
+    public function thanhToanHoaDon(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            // Find and validate invoiceS
+            $hoadon = HoaDon::findOrFail($id);
+            
+            if ($hoadon->TrangThai !== 'Chưa thanh toán') {
+                throw new \Exception('Hoá đơn này không thể thanh toán');
+            }
+
+            // Get contract details
+            $hopdongthue = HopDongThue::findOrFail($hoadon->MaHopDong);
+
+           
+            // Prepare payment data
+            $paymentData = [
+                'orderId' => $hoadon->MaHoaDon,
+                'roomId' => $hopdongthue->MaPhong,
+                'amount' => $hoadon->TongTien,
+                'type' => 'invoice',
+                'fees' => $request->input('selected_services', [])
+            ];
+            $momoPayment = $this->thanhToanService->processCheckout($paymentData);
+
+            DB::commit();
+
+            return redirect($momoPayment['payUrl']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Invoice payment error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại');
         }
     }
 

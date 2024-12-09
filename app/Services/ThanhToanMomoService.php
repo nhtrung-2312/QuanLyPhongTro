@@ -34,14 +34,21 @@ class ThanhToanMomoService
     {
         try{
             $requestId = time() . rand(100, 999);
-            $orderId = $data['orderId'] . '_' . time();
+            $originalId = $data['orderId'];
+            $orderId = $originalId . '_' . time();
             $amount = (int)$data['amount'];
-            $room_id = $data['room_id'];
+
+            $extraData = json_encode([
+                'room_id' => $data['roomId'],
+                'orderId' => $originalId,
+                'type' => $data['type'] ?? 'deposit',
+                'fees' => $data['fees'] ?? []
+            ]);
+
             $orderInfo = "Thanh toán đơn hàng #" . $orderId;
-            $failureUrl = url('/thanh-toan/dat-phong/' . $room_id);
             $rawHash = "accessKey=" . $this->accessKey .
                 "&amount=" . $amount .
-                "&extraData=" . $room_id .
+                "&extraData=" . $extraData .
                 "&ipnUrl=" . $this->ipnUrl .
                 "&orderId=" . $orderId .
                 "&orderInfo=" . $orderInfo .
@@ -62,7 +69,7 @@ class ThanhToanMomoService
                 'redirectUrl' => $this->redirectUrl,
                 'ipnUrl' => $this->ipnUrl,
                 'requestType' => 'captureWallet',
-                'extraData' => $room_id,
+                'extraData' => $extraData,
                 'signature' => $signature,
                 'lang' => 'vi'
             ];
@@ -75,22 +82,12 @@ class ThanhToanMomoService
             Log::info('MoMo payment response:', ['response' => $response]);
 
             if (!isset($response['payUrl'])) {
-                Log::error('Missing payUrl in MoMo response', ['response' => $response]);
-                return [
-                    'success' => false,
-                    'redirectUrl' => $failureUrl
-                ];
+                throw new \Exception('PaymentUrl không tồn tại trong kết quả thanh toán');
             }
-            return [
-                'success' => true,
-                'payUrl' => $response['payUrl']
-            ];
+            return $response;
         } catch (\Exception $e) {
             Log::error('MoMo payment error: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'redirectUrl' => $failureUrl
-            ];
+            throw $e;
         }
     }
 
