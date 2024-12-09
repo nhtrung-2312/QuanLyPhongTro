@@ -118,9 +118,46 @@ class PhanQuyenController extends Controller
     }
     public function storeaccount(Request $request)
     {
+        $request->validate([
+            'TenDangNhap' => 'required|unique:taikhoan,TenDangNhap',
+            'MatKhau' => 'required',
+            'VaiTro' => 'required'
+        ], [
+            'TenDangNhap.required' => 'Tên đăng nhập không được để trống',
+            'TenDangNhap.unique' => 'Tên đăng nhập đã tồn tại',
+            'MatKhau.required' => 'Mật khẩu không được để trống',
+            'VaiTro.required' => 'Vai trò không được để trống'
+        ]);
+
+        do {
+            $maTaiKhoan = 'TK' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        } while (TaiKhoan::where('MaTaiKhoan', $maTaiKhoan)->exists());
+
+        $taiKhoan = new TaiKhoan();
+        $taiKhoan->MaTaiKhoan = $maTaiKhoan;
+        $taiKhoan->TenDangNhap = $request->TenDangNhap;
+        $taiKhoan->MatKhau = $request->MatKhau;
+        $taiKhoan->VaiTro = $request->VaiTro;
+        $taiKhoan->TrangThai = 1;
+        $taiKhoan->save();
         return response()->json([
             'success' => true,
             'data' => $request->all()
         ]);
+    }
+    public function deleteaccount($id)
+    {
+        try {
+            TaiKhoan::find($id)->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Xóa tài khoản thành công'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể xoá tài khoản, kiểm tra lại!'
+            ]);
+        }
     }
 }

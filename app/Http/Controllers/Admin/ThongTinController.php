@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Spatie\Backup\Tasks\Backup\BackupJob;
 use Symfony\Component\Process\Process;
 use App\Models\PhanQuyen;
+use Illuminate\Support\Facades\File;
 class ThongTinController extends Controller
 {
     public function index()
@@ -116,13 +117,31 @@ class ThongTinController extends Controller
     public function createBackup()
     {
         try {
-            $process = new Process(['php', 'artisan', 'backup:run', '--only-db', '--disable-notifications']);
+            $artisanPath = base_path('artisan');
+            $process = new Process(['php', $artisanPath, 'backup:run', '--only-db', '--disable-notifications']);
             $process->run();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Tạo bản sao lưu thành công',
-            ]);
+            $backupPath = storage_path('app/private/Laravel');
+            if (!file_exists($backupPath)) {
+                throw new \Exception('Thư mục backup không tồn tại.');
+            }
+
+            $latestBackup = collect(File::files($backupPath))
+            ->sortByDesc(function ($file) {
+                return $file->getCTime();
+            })
+            ->first();
+
+            Log::info('Latest backup: ' . $latestBackup->getRealPath());
+
+            return response()->download(
+                $latestBackup->getRealPath(),
+                $latestBackup->getFilename(),
+                [
+                    'Content-Type' => 'application/octet-stream',
+                    'Content-Disposition' => 'attachment; filename="' . $latestBackup->getFilename() . '"',
+                ]
+            );
         } catch (\Exception $e) {
             Log::error('Backup failed: ' . $e->getMessage());
             return response()->json([
@@ -131,79 +150,59 @@ class ThongTinController extends Controller
             ]);
         }
     }
-
-    public function download($filename)
-    {
-        try {
-            $path = storage_path("app/Laravel/{$filename}");
-            if (file_exists($path)) {
-                return response()->download($path);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'File không tồn tại'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi tải file'
-            ]);
-        }
-    }
     public function restoreDatabase(Request $request)
     {
         try {
-            if (!$request->hasFile('backup_file')) {
+            if (!$request->hasFile('backup_file') || !$request->file('backup_file')->isValid()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Vui lòng chọn file backup'
+                    'message' => 'File không hợp lệ.',
                 ]);
             }
 
-        $file = $request->file('backup_file');
+            // Lấy file tải lên
+            $backupFile = $request->file('backup_file');
+            $backupFilePath = $backupFile->getRealPath();
 
-        // Kiểm tra file có phải là file sql không
-        if ($file->getClientOriginalExtension() !== 'sql') {
-            return response()->json([
-                'success' => false,
-                'message' => 'File không hợp lệ. Vui lòng chọn file .sql'
+            Log::info('Starting database restore from file: ' . $backupFilePath);
+
+            $process = new Process([
+                'mysql',
+                '--user=' . env('DB_USERNAME'),
+                '--password=' . env('DB_PASSWORD'),
+                '--host=' . env('DB_HOST'),
+                '--database=' . env('DB_DATABASE'),
+                '--binary-mode=1',
+                '--batch',
+                '--execute=source ' . $backupFilePath
             ]);
-        }
 
-        $database = config('database.connections.mysql.database');
-        $username = config('database.connections.mysql.username');
-        $password = config('database.connections.mysql.password');
+            $process->run();
 
-        // Lưu file tạm
-        $path = $file->getRealPath();
+            // Ghi lại output và lỗi chi tiết nếu có
+            Log::info('Process output: ' . $process->getOutput());
+            Log::error('Process error: ' . $process->getErrorOutput());
 
-        // Thực hiện lệnh restore
-        $command = sprintf(
-            'D:\xampp\mysql\bin\mysql -u%s -p%s %s < %s',
-            escapeshellarg($username),
-            escapeshellarg($password),
-            escapeshellarg($database),
-            escapeshellarg($path)
-        );
+            // Kiểm tra nếu quá trình không thành công
+            if (!$process->isSuccessful()) {
+                Log::error('Restore database failed: ' . $process->getErrorOutput());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Phục hồi dữ liệu thất bại: ' . $process->getErrorOutput(),
+                ]);
+            }
 
-        exec($command, $output, $returnVar);
+            Log::info('Database restore completed successfully');
 
-        if ($returnVar === 0) {
             return response()->json([
                 'success' => true,
-                'message' => 'Phục hồi dữ liệu thành công'
+                'message' => 'Dữ liệu đã được phục hồi thành công.',
             ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Không thể phục hồi dữ liệu'
-        ]);
-
         } catch (\Exception $e) {
+            Log::error('Database restore failed: ' . $e->getMessage());
             return response()->json([
-            'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+                'success' => false,
+                'message' => 'Có lỗi khi phục hồi dữ liệu: ' . $e->getMessage(),
             ]);
         }
     }

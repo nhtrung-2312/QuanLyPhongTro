@@ -32,7 +32,7 @@
                                 <h5 class="card-text">Sao lưu dữ liệu</h5>
                                 <form id="createBackupForm" action="{{ route('admin.thongtin.createBackup') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="button" class="btn btn-primary" onclick="createBackup()">
                                         <i class="fas fa-download mr-2"></i>Tạo bản sao lưu
                                     </button>
                                 </form>
@@ -46,11 +46,11 @@
                                 <form id="restoreDatabaseForm" action="{{ route('admin.thongtin.restoreDatabase') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="custom-file mb-3">
-                                        <input type="file" name="backup_file" class="custom-file-input" id="backupFile" accept=".sql">
-                                        <label class="custom-file-label" for="backupFile">Chọn file</label>
+                                        <input type="file" name="backup_file" class="custom-file-input" id="backupFile" accept=".sql" onchange="updateFileName(this)">
+                                        <label class="custom-file-label" for="backupFile">Chọn file backup (.sql)</label>
                                     </div>
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-upload mr-2"></i>Phục hồi
+                                    <button type="button" class="btn btn-success" onclick="restoreDatabase()">
+                                        <i class="fas fa-upload mr-2"></i> Phục hồi dữ liệu
                                     </button>
                                 </form>
                             </div>
@@ -64,60 +64,76 @@
 
 @push('scripts')
 <script>
-    $(document).ready(function() {
-        $('.custom-file-input').on('change', function() {
-            let fileName = $(this).val().split('\\').pop();
-            $(this).next('.custom-file-label').addClass("selected").html(fileName);
-        });
-        $('#createBackupForm').on('submit', function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        window.location.reload();
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('Có lỗi xảy ra khi tạo bản sao lưu');
-                }
-            });
-        });
+function updateFileName(input) {
+    const fileName = input.files[0].name;
+    input.nextElementSibling.innerText = fileName;
+}
 
-        $('#restoreDatabaseForm').on('submit', function(e) {
-            e.preventDefault();
-            if (!confirm('Bạn có chắc chắn muốn phục hồi dữ liệu? Hành động này không thể hoàn tác!')) {
-                return;
-            }
-
-            var formData = new FormData(this);
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 2000);
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function() {
-                    toastr.error('Có lỗi xảy ra khi phục hồi dữ liệu');
-                }
+function createBackup() {
+    fetch('{{ route('admin.thongtin.createBackup') }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => {
+        if (response.headers.get('content-type') === 'application/json') {
+            return response.json().then(data => {
+                throw new Error(data.message);
             });
-        });
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'backup.sql';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        toastr.error(error.message || 'Có lỗi xảy ra khi tạo backup');
     });
+}
+
+function restoreDatabase() {
+    if (!document.getElementById('backupFile').files[0]) {
+        toastr.warning('Vui lòng chọn file backup');
+        return;
+    }
+
+    if (!confirm('Bạn có chắc chắn muốn phục hồi dữ liệu? Hành động này không thể hoàn tác!')) {
+        return;
+    }
+
+    const formData = new FormData(document.getElementById('restoreDatabaseForm'));
+
+    toastr.info('Đang phục hồi dữ liệu... Vui lòng đợi trong giây lát');
+
+    fetch('{{ route('admin.thongtin.restoreDatabase') }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            toastr.success(data.message);
+            document.getElementById('restoreDatabaseForm').reset();
+            document.querySelector('.custom-file-label').innerText = 'Chọn file backup (.sql)';
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        toastr.error(error.message || 'Có lỗi xảy ra khi phục hồi dữ liệu');
+    });
+}
 </script>
 @endpush
 @endsection

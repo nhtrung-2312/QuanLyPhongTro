@@ -136,6 +136,7 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::put('/updateQuyen', [PhanQuyenController::class, 'updateQuyen'])->name('updateQuyen');
         Route::get('/createaccount', [PhanQuyenController::class, 'createaccount'])->name('createaccount');
         Route::post('/storeaccount', [PhanQuyenController::class, 'storeaccount'])->name('storeaccount');
+        Route::delete('/deleteaccount/{id}', [PhanQuyenController::class, 'deleteaccount'])->name('deleteaccount');
     });
 
     Route::prefix('thongtin')->name('admin.thongtin.')->group(function () {
