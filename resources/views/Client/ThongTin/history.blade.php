@@ -59,7 +59,7 @@
                                     @if($hoadon->TrangThai == "Chưa thanh toán")
                                     <button type="button" 
                                             class="btn btn-sm btn-success" 
-                                            onclick="window.location.href='#'"> 
+                                            onclick="window.location.href='{{ route('thanhToan.hoaDon', ['id' => $hoadon->MaHoaDon]) }}'"> 
                                         Thanh toán
                                     </button>
                                     @elseif($hoadon->TrangThai == "Đang xử lý")

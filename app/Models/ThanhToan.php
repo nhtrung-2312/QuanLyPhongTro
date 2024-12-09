@@ -10,6 +10,7 @@ class ThanhToan extends Model
     protected $primaryKey = 'MaThanhToan';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'MaThanhToan',
