@@ -16,7 +16,7 @@ class ThanhToanService
     {
         $this->momoPaymentService = $momoPaymentService;
     }
- 
+
     public function processCheckout($data)
     {
         try {
@@ -119,7 +119,6 @@ class ThanhToanService
                 'GhiChu' => $type === 'invoice' ? 'Thanh toán hóa đơn' : 'Thanh toán tiền cọc'
             ]);
             $thanhtoan->save();
-            
             DB::commit();
             return [
                 'success' => $success,

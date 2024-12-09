@@ -29,7 +29,7 @@ class ThanhToanMomoService
             'redirectUrl' => $this->redirectUrl,
             'ipnUrl' => $this->ipnUrl,
         ]);
-    }   
+    }
     public function createPayment($data)
     {
         try{
@@ -99,7 +99,7 @@ class ThanhToanMomoService
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
-            'Content-Length: ' . strlen($data)  
+            'Content-Length: ' . strlen($data)
         ]);
         $result = curl_exec($ch);
         curl_close($ch);

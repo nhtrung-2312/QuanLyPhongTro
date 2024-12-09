@@ -57,7 +57,7 @@ class ThanhToanController extends Controller
 
             // Check room status first
             $phong = PhongTro::find($request->ma_phong);
-            
+
             if (!$phong) {
                 throw new \Exception('Phòng không tồn tại');
             }
@@ -78,29 +78,29 @@ class ThanhToanController extends Controller
                         'type' => 'deposit',
                         'fees' => $selectedServices
                     ];
-    
+
                     $momoPayment = $this->thanhToanService->processCheckout($paymentData);
                     DB::commit();
                     return redirect($momoPayment['payUrl']);
                 } else {
                     throw new \Exception('Phòng đã được thuê và thanh toán');
-                }    
+                }
             }
             $selectedServices = json_decode($request->input('selected_services'), true);
             $selectedServices = $selectedServices ?? [];
             do{
                 $mahdt = 'HDT' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-                $hopdongthue = HopDongThue::where('MaHopDong', $mahdt)->first();        
+                $hopdongthue = HopDongThue::where('MaHopDong', $mahdt)->first();
             }while($hopdongthue);
 
             do{
                 $mahd = 'HD' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-                $hoadon = HoaDon::where('MaHoaDon', $mahd)->first();    
+                $hoadon = HoaDon::where('MaHoaDon', $mahd)->first();
             }while($hoadon);
 
             do{
                 $macs = 'CS' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-                $chisodn = ChiSoDienNuoc::where('MaChiSo', $macs)->first(); 
+                $chisodn = ChiSoDienNuoc::where('MaChiSo', $macs)->first();
             }while($chisodn);
 
             $loaiphi = LoaiPhi::all();
@@ -111,14 +111,14 @@ class ThanhToanController extends Controller
 
             $hopdongthue = new HopDongThue();
             $hopdongthue->MaHopDong = $mahdt;
-            $hopdongthue->MaPhong = $request->ma_phong; 
-            $hopdongthue->NgayBatDau = $request->ngay_bat_dau;  
+            $hopdongthue->MaPhong = $request->ma_phong;
+            $hopdongthue->NgayBatDau = $request->ngay_bat_dau;
             $hopdongthue->NgayKetThuc = $request->ngay_ket_thuc;
             $hopdongthue->TienCoc = $request->tien_coc;
             $hopdongthue->TrangThai = 'Chờ thanh toán cọc';
             $hopdongthue->save();
 
-            $chitiethopdong = new ChiTietHopDong(); 
+            $chitiethopdong = new ChiTietHopDong();
             $chitiethopdong->MaHopDong = $mahdt;
             $chitiethopdong->MaKhachThue = session('user_id');
             $chitiethopdong->save();
@@ -129,8 +129,8 @@ class ThanhToanController extends Controller
             $chisodn->DienCu = 0;
             $chisodn->DienMoi = 0;
             $chisodn->NuocCu = 0;
-            $chisodn->NuocMoi = 0;
-            $chisodn->NgayGhi = now(); 
+$chisodn->NuocMoi = 0;
+            $chisodn->NgayGhi = now();
             $chisodn->save();
 
             $hoadon = new HoaDon();
@@ -173,7 +173,7 @@ class ThanhToanController extends Controller
                         break;
                 }
                 $chiTietHD->save();
-            }   
+            }
             $paymentData = [
                 'orderId' => $mahdt,
                 'roomId' => $request->ma_phong,
@@ -197,24 +197,22 @@ class ThanhToanController extends Controller
     {
         try {
             Log::info('Momo callback received in controller:', $request->all());
-            
+
             $result = $this->thanhToanService->handleMomoCallback($request->all());
-            
+
             if ($result['success']) {
                 return redirect($result['redirectUrl'])
                     ->with('success', 'Thanh toán thành công');
             }
-            
-            return redirect($result['redirectUrl'])
+return redirect($result['redirectUrl'])
                 ->with('error', 'Thanh toán thất bại');
-                
+
         } catch (\Exception $e) {
             Log::error('Momo callback error in controller: ' . $e->getMessage());
             return redirect()->route('phong.index')
                 ->with('error', 'Có lỗi xảy ra trong quá trình thanh toán');
         }
     }
-
     public function thanhToanHoaDon(Request $request, $id)
     {
         try {

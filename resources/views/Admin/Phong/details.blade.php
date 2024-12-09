@@ -1,4 +1,4 @@
-@extends('Layout.admin')                    
+@extends('Layout.admin')
 @section('title', 'Chi tiết phòng trọ')
 @section('content')
 <div class="card">
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($chiTietPhongs as $index => $phong)               
+                @foreach($chiTietPhongs as $index => $phong)
                 <tr class="text-center align-center vertical-middle">
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $phong->tienNghi->TenTienNghi}}</td>
@@ -31,7 +31,7 @@
                     <td class="align-middle">
                         <div class="d-flex align-items-center">
                             <div class="d-flex align-items-center justify-content-center">
-                                <a href="{{ route('admin.rooms.details.edit', ['id' => $phong->MaPhong, 'maTienNghi' => $phong->MaTienNghi]) }}" 
+                                <a href="{{ route('admin.rooms.details.edit', ['id' => $phong->MaPhong, 'maTienNghi' => $phong->MaTienNghi]) }}"
                                     class="btn btn-sm btn-info mx-1">
                                      Chỉnh sửa
                                  </a>
