@@ -139,5 +139,9 @@ Route::middleware(['auth.admin', 'check.permission'])->prefix('')->group(functio
         Route::put('/update', [ThongTinController::class, 'update'])->name('update');
         Route::get('/account', [ThongTinController::class, 'account'])->name('account');
         Route::get('/backup', [ThongTinController::class, 'backup'])->name('backup');
+        Route::post('/restoreDatabase', [ThongTinController::class, 'restoreDatabase'])->name('restoreDatabase');
+        Route::post('/createBackup', [ThongTinController::class, 'createBackup'])->name('createBackup');
+        Route::get('/download/{filename}', [ThongTinController::class, 'download'])->name('download');
+        Route::put('/updateaccount', [ThongTinController::class, 'updateaccount'])->name('updateaccount');
     });
 });

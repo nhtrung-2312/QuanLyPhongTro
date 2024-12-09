@@ -108,23 +108,18 @@ $(document).ready(function() {
 
         $.ajax({
             url: '{{ route("admin.thongtin.update") }}',
-            method: 'POST',
+            method: 'PUT',
             data: $(this).serialize(),
             success: function(response) {
-                if (response.status) {
-                    toastr.success("Cập nhật thông tin thành công!");
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
+                if (response.success) {
+                    toastr.success(response.message);
+                    window.location.reload();
+                } else {
+                    toastr.error(response.message);
                 }
             },
-            error: function(xhr) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    Object.keys(errors).forEach(key => {
-                        $(`#${key}Error`).text(errors[key][0]);
-                    });
-                }
+            error: function(xhr, status, error) {
+                console.log(xhr.responseJSON);
             }
         });
     });

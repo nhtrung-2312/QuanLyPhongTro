@@ -33,11 +33,11 @@
                 <h3 class="card-title">Chỉnh sửa tài khoản</h3>
             </div>
             <div class="card-body">
-                <form id="accountForm" method="POST">
+                <form id="accountForm" method="PUT">
                     @csrf
                     <div class="form-group">
                         <label>Tên đăng nhập</label>
-                        <input type="text" class="form-control" name="username" value="{{ $taikhoan->TenDangNhap }}" readonly>
+                        <input type="text" class="form-control" name="username" value="{{ $taikhoan->TenDangNhap }}">
                     </div>
                     <div class="form-group">
                         <label>Mật khẩu cũ</label>
@@ -108,24 +108,22 @@ $(document).ready(function() {
         $('.text-danger').text('');
 
         $.ajax({
-            url: '{{ route("admin.thongtin.update") }}',
-            method: 'POST',
+            url: '{{ route("admin.thongtin.updateaccount") }}',
+            method: 'PUT',
             data: $(this).serialize(),
             success: function(response) {
-                if (response.status) {
-                    toastr.success("Cập nhật mật khẩu thành công!");
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
+                if (response.success) {
+                    toastr.success(response.message);
+                    window.location.reload();
+                } else {
+                    $('#old_passwordError').text(response.message);
                 }
             },
-            error: function(xhr) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    Object.keys(errors).forEach(key => {
-                        $(`#${key}Error`).text(errors[key][0]);
-                    });
-                }
+            error: function(xhr, status, error) {
+                const errors = xhr.responseJSON.errors;
+                $('#old_passwordError').text(errors.old_password);
+                $('#new_passwordError').text(errors.new_password);
+                $('#confirm_passwordError').text(errors.confirm_password);
             }
         });
     });

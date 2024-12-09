@@ -1,12 +1,6 @@
 @extends('Layout.admin')
 @section('title', 'Sao lưu dữ liệu')
 @section('content')
-@php
-    $permissions = \App\Models\PhanQuyen::where('MaTaiKhoan', session('admin_id'))
-        ->where('MaCoSo', session('selected_facility'))
-        ->pluck('MaQuyen')
-        ->toArray();
-@endphp
 <div class="row">
     <div class="col-md-3">
         <div class="card">
@@ -18,11 +12,9 @@
                     <a class="nav-link" href="{{ route('admin.thongtin.account') }}">
                         <i class="fas fa-key mr-2"></i> Chỉnh sửa tài khoản
                     </a>
-                    @if(in_array("Q010", $permissions))
-                        <a class="nav-link active" href="{{ route('admin.thongtin.backup') }}">
-                            <i class="fas fa-database mr-2"></i> Sao lưu dữ liệu
-                        </a>
-                    @endif
+                    <a class="nav-link active" href="{{ route('admin.thongtin.backup') }}">
+                        <i class="fas fa-database mr-2"></i> Sao lưu dữ liệu
+                    </a>
                 </div>
             </div>
         </div>
@@ -38,9 +30,12 @@
                         <div class="card">
                             <div class="card-body text-center">
                                 <h5 class="card-text">Sao lưu dữ liệu</h5>
-                                <button class="btn btn-primary">
-                                    <i class="fas fa-download mr-2"></i>Tạo bản sao lưu
-                                </button>
+                                <form id="createBackupForm" action="{{ route('admin.thongtin.createBackup') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-download mr-2"></i>Tạo bản sao lưu
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -48,13 +43,16 @@
                         <div class="card">
                             <div class="card-body text-center">
                                 <h5 class="card-text">Phục hồi dữ liệu</h5>
-                                <div class="custom-file mb-3">
-                                    <input type="file" class="custom-file-input" id="backupFile">
-                                    <label class="custom-file-label" for="backupFile">Chọn file</label>
-                                </div>
-                                <button class="btn btn-success">
-                                    <i class="fas fa-upload mr-2"></i>Phục hồi
-                                </button>
+                                <form id="restoreDatabaseForm" action="{{ route('admin.thongtin.restoreDatabase') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="custom-file mb-3">
+                                        <input type="file" name="backup_file" class="custom-file-input" id="backupFile" accept=".sql">
+                                        <label class="custom-file-label" for="backupFile">Chọn file</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-upload mr-2"></i>Phục hồi
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -63,4 +61,63 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+        $('#createBackupForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        window.location.reload();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error('Có lỗi xảy ra khi tạo bản sao lưu');
+                }
+            });
+        });
+
+        $('#restoreDatabaseForm').on('submit', function(e) {
+            e.preventDefault();
+            if (!confirm('Bạn có chắc chắn muốn phục hồi dữ liệu? Hành động này không thể hoàn tác!')) {
+                return;
+            }
+
+            var formData = new FormData(this);
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error('Có lỗi xảy ra khi phục hồi dữ liệu');
+                }
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
